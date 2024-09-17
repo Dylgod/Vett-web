@@ -1,2 +1,23 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import Faq from '$lib/components/sections/faq.svelte';
+	import Reviews from '$lib/components/sections/reviews.svelte';
+	import Header from '$lib/components/sections/header.svelte';
+	import Hero from '$lib/components/sections/hero.svelte';
+	import Footer from '$lib/components/sections/footer.svelte';
+	import Problem from '$lib/components/sections/problem.svelte';
+	import Howitworks from '$lib/components/sections/howitworks.svelte';
+</script>
+
+<Header />
+
+<Hero />
+
+<Problem />
+
+<Howitworks />
+
+<Reviews />
+
+<Faq />
+
+<Footer />

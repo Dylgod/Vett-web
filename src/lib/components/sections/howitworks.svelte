@@ -12,7 +12,7 @@
 		data-nimg="1"
 		class="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]"
 		style="color:transparent"
-		src="/_next/static/media/background-features.5f7a9ac9.jpg"
+		src="./background-features.jpg"
 	/>
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
 		<div class="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
@@ -135,8 +135,7 @@
 							class="w-full"
 							style="color:transparent"
 							sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
-							srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=828&amp;q=75 828w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=3840&amp;q=75 3840w"
-							src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.30933b7f.png&amp;w=3840&amp;q=75"
+							src="./screenshots/profile.png"
 						/>
 					</div>
 				</div>
@@ -170,8 +169,7 @@
 							class="w-full"
 							style="color:transparent"
 							sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
-							srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=828&amp;q=75 828w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=3840&amp;q=75 3840w"
-							src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fgitkraken.d3098c06.png&amp;w=3840&amp;q=75"
+							src="./screenshots/gitkraken.png"
 						/>
 					</div>
 				</div>
@@ -206,8 +204,7 @@
 							class="w-full"
 							style="color:transparent"
 							sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
-							srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=828&amp;q=75 828w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=3840&amp;q=75 3840w"
-							src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdatadog.b380d3c8.png&amp;w=3840&amp;q=75"
+							src="./screenshots/datadog.png"
 						/>
 					</div>
 				</div>
