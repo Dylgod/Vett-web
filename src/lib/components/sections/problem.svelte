@@ -68,7 +68,7 @@
 								</svg>
 							</dt>
 							<dd class="text-white">
-								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin vis remote control.
+								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin via remote control.
 							</dd>
 						</div>
 					</dl>
@@ -94,8 +94,8 @@
 									<div class="border-r border-gray-600/10 px-4 py-2">App.jsx</div>
 								</div>
 							</div>
-							<div class="px-6 pb-14 pt-6">
-								<!-- Your code example -->
+							<div class="px-6 pb-14 pt-6 bg-gray-200">
+								code goes here. tried with pre and code tags
 							</div>
 						</div>
 					</div>
