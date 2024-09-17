@@ -1,8 +1,8 @@
 <header class="bg-white">
 	<nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
 		<div class="flex items-center gap-x-12">
-			<a href="#" class="-m-1.5 p-1.5">
-				<span class="sr-only">Your Company</span>
+			<a href="/" class="-m-1.5 p-1.5">
+				<span class="sr-only">Vett</span>
 				<img
 					class="h-8 w-auto"
 					src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -10,10 +10,9 @@
 				/>
 			</a>
 			<div class="hidden lg:flex lg:gap-x-12">
-				<a href="#" class="text-sm font-semibold leading-6 text-gray-900">Product</a>
-				<a href="#" class="text-sm font-semibold leading-6 text-gray-900">Features</a>
-				<a href="#" class="text-sm font-semibold leading-6 text-gray-900">Marketplace</a>
-				<a href="#" class="text-sm font-semibold leading-6 text-gray-900">Company</a>
+				<a href="/" class="text-sm font-semibold leading-6 text-gray-900">Home</a>
+				<a href="/about" class="text-sm font-semibold leading-6 text-gray-900">About Us</a>
+				<a href="/blog" class="text-sm font-semibold leading-6 text-gray-900">Blog</a>
 			</div>
 		</div>
 		<div class="flex lg:hidden">
@@ -39,7 +38,7 @@
 			</button>
 		</div>
 		<div class="hidden lg:flex">
-			<a href="#" class="text-sm font-semibold leading-6 text-gray-900"
+			<a href="/login" class="text-sm font-semibold leading-6 text-gray-900"
 				>Log in <span aria-hidden="true">&rarr;</span></a
 			>
 		</div>
@@ -52,8 +51,8 @@
 			class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
 		>
 			<div class="flex items-center justify-between">
-				<a href="#" class="-m-1.5 p-1.5">
-					<span class="sr-only">Your Company</span>
+				<a href="/" class="-m-1.5 p-1.5">
+					<span class="sr-only">Vett</span>
 					<img
 						class="h-8 w-auto"
 						src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -78,29 +77,24 @@
 				<div class="-my-6 divide-y divide-gray-500/10">
 					<div class="space-y-2 py-6">
 						<a
-							href="#"
+							href="/"
 							class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>Product</a
+							>Home</a
 						>
 						<a
-							href="#"
+							href="/about"
 							class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>Features</a
+							>About Us</a
 						>
 						<a
-							href="#"
+							href="/blog"
 							class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>Marketplace</a
-						>
-						<a
-							href="#"
-							class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>Company</a
+							>Blog</a
 						>
 					</div>
 					<div class="py-6">
 						<a
-							href="#"
+							href="/login"
 							class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 							>Log in</a
 						>
