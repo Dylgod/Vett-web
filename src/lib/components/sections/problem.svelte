@@ -3,13 +3,12 @@
 		<div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
 			<div class="px-6 md:px-0 lg:pr-4 lg:pt-4">
 				<div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
-					<h2 class="text-base font-semibold leading-7 text-indigo-600">Deploy faster</h2>
-					<p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-						A better workflow
+					<h2 class="text-base font-semibold leading-7 text-white">Deploy faster</h2>
+					<p class="mt-2 text-3xl font-bold tracking-tight text-indigo-500 sm:text-4xl">
+						The Cost of a Bad Hire
 					</p>
-					<p class="mt-6 text-lg leading-8 text-gray-600">
-						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis
-						suscipit eaque, iste dolor cupiditate blanditiis ratione.
+					<p class="mt-6 text-lg leading-8 text-white">
+						Poor performance among hires cost enterprise level companies millions every quarter. Vetting candidates take the risk out of the process for a fraction of that cost.
 					</p>
 					<dl class="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
 						<div class="relative pl-9">
@@ -26,11 +25,9 @@
 										clip-rule="evenodd"
 									/>
 								</svg>
-								Push to deploy.
 							</dt>
-							<dd class="inline">
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit
-								perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.
+							<dd class="text-white">
+								According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible.
 							</dd>
 						</div>
 						<div class="relative pl-9">
@@ -47,11 +44,9 @@
 										clip-rule="evenodd"
 									/>
 								</svg>
-								SSL certificates.
 							</dt>
-							<dd class="inline">
-								Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat
-								commodo.
+							<dd class="inline text-white">
+								According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible.
 							</dd>
 						</div>
 						<div class="relative pl-9">
@@ -71,11 +66,9 @@
 										clip-rule="evenodd"
 									/>
 								</svg>
-								Database backups.
 							</dt>
-							<dd class="inline">
-								Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi
-								lobortis.
+							<dd class="text-white">
+								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin vis remote control.
 							</dd>
 						</div>
 					</dl>
