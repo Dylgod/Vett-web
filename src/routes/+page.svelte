@@ -6,14 +6,11 @@
 	import Footer from '$lib/components/sections/footer.svelte';
 	import Problem from '$lib/components/sections/problem.svelte';
 	import Howitworks from '$lib/components/sections/howitworks.svelte';
-	import Logocloud from '$lib/components/sections/logocloud.svelte';
 </script>
 
 <Header />
 
 <Hero />
-
-<Logocloud />
 
 <Problem />
 
