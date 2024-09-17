@@ -8,7 +8,8 @@
 						The Cost of a Bad Hire
 					</p>
 					<p class="mt-6 text-lg leading-8 text-white">
-						Poor performance among hires cost enterprise level companies millions every quarter. Vetting candidates take the risk out of the process for a fraction of that cost.
+						Poor performance among hires cost enterprise level companies millions every quarter.
+						Vetting candidates take the risk out of the process for a fraction of that cost.
 					</p>
 					<dl class="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
 						<div class="relative pl-9">
@@ -27,7 +28,9 @@
 								</svg>
 							</dt>
 							<dd class="text-white">
-								According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible.
+								According to all known laws of aviation, there is no way that a bee should be able
+								to fly. Its wings are too small to get its fat little body off the ground. The bee,
+								of course, flies anyway because bees don't care what humans think is impossible.
 							</dd>
 						</div>
 						<div class="relative pl-9">
@@ -46,7 +49,9 @@
 								</svg>
 							</dt>
 							<dd class="inline text-white">
-								According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible.
+								According to all known laws of aviation, there is no way that a bee should be able
+								to fly. Its wings are too small to get its fat little body off the ground. The bee,
+								of course, flies anyway because bees don't care what humans think is impossible.
 							</dd>
 						</div>
 						<div class="relative pl-9">
@@ -68,7 +73,8 @@
 								</svg>
 							</dt>
 							<dd class="text-white">
-								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin vis remote control.
+								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin
+								vis remote control.
 							</dd>
 						</div>
 					</dl>
