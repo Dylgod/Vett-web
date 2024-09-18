@@ -45,10 +45,10 @@
 					<div class="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
 						<div class="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
 							<h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-								We're changing the way you hire candidates.
+								We're changing the way you hire.
 							</h1>
 							<p class="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-                                At Vett, we're revolutionizing the hiring process for software engineering positions. Our cutting-edge assessment tools and data-driven insights help you build exceptional teams while saving time and resources. Say goodbye to uncertainty and hello to confident hiring decisions.
+								You want to hire talented people who can solve hard problems. People like the legends on the right. At Vett, we help you do exactly that. Hire with confidence and say goodbye to uncertainty.
 
 							</p>
 						</div>
@@ -126,9 +126,9 @@
 				<div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
 					<div class="lg:w-full lg:max-w-2xl lg:flex-auto">
 						<p class="text-xl leading-8 text-gray-600">
-                            We understand that each hire is a significant investment, and we're committed to helping our clients maximize their return on that investment.<br><br>
-                            We strive to never leave you in the position to ask yourself if a candidate really knows their stuff.<br><br>
-                            Leverage our expertise. Make informed decisions.
+							Every hire is a significant investment. A poor investment can be costly, if not deadly. Our mission is to make sure each investment is a good one. <br><br>
+
+							Leverage our expertise. Make informed decisions. Build stronger teams. 
 						</p>
 					</div>
 					<div class="lg:flex lg:flex-auto lg:justify-center">
@@ -165,46 +165,28 @@
 			<div class="mx-auto max-w-2xl lg:mx-0">
 				<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our values</h2>
 				<p class="mt-6 text-lg leading-8 text-gray-600">
-                    At Vett, our core values guide every aspect of our business. They shape how we assess candidates, interact with clients, and innovate our services. We are commited to revolutionizing the hiring process and delivering exceptional value to our clients.
+					At Vett, we care about performance. No buzzword soup or feel-good self-aggrandizing acclamations. Every hire you make is a big decision. We want to help you make the right one. That's it.
 				</p>
 			</div>
 			<dl
 				class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-base leading-7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3"
 			>
 				<div>
-					<dt class="font-semibold text-gray-900">Precision in Assessment</dt>
+					<dt class="font-semibold text-gray-900">Fairness</dt>
 					<dd class="mt-1 text-gray-600">
-                        We believe in the power of accurate, data-driven evaluations to identify the best candidates.
+                        No Vetter knows the candidate's background during the pre-interview evaluation. Candidates either demonstrate the skills you are looking for, or they don't. 
 					</dd>
 				</div>
 				<div>
-					<dt class="font-semibold text-gray-900">Integrity in Process</dt>
+					<dt class="font-semibold text-gray-900">Flexibility</dt>
 					<dd class="mt-1 text-gray-600">
-                        We uphold the highest standards of fairness and transparency in our assessment methodologies.
+						The best candidates are busy people. We understand that and offer flexible scheduling to ensure you never lose a great candidate due to inconvenient timing. 
 					</dd>
 				</div>
 				<div>
-					<dt class="font-semibold text-gray-900">Innovation in Hiring</dt>
+					<dt class="font-semibold text-gray-900">Efficiency</dt>
 					<dd class="mt-1 text-gray-600">
-                        We continuously evolve our techniques to stay ahead of industry trends and technological advancements.
-					</dd>
-				</div>
-				<div>
-					<dt class="font-semibold text-gray-900">Client-Centric Approach</dt>
-					<dd class="mt-1 text-gray-600">
-                        We tailor our services to meet the unique needs of each client, ensuring maximum value and satisfaction.
-					</dd>
-				</div>
-				<div>
-					<dt class="font-semibold text-gray-900">Efficiency Optimization</dt>
-					<dd class="mt-1 text-gray-600">
-                        We strive to streamline the hiring process, saving our clients time and resources without compromising quality.
-					</dd>
-				</div>
-				<div>
-					<dt class="font-semibold text-gray-900">Continuous Improvement</dt>
-					<dd class="mt-1 text-gray-600">
-                        We are committed to ongoing learning and refinement of our methods to deliver ever-improving results.
+						The hiring process takes up enough of your time as it is. Once a candidate's evaluation is complete, we send you our recommendation within 24 hours. 
 					</dd>
 				</div>
 			</dl>
