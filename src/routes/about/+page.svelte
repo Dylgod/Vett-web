@@ -134,16 +134,16 @@
 					<div class="lg:flex lg:flex-auto lg:justify-center">
 						<dl class="w-64 space-y-8 xl:w-80">
 							<div class="flex flex-col-reverse gap-y-4">
-								<dt class="text-base leading-7 text-gray-600">Reduction in bad hires</dt>
-								<dd class="text-5xl font-semibold tracking-tight text-gray-900">75%</dd>
-							</div>
-							<div class="flex flex-col-reverse gap-y-4">
 								<dt class="text-base leading-7 text-gray-600">Average savings per hire</dt>
 								<dd class="text-5xl font-semibold tracking-tight text-gray-900">$50,000</dd>
 							</div>
 							<div class="flex flex-col-reverse gap-y-4">
 								<dt class="text-base leading-7 text-gray-600">Increase in team productivity</dt>
-								<dd class="text-5xl font-semibold tracking-tight text-gray-900">40%</dd>
+								<dd class="text-5xl font-semibold tracking-tight text-gray-900">36%</dd>
+							</div>
+							<div class="flex flex-col-reverse gap-y-4">
+								<dt class="text-base leading-7 text-gray-600">Increase in team morale</dt>
+								<dd class="text-5xl font-semibold tracking-tight text-gray-900">32%</dd>
 							</div>
 						</dl>
 					</div>
