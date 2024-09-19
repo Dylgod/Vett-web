@@ -1,41 +1,3 @@
-<!--
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
-<!--
-  This example requires updating your template:
-
-  ```
-  <html class="h-full bg-gray-50">
-  <body class="h-full">
-  ```
--->
-
-<!-- <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import type { PageData } from './$types';
-
-	export let form;
-	export let data: PageData;
-
-	onMount(() => {
-		if (data.session?.user) {
-			goto('/account');
-		}
-	});
-</script> -->
-
 <div class="flex min-h-full flex-col justify-center py-24 sm:px-6 lg:px-8 pb-44 pt-10">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
 		<h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -44,12 +6,12 @@
 	</div>
 
 	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-		<div class="bg-white px-6 py-12 outline outline-gray-300 outline-1 shadow-lg sm:rounded-lg sm:px-12">
+		<div
+			class="bg-white px-6 py-12 outline outline-gray-300 outline-1 shadow-lg sm:rounded-lg sm:px-12"
+		>
 			<form class="space-y-6" action="#" method="POST">
 				<div>
-					<label for="email" class="block text-sm font-medium leading-6 text-gray-900"
-						>Email</label
-					>
+					<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
 					<div class="mt-1">
 						<input
 							id="email"
@@ -189,4 +151,3 @@
 		</p>
 	</div>
 </div>
-
