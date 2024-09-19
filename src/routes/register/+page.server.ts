@@ -16,7 +16,7 @@ export const actions = {
     const { error } = await locals.supabase.auth.signUp(credentials)
 
     if (!error) {
-      redirect(303, '/verify')
+      redirect(303, `/auth/confirm?email=${body.email}`)
     } else {
       return error.message
     }

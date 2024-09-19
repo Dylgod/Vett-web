@@ -7,7 +7,7 @@
 	  decoding="async"
 	  class="absolute left-1/2 top-1/2 max-w-none translate-x-[-75%] translate-y-[-30%] opacity-50"
 	  style="color:transparent"
-	  src="./background-features.jpg"
+	  src="/background-features.jpg"
 	/>
 	<div class="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8 relative z-10">
 	  <nav class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
