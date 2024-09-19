@@ -5,7 +5,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	$: ({ notes, supabase, user } = data);
+	$: ({ users, supabase, user } = data);
 
 	let handleSubmit: EventHandler<SubmitEvent, HTMLFormElement>;
 	$: handleSubmit = async (evt) => {
@@ -28,13 +28,13 @@
 <h1>Private page for user: {user?.email}</h1>
 <h2>Notes</h2>
 <ul>
-	{#each notes as note}
-		<li>{note.note}</li>
+	{#each users as user}
+		<li>{user.first_name}</li>
 	{/each}
 </ul>
 <form on:submit={handleSubmit}>
 	<label>
-		Add a note
-		<input name="note" type="text" />
+		Add a user
+		<input name="user" type="text" />
 	</label>
 </form>
