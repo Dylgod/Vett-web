@@ -20,7 +20,7 @@
 		const { error } = await supabase.from('users').insert({ user });
 		if (error) console.error(error);
 
-		invalidate('supabase:db:notes');
+		invalidate('supabase:db:users');
 		form.reset();
 	};
 </script>

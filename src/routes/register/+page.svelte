@@ -10,8 +10,36 @@
 			class="bg-white px-6 py-12 outline outline-gray-300 outline-1 shadow-lg sm:rounded-lg sm:px-12"
 		>
 			<form class="space-y-6" action="#" method="POST">
+				<div class="flex gap-4">
+					<div class="mt-1 w-full">
+						<label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First Name</label>
+
+						<input
+							id="first_name"
+							name="first_name"
+							type="first_name"
+							required
+							class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+						/>
+					</div>
+
+					<div class="mt-1 w-full">
+						<label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
+
+						<input
+							id="last_name"
+							name="last_name"
+							type="last_name"
+							required
+							class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+						/>
+					</div>
+				</div>
+
 				<div>
-					<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+					<label for="email" class="block text-sm font-medium leading-6 text-gray-900"
+						>Email</label
+					>
 					<div class="mt-1">
 						<input
 							id="email"
@@ -24,47 +52,40 @@
 					</div>
 				</div>
 
-				<div>
-					<label for="password" class="block text-sm font-medium leading-6 text-gray-900"
-						>Password</label
-					>
-					<div class="mt-1">
+				<div class="flex gap-4">
+					<div class="mt-1 w-full">
+						<label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
 						<input
 							id="password"
 							name="password"
 							type="password"
-							autocomplete="current-password"
+							required
+							class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+						/>
+					</div>
+
+					<div class="mt-1 w-full">
+						<label for="confirm_password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
+						<input
+							id="confirm_password"
+							name="confirm_password"
+							type="password"
 							required
 							class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
 						/>
 					</div>
 				</div>
-
-				<div>
-					<label for="password" class="block text-sm font-medium leading-6 text-gray-900"
-						>Confirm Password</label
-					>
-					<div class="mt-1">
-						<input
-							id="password"
-							name="password"
-							type="password"
-							autocomplete="current-password"
-							required
-							class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-				</div>
-
+				
 				<div class="flex items-center justify-items-start">
 					<div class="flex items-center">
 						<input
-							id="remember-me"
-							name="remember-me"
+							id="terms"
+							name="terms"
 							type="checkbox"
+							required
 							class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
 						/>
-						<label for="remember-me" class="ml-3 block text-sm leading-6 text-gray-900 pr-1"
+						<label for="terms" class="ml-3 block text-sm leading-6 text-gray-900 pr-1"
 							>I accept the</label
 						>
 					</div>
