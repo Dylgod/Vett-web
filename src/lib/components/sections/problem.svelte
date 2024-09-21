@@ -1,3 +1,29 @@
+<script>
+  import Highlight from "svelte-highlight";
+  import rust from "svelte-highlight/languages/rust";
+  import tokyo from "svelte-highlight/styles/tokyo-night-dark";
+  const code = `
+ // Burning time and money
+fn hire_noob(noob: BadHire) {
+  while noob.is_hired {
+    company.lose_money(100_000)
+  }
+}
+
+// Making money, living your best life
+fn hire_pro(pro: GoodHire) {
+  while pro.is_hired {
+    company.make_money(100_000_000)
+  }
+} 
+  `
+
+</script>
+
+<svelte:head>
+  {@html tokyo}
+</svelte:head>
+
 <div class="overflow-hidden bg-gray-900 py-24 sm:py-32">
 	<div class="mx-auto max-w-7xl md:px-6 lg:px-8">
 		<div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
@@ -73,43 +99,59 @@
 								</svg>
 							</dt>
 							<dd class="text-white">
-								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin via remote control.
+								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin
+								via remote control.
 							</dd>
 						</div>
 					</dl>
 				</div>
 			</div>
-			<div class="sm:px-6 lg:px-0">
+
+			<div class="mt-20 sm:mt-24 md:mx-auto md:max-w-2xl lg:mx-0 lg:mt-0 lg:w-screen">
 				<div
-					class="relative isolate overflow-hidden bg-indigo-500 px-6 pt-8 sm:mx-auto sm:max-w-2xl sm:rounded-3xl sm:pl-16 sm:pr-0 sm:pt-16 lg:mx-0 lg:max-w-none"
-				>
+					class="absolute inset-y-0 right-1/2 -z-10 -mr-10 w-[200%] skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 md:-mr-20 lg:-mr-36"
+					aria-hidden="true"
+				></div>
+				<div class="shadow-lg md:rounded-3xl">
 					<div
-						class="absolute -inset-y-px -left-3 -z-10 w-full origin-bottom-left skew-x-[-30deg] bg-indigo-100 opacity-20 ring-1 ring-inset ring-white"
-						aria-hidden="true"
-					></div>
-					<div class="mx-auto max-w-2xl sm:mx-0 sm:max-w-none">
-						<div class="w-screen overflow-hidden rounded-tl-xl bg-gray-900 ring-1 ring-white/10">
-							<div class="flex bg-gray-800/40 ring-1 ring-white/5">
-								<div class="-mb-px flex text-sm font-medium leading-6 text-gray-400">
-									<div
-										class="border-b border-r border-b-white/20 border-r-white/10 bg-white/5 px-4 py-2 text-white"
-									>
-										NotificationSetting.jsx
+						class="bg-indigo-500 [clip-path:inset(0)] md:[clip-path:inset(0_round_theme(borderRadius.3xl))]"
+					>
+						<div
+							class="absolute -inset-y-px left-1/2 -z-10 ml-10 w-[200%] skew-x-[-30deg] bg-indigo-100 opacity-20 ring-1 ring-inset ring-white md:ml-20 lg:ml-36"
+							aria-hidden="true"
+						></div>
+						<div class="relative px-6 pt-8 sm:pt-16 md:pl-16 md:pr-0">
+							<div class="mx-auto max-w-2xl md:mx-0 md:max-w-none">
+								<div class="w-screen overflow-hidden rounded-tl-xl bg-gray-900">
+									<div class="flex bg-gray-800/40 ring-1 ring-white/5">
+										<div class="-mb-px flex text-sm font-medium leading-6 text-gray-400">
+											<div
+												class="border-b border-r border-b-white/20 border-r-white/10 bg-white/5 px-4 py-2 text-white"
+											>
+												hiring_decisions.rs
+											</div>
+											<div class="border-r border-gray-600/10 px-4 py-2">profit.rs</div>
+										</div>
 									</div>
-									<div class="border-r border-gray-600/10 px-4 py-2">App.jsx</div>
+									<div class="px-6">
+										<Highlight language={rust} {code} />
+									</div>
 								</div>
 							</div>
-							<div class="px-6 pb-14 pt-6 bg-gray-200">
-								code goes here. tried with pre and code tags
-							</div>
+							<div
+								class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10 md:rounded-3xl"
+								aria-hidden="true"
+							></div>
 						</div>
 					</div>
-					<div
-						class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10 sm:rounded-3xl"
-						aria-hidden="true"
-					></div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	:global(.hljs) {
+	  background: transparent !important;
+	}
+  </style>
