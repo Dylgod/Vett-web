@@ -20,10 +20,10 @@
   <body class="h-full">
   ```
 -->
-<div class="flex min-h-full flex-col justify-center py-24 sm:px-6 lg:px-8 pt-10">
+<div class="flex pt-20 flex-col justify-center sm:px-6 lg:px-8">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
 		<h2 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
-			First, enter your email
+			Sign in to Vett
 		</h2>
 		<p class="mt-3 text-center text-lg leading-9 tracking-tight text-gray-900">
 			We suggest using the <strong>email address you use at work.</strong>

@@ -1,6 +1,6 @@
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "../../../$types";
 import { redirect } from '@sveltejs/kit'
-import type { Actions } from './$types'
+import type { Actions } from '../../../$types'
 import type { ResendParams } from "@supabase/supabase-js";
 
 export const load: PageServerLoad = async ({ url }) => {

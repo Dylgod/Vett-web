@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit'
-import type { PageServerLoad } from './$types'
+import type { PageServerLoad } from '../../$types'
 
-import type { Actions } from './$types'
+import type { Actions } from '../../$types'
 
 export const actions: Actions = {
   signup: async ({ request, locals: { supabase } }) => {

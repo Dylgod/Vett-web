@@ -8,6 +8,8 @@
 	import Howitworks from '$lib/components/sections/howitworks.svelte';
 </script>
 
+<Header />
+
 <Hero />
 
 <Problem />
@@ -17,3 +19,5 @@
 <Reviews />
 
 <Faq />
+
+<Footer /> 
