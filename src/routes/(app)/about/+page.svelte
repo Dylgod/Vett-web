@@ -123,25 +123,29 @@
 		<div class="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
 			<div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
 				<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our mission</h2>
-				<div class="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
-					<div class="lg:w-full lg:max-w-2xl lg:flex-auto">
+				<div class="mt-6 flex flex-col gap-y-8">
+					<div class="lg:w-full lg:max-w-2xl">
 						<p class="text-xl leading-8 text-gray-600">
 							Every hire is a significant investment. A poor investment can be costly, if not deadly. Our mission is to make sure each investment is a good one. <br><br>
-
+		
 							Leverage our expertise. Make informed decisions. Build stronger teams. 
 						</p>
 					</div>
-					<div class="lg:flex lg:flex-auto lg:justify-center">
-						<dl class="w-64 space-y-8 xl:w-80">
-							<div class="flex flex-col-reverse gap-y-4">
+					<div class="flex flex-col gap-y-8 sm:flex-row sm:gap-x-8 sm:gap-y-0 mt-3">
+						<dl class="flex-1">
+							<div class="flex flex-col-reverse">
 								<dt class="text-base leading-7 text-gray-600">Average savings per hire</dt>
 								<dd class="text-5xl font-semibold tracking-tight text-gray-900">$50,000</dd>
 							</div>
-							<div class="flex flex-col-reverse gap-y-4">
+						</dl>
+						<dl class="flex-1">
+							<div class="flex flex-col-reverse">
 								<dt class="text-base leading-7 text-gray-600">Increase in team productivity</dt>
 								<dd class="text-5xl font-semibold tracking-tight text-gray-900">36%</dd>
 							</div>
-							<div class="flex flex-col-reverse gap-y-4">
+						</dl>
+						<dl class="flex-1">
+							<div class="flex flex-col-reverse">
 								<dt class="text-base leading-7 text-gray-600">Increase in team morale</dt>
 								<dd class="text-5xl font-semibold tracking-tight text-gray-900">32%</dd>
 							</div>
@@ -152,7 +156,7 @@
 		</div>
 
 		<!-- Image section -->
-		<div class="mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8">
+		<div class="my-16 xl:mx-auto xl:max-w-7xl xl:px-8">
 			<img
 				src="screenshots/hackathon.jpg"
 				alt=""
@@ -161,7 +165,7 @@
 		</div>
 
 		<!-- Values section -->
-		<div class="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
+		<div class="mx-auto max-w-7xl px-6 lg:px-8">
 			<div class="mx-auto max-w-2xl lg:mx-0">
 				<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our values</h2>
 				<p class="mt-6 text-lg leading-8 text-gray-600">
