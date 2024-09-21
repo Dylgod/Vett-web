@@ -145,8 +145,10 @@
 			</div>
 		</div>
 
-		<div class="flex rounded-md bg-neutral-100 outline outline-gray-300 outline-1 p-4 mt-3">
-			<div class="flex align-middle">
+		<div
+			class="flex rounded-md bg-neutral-100 outline outline-gray-300 outline-1 p-4 mt-3 justify-center"
+		>
+			<div class="flex">
 				<div class="flex-shrink-0">
 					<svg
 						class="h-5 w-5 text-gray-500"
@@ -163,11 +165,11 @@
 				</div>
 				<div class="ml-3 flex-1 md:flex md:justify-between">
 					<p class="text-sm text-gray-500">
-						We’ll email you a magic code for a password-free sign in.<br>Dont have an account?
+						We’ll email you a magic code for a password-free sign in.<br />Dont have an account?
 						<a href="/login" class="font-semibold leading-6 text-blue-600 hover:text-blue-500"
-						>Sign up here!</a>
+							>Sign up here!</a
+						>
 					</p>
-
 				</div>
 			</div>
 		</div>
