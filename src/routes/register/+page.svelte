@@ -1,45 +1,37 @@
-<div class="flex min-h-full flex-col justify-center py-24 sm:px-6 lg:px-8 pb-44 pt-10">
+<!--
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+-->
+<!--
+  This example requires updating your template:
+
+  ```
+  <html class="h-full bg-gray-50">
+  <body class="h-full">
+  ```
+-->
+<div class="flex min-h-full flex-col justify-center py-24 sm:px-6 lg:px-8 pt-10">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
-		<h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-			Create an account
+		<h2 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
+			Log in to Vett
 		</h2>
 	</div>
 
-	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-		<div
-			class="bg-white px-6 py-12 outline outline-gray-300 outline-1 shadow-lg sm:rounded-lg sm:px-12"
-		>
-			<form class="space-y-6" action="#" method="POST">
-				<div class="flex gap-4">
-					<div class="mt-1 w-full">
-						<label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First Name</label>
-
-						<input
-							id="first_name"
-							name="first_name"
-							type="first_name"
-							required
-							class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-
-					<div class="mt-1 w-full">
-						<label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
-
-						<input
-							id="last_name"
-							name="last_name"
-							type="last_name"
-							required
-							class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-				</div>
-
+	<div class="sm:mx-auto sm:w-full sm:max-w-[480px]">
+		<div class="bg-white px-6 py-6 sm:rounded-lg sm:px-12">
+			<form class="space-y-4" action="#" method="POST">
 				<div>
-					<label for="email" class="block text-sm font-medium leading-6 text-gray-900"
-						>Email</label
-					>
+					<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
 					<div class="mt-1">
 						<input
 							id="email"
@@ -47,76 +39,52 @@
 							type="email"
 							autocomplete="email"
 							required
-							class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+							class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
 						/>
 					</div>
 				</div>
 
-				<div class="flex gap-4">
-					<div class="mt-1 w-full">
-						<label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
-						<input
-							id="password"
-							name="password"
-							type="password"
-							required
-							class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-
-					<div class="mt-1 w-full">
-						<label for="confirm_password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
-						<input
-							id="confirm_password"
-							name="confirm_password"
-							type="password"
-							required
-							class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-				</div>
-				
-				<div class="flex items-center justify-items-start">
+				<!-- In case we bring normal account flow back. -->
+				<!-- <div class="flex items-center justify-between">
 					<div class="flex items-center">
 						<input
-							id="terms"
-							name="terms"
+							id="remember-me"
+							name="remember-me"
 							type="checkbox"
-							required
 							class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
 						/>
-						<label for="terms" class="ml-3 block text-sm leading-6 text-gray-900 pr-1"
-							>I accept the</label
+						<label for="remember-me" class="ml-3 block text-sm leading-6 text-gray-900"
+							>Remember me</label
 						>
 					</div>
 
 					<div class="text-sm leading-6">
 						<a href="/login" class="font-semibold text-blue-600 hover:text-blue-500"
-							>Terms and Conditions</a
+							>Forgot password?</a
 						>
 					</div>
-				</div>
+				</div> -->
 
 				<div>
 					<button
 						type="submit"
 						class="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-						>Create an Account</button
+						>Sign In With Email</button
 					>
 				</div>
 			</form>
 
 			<div>
-				<div class="relative mt-5">
+				<div class="relative mt-4">
 					<div class="absolute inset-0 flex items-center" aria-hidden="true">
 						<div class="w-full border-t border-gray-200"></div>
 					</div>
 					<div class="relative flex justify-center text-sm font-medium leading-6">
-						<span class="bg-white px-6 text-gray-900">Or Create with</span>
+						<span class="bg-white px-6 text-gray-900">Or Sign In With</span>
 					</div>
 				</div>
 
-				<div class="mt-6 grid grid-cols-2 gap-4">
+				<div class="mt-4 grid grid-cols-2 gap-4">
 					<a
 						href="/login"
 						class="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
@@ -147,28 +115,60 @@
 						class="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
 					>
 						<svg
-							class="h-5 w-5 fill-[#24292F]"
-							fill="currentColor"
+							class="h-5 w-5"
+							fill="#000000"
+							version="1.1"
+							id="Capa_1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink"
+							viewBox="0 0 22.773 22.773"
+							xml:space="preserve"
+						>
+							<path
+								d="M15.769,0c0.053,0,0.106,0,0.162,0c0.13,1.606-0.483,2.806-1.228,3.675c-0.731,0.863-1.732,1.7-3.351,1.573
+						c-0.108-1.583,0.506-2.694,1.25-3.561C13.292,0.879,14.557,0.16,15.769,0z"
+							/>
+							<path
+								d="M20.67,16.716c0,0.016,0,0.03,0,0.045c-0.455,1.378-1.104,2.559-1.896,3.655c-0.723,0.995-1.609,2.334-3.191,2.334
+						c-1.367,0-2.275-0.879-3.676-0.903c-1.482-0.024-2.297,0.735-3.652,0.926c-0.155,0-0.31,0-0.462,0
+						c-0.995-0.144-1.798-0.932-2.383-1.642c-1.725-2.098-3.058-4.808-3.306-8.276c0-0.34,0-0.679,0-1.019
+						c0.105-2.482,1.311-4.5,2.914-5.478c0.846-0.52,2.009-0.963,3.304-0.765c0.555,0.086,1.122,0.276,1.619,0.464
+						c0.471,0.181,1.06,0.502,1.618,0.485c0.378-0.011,0.754-0.208,1.135-0.347c1.116-0.403,2.21-0.865,3.652-0.648
+						c1.733,0.262,2.963,1.032,3.723,2.22c-1.466,0.933-2.625,2.339-2.427,4.74C17.818,14.688,19.086,15.964,20.67,16.716z"
+							/>
+						</svg>
+						<span class="text-sm font-semibold">Apple</span>
+					</a>
+				</div>
+			</div>
+			<div
+				class="flex rounded-md bg-neutral-100 outline outline-gray-300 outline-1 p-3 mt-5 justify-center"
+			>
+				<div class="flex">
+					<div class="flex-shrink-0">
+						<svg
+							class="h-5 w-5 text-gray-500"
 							viewBox="0 0 20 20"
+							fill="currentColor"
 							aria-hidden="true"
 						>
 							<path
 								fill-rule="evenodd"
-								d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z"
+								d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
 								clip-rule="evenodd"
 							/>
 						</svg>
-						<span class="text-sm font-semibold leading-6">GitHub</span>
-					</a>
+					</div>
+					<div class="ml-3 flex-1 md:flex md:justify-between">
+						<p class="text-sm text-gray-500">
+							We’ll email you a magic code for a password-free sign in. Dont have an account?
+							<a href="/login" class="font-semibold leading-6 text-blue-600 hover:text-blue-500"
+								>Sign up here!</a
+							>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<p class="mt-10 text-center text-sm text-gray-500">
-			Already have an account?
-			<a href="/login" class="font-semibold leading-6 text-blue-600 hover:text-blue-500"
-				>Log in &rarr;</a
-			>
-		</p>
 	</div>
 </div>
