@@ -20,7 +20,7 @@
   <body class="h-full">
   ```
 -->
-<div class="flex min-h-[75svh] flex-col justify-center pb-24 sm:px-6 lg:px-8 pt-10">
+<div class="flex flex-col min-h-[75svh] lg:mt-48 px-6">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
 		<h2 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
 			Sign in to Vett
