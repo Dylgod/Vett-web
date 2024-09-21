@@ -20,19 +20,19 @@
   <body class="h-full">
   ```
 -->
-<div class="flex min-h-full flex-col justify-center py-24 sm:px-6 lg:px-8 pb-52 pt-10">
+<div class="flex min-h-full flex-col justify-center py-24 sm:px-6 lg:px-8 pt-10">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
 		<h2 class="mt-6 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900">
 			Sign in to Vett
 		</h2>
-		<p class="mt-2 text-center text-lg leading-9 tracking-tight text-gray-900">
+		<p class="mt-3 text-center text-lg leading-9 tracking-tight text-gray-900">
 			We suggest using the <strong>email address you use at work.</strong>
 		</p>
 	</div>
 
-	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-		<div class="bg-white px-6 py-12 outline outline-gray-300 outline-1 sm:rounded-lg sm:px-12">
-			<form class="space-y-6" action="#" method="POST">
+	<div class="sm:mx-auto sm:w-full sm:max-w-[480px]">
+		<div class="bg-white px-6 py-6 sm:rounded-lg sm:px-12">
+			<form class="space-y-4" action="#" method="POST">
 				<div>
 					<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
 					<div class="mt-1">
@@ -47,7 +47,8 @@
 					</div>
 				</div>
 
-				<div class="flex items-center justify-between">
+				<!-- In case we bring normal account flow back. -->
+				<!-- <div class="flex items-center justify-between">
 					<div class="flex items-center">
 						<input
 							id="remember-me"
@@ -65,7 +66,7 @@
 							>Forgot password?</a
 						>
 					</div>
-				</div>
+				</div> -->
 
 				<div>
 					<button
@@ -77,7 +78,7 @@
 			</form>
 
 			<div>
-				<div class="relative mt-10">
+				<div class="relative mt-4">
 					<div class="absolute inset-0 flex items-center" aria-hidden="true">
 						<div class="w-full border-t border-gray-200"></div>
 					</div>
@@ -86,7 +87,7 @@
 					</div>
 				</div>
 
-				<div class="mt-6 grid grid-cols-2 gap-4">
+				<div class="mt-4 grid grid-cols-2 gap-4">
 					<a
 						href="/login"
 						class="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
@@ -143,33 +144,32 @@
 					</a>
 				</div>
 			</div>
-		</div>
-
-		<div
-			class="flex rounded-md bg-neutral-100 outline outline-gray-300 outline-1 p-4 mt-3 justify-center"
-		>
-			<div class="flex">
-				<div class="flex-shrink-0">
-					<svg
-						class="h-5 w-5 text-gray-500"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						aria-hidden="true"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-				</div>
-				<div class="ml-3 flex-1 md:flex md:justify-between">
-					<p class="text-sm text-gray-500">
-						We’ll email you a magic code for a password-free sign in.<br />Dont have an account?
-						<a href="/login" class="font-semibold leading-6 text-blue-600 hover:text-blue-500"
-							>Sign up here!</a
+			<div
+				class="flex rounded-md bg-neutral-100 outline outline-gray-300 outline-1 p-3 mt-5 justify-center"
+			>
+				<div class="flex">
+					<div class="flex-shrink-0">
+						<svg
+							class="h-5 w-5 text-gray-500"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
 						>
-					</p>
+							<path
+								fill-rule="evenodd"
+								d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+					</div>
+					<div class="ml-3 flex-1 md:flex md:justify-between">
+						<p class="text-sm text-gray-500">
+							We’ll email you a magic code for a password-free sign in. Dont have an account?
+							<a href="/login" class="font-semibold leading-6 text-blue-600 hover:text-blue-500"
+								>Sign up here!</a
+							>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
