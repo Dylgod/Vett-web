@@ -1,175 +1,90 @@
-<section class="overflow-hidden bg-neutral-100">
-	<div class="py-12 sm:py-12">
-		<div class="mx-auto max-w-7xl px-6 lg:px-8">
-			<div class="mx-auto max-w-xl text-center">
-				<h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-					Testimonials
-				</h2>
-				<p class="mb-4 mt-6 text-xl leading-8 text-neutral-600 sm:mb-12">
-					We have worked with thousands of amazing people
-				</p>
+<section class="bg-white py-24 sm:py-32">
+	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="mx-auto max-w-xl text-center">
+			<h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Testimonials</h2>
+			<p class="mb-4 mt-6 text-xl leading-8 text-neutral-600 sm:mb-12">
+				We have worked with thousands of amazing people
+			</p>
+		</div>
+		<div class="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2 mt-16">
+			<div class="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
+				<!-- <img class="h-12 self-start" src="./screenshots/canon.png" alt=""> -->
+				<svg
+					class="h-12 self-start"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 541.863 112.523"
+					><g fill="#cc2229"
+						><path
+							d="M42.715 80.075c8.676 14.225 24.588 23.769 42.297 23.769 26.166 0 40.57-22.581 40.57-22.581l1.854 6.015c-12.114 15.755-33.755 25.246-57.967 25.246-27.876 0-51.917-13.298-62.979-32.475C2.325 72.826 0 64.758 0 56.261 0 25.188 31.099 0 69.468 0c27.11 0 48.937 11.612 60.395 28.44L84.375 55.679l25.96-39.862c-7.427-4.671-16.539-9.045-25.96-9.045-26.632 0-48.567 22.224-48.567 48.855 0 8.923 2.534 17.307 6.907 24.448zM164.513 80.059a18.41 18.41 0 0 0-.204 2.745c0 10.109 8.196 18.306 18.306 18.306 10.11 0 18.305-8.196 18.305-18.306a18.5 18.5 0 0 0-.205-2.755c-1.324-8.797-8.923-15.55-18.101-15.55-9.177 0-16.777 6.753-18.101 15.56zm67.925-.01l9.098 30.646h-31.914l-6.275-20.985c-4.202 12.092-18.383 20.985-35.229 20.985-20.156 0-36.494-12.73-36.494-28.436 0-.735.036-1.465.106-2.21 1.434-14.659 17.177-26.226 36.388-26.226 10.904 0 20.691 3.726 27.378 9.633l-8.693-29.064h-36.628s6.094-3.655 33.119-13.488c27.025-9.832 35.589 13.488 35.589 13.488l13.555 45.657zM334.475 80.049v30.646h-32.838V43.363a8.971 8.971 0 0 0-8.971-8.971 8.971 8.971 0 0 0-8.361 5.714v70.589h-32.229V34.392H233.28s26.148-15.841 35.215-15.841c8.593 0 14.953 6.602 15.748 15.012 12.646-6.821 25.186-15.012 33.814-15.012 8.914 0 16.17 7.104 16.418 15.961v45.537zM385.062 80.049l4.57 15.105c.088 6.474 5.408 11.653 11.938 11.653 6.676 0 12.086-5.41 12.086-12.085 0-.473-.027-.938-.08-1.396l-3.885-13.277-13.643-46.627c-.672-6.042-5.793-10.739-12.014-10.739-6.158 0-12.029 5.754-12.779 11.708l13.807 45.658zm52.26.006c-6.219 18.857-23.98 32.469-44.922 32.469-20.943 0-38.705-13.611-44.926-32.475a47.2 47.2 0 0 1-2.369-14.817c0-26.119 21.174-47.291 47.295-47.291 26.119 0 47.293 21.172 47.293 47.291 0 5.177-.832 10.161-2.371 14.823zM491.693 80.049v30.646h-32.23V34.392H441.44s25.375-15.841 34.443-15.841c8.594 0 14.953 6.602 15.75 15.012 12.646-6.821 25.184-15.012 33.812-15.012 8.916 0 16.172 7.104 16.418 15.961V110.695h-32.838V43.363a8.971 8.971 0 0 0-8.971-8.971 8.971 8.971 0 0 0-8.361 5.714v39.943z"
+						/></g
+					></svg
+				>
+
+				<figure class="mt-10 flex flex-auto flex-col justify-between">
+					<blockquote class="text-lg leading-8 text-gray-900">
+						<p>
+							“We needed to hire talent with expertise to expand our tech stack. Vett made it possible for us to pick the right people.”
+						</p>
+					</blockquote>
+					<figcaption class="mt-10 flex items-center gap-x-6">
+						<img class="h-14 w-14 rounded-full bg-gray-50" src="./photos/zack.webp" alt="" />
+						<div class="text-base">
+							<div class="font-semibold text-gray-900">Zack U.</div>
+							<div class="mt-1 text-gray-500">Staffing Manager | Canon</div>
+						</div>
+					</figcaption>
+				</figure>
 			</div>
-			<div class="mx-auto mt-12 flow-root max-w-2xl lg:mx-0 lg:max-w-none">
-				<div class="-mt-8 sm:-mx-4 sm:columns-2 sm:text-[0] lg:columns-3">
-					<div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-						<figure
-							class="rounded-2xl text-sm leading-6 p-8 ring-3 ring-black bg-gray-900 shadow-gray-800 shadow-lg xl:p-10 hover:bg-black transition-all duration-1000 hover:shadow-black hover:shadow-2xl">
-							<blockquote class="text-gray-900">
-								<p class="text-white">
-									“I got a job in no time at all! It was amazing seeing the
-									notifications I received about open positions I applied to.
-									The job I found was an ideal fit, and I couldn't be more
-									excited to start. Highly recommend this app!”
-								</p>
-							</blockquote>
-							<figcaption class="mt-6 flex items-center gap-x-4">
-								<img
-									class="h-10 w-10 rounded-full bg-gray-50"
-									src="./photos/rob.webp"
-									alt="" />
-								<div class="text-xl font-medium text-white">
-									Rob M.
-									<div>
-										<div class="text-sm font-medium text-orange-500">
-											<p>Software Engineer | Raytheon</p>
-										</div>
-									</div>
-								</div>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-						<figure
-							class="rounded-2xl text-sm leading-6 p-8 ring-3 ring-black bg-gray-900 shadow-gray-800 shadow-lg xl:p-10 hover:bg-black transition-all duration-1000 hover:shadow-black hover:shadow-2xl">
-							<blockquote class="text-gray-900">
-								<p class="text-white">
-									“Between going to class, time studying and my job, it was
-									impossible for me to find the time to look for a job in my
-									career field. Shyapply made it possible for me to do that and
-									fit everything in my day. Definitely get this if you dont have
-									time to apply places.”
-								</p>
-							</blockquote>
-							<figcaption class="mt-6 flex items-center gap-x-4">
-								<img
-									class="h-10 w-10 rounded-full bg-gray-50"
-									src="./photos/kristal.webp"
-									alt="" />
-								<div class="text-xl font-medium text-white">
-									Kristal H.
-									<div>
-										<div class="text-sm font-medium text-orange-500">
-											<p>Human Resources | Supercell</p>
-										</div>
-									</div>
-								</div>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-						<figure
-							class="rounded-2xl text-sm leading-6 p-8 ring-3 ring-black bg-gray-900 shadow-gray-800 shadow-lg xl:p-10 hover:bg-black transition-all duration-1000 hover:shadow-black hover:shadow-2xl">
-							<blockquote class="text-gray-900">
-								<p class="text-white">
-									“It works great, got 2 interviews in the first week.”
-								</p>
-							</blockquote>
-							<figcaption class="mt-6 flex items-center gap-x-4">
-								<img
-									class="h-10 w-10 rounded-full bg-gray-50"
-									src="./photos/sam.webp"
-									alt="" />
-								<div class="text-xl font-medium text-white">
-									Sam V.
-									<div>
-										<div class="text-sm font-medium text-orange-500">
-											<p>3D Artist Intern | Activision Blizzard</p>
-										</div>
-									</div>
-								</div>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-						<figure
-							class="rounded-2xl text-sm leading-6 p-8 ring-3 ring-black bg-gray-900 shadow-gray-800 shadow-lg xl:p-10 hover:bg-black transition-all duration-1000 hover:shadow-black hover:shadow-2xl">
-							<blockquote class="text-gray-900">
-								<p class="text-white">
-									“In my third interview I was questioned about giving an old
-									lady a discount at a yard sale that I hosted. That never
-									happened. AI is crazy. Got the job though so we lit.”
-								</p>
-							</blockquote>
-							<figcaption class="mt-6 flex items-center gap-x-4">
-								<img
-									class="h-10 w-10 rounded-full bg-gray-50"
-									src="./photos/kenny.webp"
-									alt="kenny portrait" />
-								<div class="text-xl font-medium text-white">
-									Kenny V.
-									<div>
-										<div class="text-sm font-medium text-orange-500">
-											<p>Laborer | SF Landscapers</p>
-										</div>
-									</div>
-								</div>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-						<figure
-							class="rounded-2xl text-sm leading-6 p-8 ring-3 ring-black bg-gray-900 shadow-gray-800 shadow-lg xl:p-10 hover:bg-black transition-all duration-1000 hover:shadow-black hover:shadow-2xl">
-							<blockquote class="text-gray-900">
-								<p class="text-white">
-									“I got laid off last month from a job I really enjoyed and
-									applying for jobs was so demoralizing. The Shy Apply app legit
-									got me back in the game within a month.”
-								</p>
-							</blockquote>
-							<figcaption class="mt-6 flex items-center gap-x-4">
-								<img
-									class="h-10 w-10 rounded-full bg-gray-50"
-									src="./photos/zack.webp"
-									alt="" />
-								<div class="text-xl font-medium text-white">
-									Zack U.
-									<div>
-										<div class="text-sm font-medium text-orange-500">
-											<p>Material Management | Canon</p>
-										</div>
-									</div>
-								</div>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="pt-8 sm:inline-block sm:w-full sm:px-4">
-						<figure
-							class="rounded-2xl text-sm leading-6 p-8 ring-3 ring-black bg-gray-900 shadow-gray-800 shadow-lg xl:p-10 hover:bg-black transition-all duration-1000 hover:shadow-black hover:shadow-2xl">
-							<blockquote class="text-gray-900">
-								<p class="text-white">
-									“Its good when you're using it but it doesn't apply forever
-									and I kept forgetting to turn it back on everyday. I guess
-									that's on me to check on it but I would like to see a "run
-									forever" option.”
-								</p>
-							</blockquote>
-							<figcaption class="mt-6 flex items-center gap-x-4">
-								<img
-									class="h-10 w-10 rounded-full bg-gray-50"
-									src="./photos/ryan.webp"
-									alt="" />
-								<div class="text-xl font-medium text-white">
-									Ryan R.
-									<div>
-										<div class="text-sm font-medium text-orange-500">
-											<p>Bartender | Applebees</p>
-										</div>
-									</div>
-								</div>
-							</figcaption>
-						</figure>
-					</div>
-				</div>
+			<div
+				class="flex flex-col border-t border-gray-900/10 pt-10 sm:pt-16 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 xl:pl-20"
+			>
+				<!-- <img class="h-12 self-start" src="https://tailwindui.com/img/logos/reform-logo-gray-900.svg" alt=""> -->
+				<svg
+					class="h-12 self-start"
+					version="1.1"
+					id="Layer_1"
+					xmlns="http://www.w3.org/2000/svg"
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					viewBox="0 0 163.779 31.521"
+					enable-background="new 0 0 163.779 31.521"
+					xml:space="preserve"
+				>
+					<path
+						fill="#E31937"
+						d="M34.137,19.762h-2.052v-4.256h2.052V19.762z M132.322,20.329h-1.951V8.982h1.951V20.329z M110.322,12.639
+		  h-1.957V8.982h1.957V12.639z M76.375,11.063V5.642h-3.152V0h-9.331v5.642h-7.346l-2.805,9.93l-2.71-9.93h-9.016l7.156,18.819
+		  l-2.617,7.061h9.141l8.164-21.372v14.404h9.363V11.063H76.375z M163.779,24.554V10.592c0-1.578-0.662-2.933-1.984-4.066
+		  c-1.262-1.074-2.648-1.608-4.191-1.578c-2.555,0.032-4.445,0.724-5.676,2.048l-0.033-1.766h-8.916v19.323h9.266V11.063h1.921v13.491
+		  H163.779z M43.213,24.554v-12.42c0-2.457-0.976-4.348-2.866-5.704c-1.767-1.261-4.035-1.891-6.841-1.859
+		  c-3.278,0.031-5.832,0.693-7.691,1.956c-1.608,1.069-2.397,2.363-2.397,3.907v0.853h8.763V8.982h1.957v3.592l-4.477,0.097
+		  c-4.6,0.092-6.936,1.922-6.965,5.454c-0.065,4.475,1.984,6.713,6.113,6.713c2.489,0,4.381-0.916,5.674-2.773l0.033,2.489H43.213z
+		   M120.06,14.687c-0.062-3.246-0.755-5.642-2.048-7.154c-1.67-1.985-4.537-2.962-8.635-2.962c-3.469,0-5.961,0.504-7.473,1.542
+		  c-2.175,1.482-3.246,4.352-3.246,8.574c0,4.13,1.135,6.968,3.404,8.513c1.545,1.072,3.971,1.606,7.281,1.639
+		  c3.184,0.031,5.609-0.473,7.282-1.578c1.479-0.975,2.52-2.52,3.089-4.6c0.094-0.41,0.156-0.757,0.189-1.07h-9.551v2.739h-1.986
+		  v-4.507h11.631C120.031,15.413,120.06,15.035,120.06,14.687 M142.029,14.687c0-4.189-1.072-6.997-3.214-8.509
+		  c-1.482-1.042-3.972-1.607-7.472-1.607c-3.498,0-5.988,0.536-7.47,1.576c-2.11,1.513-3.183,4.351-3.183,8.54
+		  c0,4.257,1.072,7.093,3.183,8.573c1.481,1.041,3.972,1.578,7.47,1.578c3.469,0,5.957-0.504,7.472-1.578
+		  C140.957,21.748,142.029,18.879,142.029,14.687 M21.908,6.557c0.063-1.828-0.539-3.373-1.673-4.633C19.07,0.63,17.523,0,15.538,0H0
+		  v24.554h9.834v-9.141h2.174v9.141h9.867v-7.753c0-1.388-0.253-2.396-0.789-3.058c-0.754-0.946-1.542-1.546-2.332-1.828
+		  c1.07-0.63,1.828-1.261,2.238-1.892C21.527,9.204,21.842,8.036,21.908,6.557 M98.061,24.554V10.149c0-1.48-0.568-2.711-1.674-3.72
+		  c-1.1-0.977-2.426-1.481-3.97-1.481c-1.104,0-2.205,0.188-3.31,0.567c-1.104,0.378-1.922,0.851-2.458,1.387V0h-9.393v24.554h9.393
+		  V11.063h1.954v13.491H98.061z M12.041,10.053H9.896V4.694h2.146V10.053z"
+					/>
+				</svg>
+				<figure class="mt-10 flex flex-auto flex-col justify-between">
+					<blockquote class="text-lg leading-8 text-gray-900">
+						<p>
+							"We've been struggling with a large influx of applicants, many of whom are using AI or inflating their experience. Now we just send our short list of candidates that seem great, and Vett saves our technical team from spending all day doing interviews. It's been a game changer."
+						</p>
+					</blockquote>
+					<figcaption class="mt-10 flex items-center gap-x-6">
+						<img class="h-14 w-14 rounded-full bg-gray-50" src="./photos/rob.webp" alt="" />
+						<div class="text-base">
+							<div class="font-semibold text-gray-900">Rob M.</div>
+							<div class="mt-1 text-gray-500">Human Resources | Raytheon</div>
+						</div>
+					</figcaption>
+				</figure>
 			</div>
 		</div>
 	</div>
