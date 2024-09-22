@@ -103,8 +103,7 @@ fn hire_pro(pro: GoodHire) {
 								</svg>
 							</dt>
 							<dd class="text-white">
-								Vett solves all problems by giving every bee his own jetpack. Operated by his cousin
-								via remote control.
+								The Standish Group's CHAOS report indicates that only 29% of software projects are completed on time and within budget and yet, high-performing software developers are up to 10 times more productive than average developers. Let Vett find your company that 10x developer and get more projects done on time.
 							</dd>
 						</div>
 					</dl>
