@@ -15,7 +15,7 @@
 			>
 				<div>
 					<dt class="text-base font-semibold leading-7 text-white">
-						What&#039;s the best thing about Switzerland?
+						Why do I need Vett in my hiring process?
 					</dt>
 					<dd class="mt-2 text-base leading-7 text-gray-300">
 						I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur
@@ -23,7 +23,25 @@
 					</dd>
 				</div>
 
-				<!-- More questions... -->
+				<div>
+					<dt class="text-base font-semibold leading-7 text-white">
+						How much money will my company save with your service?
+					</dt>
+					<dd class="mt-2 text-base leading-7 text-gray-300">
+						Here is a <a href="#" class="font-semibold text-blue-600 hover:text-indigo-300">calculator</a> showing exactly how much money you can expect to save.
+					</dd>
+				</div>
+
+				<div>
+					<dt class="text-base font-semibold leading-7 text-white">
+						What does it look like involving Vett in my hiring process?
+					</dt>
+					<dd class="mt-2 text-base leading-7 text-gray-300">
+						I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur
+						adipisicing elit. Quas cupiditate laboriosam fugiat.
+					</dd>
+				</div>
+
 			</dl>
 		</div>
 	</div>
