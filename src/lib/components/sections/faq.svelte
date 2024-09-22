@@ -18,27 +18,52 @@
 						Why do I need Vett in my hiring process?
 					</dt>
 					<dd class="mt-2 text-base leading-7 text-gray-300">
-						I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur
-						adipisicing elit. Quas cupiditate laboriosam fugiat.
+						You might not need Vett if you're confident you'll never hire an under-skilled developer, or if the technical evaluation process doesn't drag on your team's performance.
 					</dd>
 				</div>
 
 				<div>
 					<dt class="text-base font-semibold leading-7 text-white">
-						How much money will my company save with your service?
+						What's your process for matching candidates to our needs?
 					</dt>
 					<dd class="mt-2 text-base leading-7 text-gray-300">
-						Here is a <a href="#" class="font-semibold text-blue-600 hover:text-indigo-300">calculator</a> showing exactly how much money you can expect to save.
+						The evaluation process for each candidate, including take-home projects and interview questions, is tailored to your requirements, tools, and tech stack.
 					</dd>
 				</div>
 
 				<div>
 					<dt class="text-base font-semibold leading-7 text-white">
-						What does it look like involving Vett in my hiring process?
+						How do you handle potential bias in the interview process?
 					</dt>
 					<dd class="mt-2 text-base leading-7 text-gray-300">
-						I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur
-						adipisicing elit. Quas cupiditate laboriosam fugiat.
+						We use a single blind system where Vetters are unaware of the candidate's identity. Practical skills are scored prior to the technical interview to ensure consistency and fairness.
+					</dd>
+				</div>
+
+				<div>
+					<dt class="text-base font-semibold leading-7 text-white">
+						How do you ensure Vetters are qualified?
+					</dt>
+					<dd class="mt-2 text-base leading-7 text-gray-300">
+						A Vetter must have at least 10 years of industry experience and a public (typically, open source) body of work that we can evaluate. 
+					</dd>
+				</div>
+
+				<div>
+					<dt class="text-base font-semibold leading-7 text-white">
+						How quickly can you typically provide results after the assessment?
+					</dt>
+					<dd class="mt-2 text-base leading-7 text-gray-300">
+						Results show up in your dashboard in less than 24 hours after an evaluation is complete.
+					</dd>
+				</div>
+
+				<div>
+					<dt class="text-base font-semibold leading-7 text-white">
+						Can I Vett multiple candidates simutaneously?
+					</dt>
+					<dd class="mt-2 text-base leading-7 text-gray-300">
+						Absolutely! We can Vett multiple candidates across multiple roles at once.
 					</dd>
 				</div>
 

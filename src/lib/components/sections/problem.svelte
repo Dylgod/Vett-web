@@ -28,13 +28,13 @@ fn hire_pro(pro: GoodHire) {
 		<div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
 			<div class="px-6 md:px-0 lg:pr-4 lg:pt-4">
 				<div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
-					<h2 class="text-base font-semibold leading-7 text-white">Deploy faster</h2>
+					<h2 class="text-base font-semibold leading-7 text-white">Fortunes</h2>
 					<p class="mt-2 text-3xl font-bold tracking-tight text-indigo-500 sm:text-4xl">
 						The Cost of a Bad Hire
 					</p>
 					<p class="mt-6 text-lg leading-8 text-white">
-						Poor performance among hires cost enterprise level companies millions every quarter.
-						Vetting candidates take the risk out of the process for a fraction of that cost.
+						Underperforming employees cost businesses billions every year.
+						Thoroughly Vetting candidates is critical to avoid costly hiring mistakes.
 					</p>
 					<dl class="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
 						<div class="relative pl-9">
@@ -53,35 +53,9 @@ fn hire_pro(pro: GoodHire) {
 								</svg>
 							</dt>
 							<dd class="text-white">
-								According to the CEO of Link humans, the cost of a bad hire is $240,000 US dollars.
-								Thats nearly 3x the average junior developer's salary. One meeting could be what
-								seperates your company from serious savings.
-							</dd>
-						</div>
-						<div class="relative pl-9">
-							<dt class="inline font-semibold text-gray-900">
-								<svg
-									class="absolute left-1 top-1 h-5 w-5 text-indigo-600"
-									viewBox="0 0 20 20"
-									fill="currentColor"
-									aria-hidden="true"
-								>
-									<path
-										fill-rule="evenodd"
-										d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-										clip-rule="evenodd"
-									/>
-								</svg>
-							</dt>
-							<dd class="inline text-white">
-								In a study conducted by the Bureau of Labor Statistics, <strong
-									>73% of Americans would lie</strong
-								>
-								on resume or use AI to cheat and 74% of hiring managers admit to having made bad
-								hiring decisions. Dont be a victim to AI deception or
-								<a class="text-indigo-500" href="https://www.youtube.com/watch?v=5bId3N7QZec"
-									>leetcode</a
-								> warriors. Let Vett do the heavy lifting.
+								According to the CEO of Link Humans, the average cost of a bad developer hire is
+								$240,000 US Dollars. The wrong hire means paying months of salary to get worse
+								productivity and reduced morale, only so you can try again to find the right fit.
 							</dd>
 						</div>
 						<div class="relative pl-9">
@@ -103,7 +77,30 @@ fn hire_pro(pro: GoodHire) {
 								</svg>
 							</dt>
 							<dd class="text-white">
-								The Standish Group's CHAOS report indicates that only 29% of software projects are completed on time and within budget and yet, high-performing software developers are up to 10 times more productive than average developers. Let Vett find your company that 10x developer and get more projects done on time.
+								Standish's CHAOS report indicates only 29% of software projects are completed within the expected timeframe and budget, despite the ever-growing sizes of developer teams. With Vett, you can find 10x engineers and conquer Price's law.
+							</dd>
+						</div>
+						<div class="relative pl-9">
+							<dt class="inline font-semibold text-gray-900">
+								<svg
+									class="absolute left-1 top-1 h-5 w-5 text-indigo-600"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									aria-hidden="true"
+								>
+									<path
+										fill-rule="evenodd"
+										d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+										clip-rule="evenodd"
+									/>
+								</svg>
+							</dt>
+							<dd class="inline text-white">
+								The Bureau of Labor Statistics claims that 73% of Americans would lie on a resume or
+								use AI to cheat in order to get a job. <br>Don't be another victim of a <a
+									class="text-indigo-500"
+									href="https://www.youtube.com/watch?v=5bId3N7QZec">leetcode</a
+								> warrior.
 							</dd>
 						</div>
 					</dl>
