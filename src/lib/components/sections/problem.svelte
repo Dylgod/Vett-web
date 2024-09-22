@@ -1,8 +1,8 @@
 <script>
-  import Highlight from "svelte-highlight";
-  import rust from "svelte-highlight/languages/rust";
-  import tokyo from "svelte-highlight/styles/tokyo-night-dark";
-  const code = `
+	import Highlight from 'svelte-highlight';
+	import rust from 'svelte-highlight/languages/rust';
+	import tokyo from 'svelte-highlight/styles/tokyo-night-dark';
+	const code = `
  // Burning time and money
 fn hire_noob(noob: BadHire) {
   while noob.is_hired {
@@ -16,12 +16,11 @@ fn hire_pro(pro: GoodHire) {
     company.make_money(100_000_000)
   }
 } 
-  `
-
+  `;
 </script>
 
 <svelte:head>
-  {@html tokyo}
+	{@html tokyo}
 </svelte:head>
 
 <div class="overflow-hidden bg-gray-900 py-24 sm:py-32">
@@ -54,9 +53,9 @@ fn hire_pro(pro: GoodHire) {
 								</svg>
 							</dt>
 							<dd class="text-white">
-								According to all known laws of aviation, there is no way that a bee should be able
-								to fly. Its wings are too small to get its fat little body off the ground. The bee,
-								of course, flies anyway because bees don't care what humans think is impossible.
+								According to the CEO of Link humans, the cost of a bad hire is $240,000 US dollars.
+								Thats nearly 3x the average junior developer's salary. One meeting could be what
+								seperates your company from serious savings.
 							</dd>
 						</div>
 						<div class="relative pl-9">
@@ -75,9 +74,14 @@ fn hire_pro(pro: GoodHire) {
 								</svg>
 							</dt>
 							<dd class="inline text-white">
-								According to all known laws of aviation, there is no way that a bee should be able
-								to fly. Its wings are too small to get its fat little body off the ground. The bee,
-								of course, flies anyway because bees don't care what humans think is impossible.
+								In a study conducted by the Bureau of Labor Statistics, <strong
+									>73% of Americans would lie</strong
+								>
+								on resume or use AI to cheat and 74% of hiring managers admit to having made bad
+								hiring decisions. Dont be a victim to AI deception or
+								<a class="text-indigo-500" href="https://www.youtube.com/watch?v=5bId3N7QZec"
+									>leetcode</a
+								> warriors. Let Vett do the heavy lifting.
 							</dd>
 						</div>
 						<div class="relative pl-9">
@@ -109,7 +113,7 @@ fn hire_pro(pro: GoodHire) {
 
 			<div class="mt-20 sm:mt-24 md:mx-auto md:max-w-2xl lg:mx-0 lg:mt-0 lg:w-screen">
 				<div
-					class="absolute inset-y-0 right-1/2 -z-10 -mr-10 w-[200%] skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 md:-mr-20 lg:-mr-36"
+					class="absolute inset-y-0 right-1/2 -z-10 -mr-10 skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 md:-mr-20 lg:-mr-36"
 					aria-hidden="true"
 				></div>
 				<div class="shadow-lg md:rounded-3xl">
@@ -117,7 +121,7 @@ fn hire_pro(pro: GoodHire) {
 						class="bg-indigo-500 [clip-path:inset(0)] md:[clip-path:inset(0_round_theme(borderRadius.3xl))]"
 					>
 						<div
-							class="absolute -inset-y-px left-1/2 -z-10 ml-10 w-[200%] skew-x-[-30deg] bg-indigo-100 opacity-20 ring-1 ring-inset ring-white md:ml-20 lg:ml-36"
+							class="absolute -inset-y-px left-1/2 -z-10 ml-10 skew-x-[-30deg] bg-indigo-100 opacity-20 ring-1 ring-inset ring-white md:ml-20 lg:ml-36"
 							aria-hidden="true"
 						></div>
 						<div class="relative px-6 pt-8 sm:pt-16 md:pl-16 md:pr-0">
@@ -152,6 +156,6 @@ fn hire_pro(pro: GoodHire) {
 
 <style>
 	:global(.hljs) {
-	  background: transparent !important;
+		background: transparent !important;
 	}
-  </style>
+</style>
