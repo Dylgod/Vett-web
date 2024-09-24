@@ -23,7 +23,8 @@
 				<figure class="mt-10 flex flex-auto flex-col justify-between">
 					<blockquote class="text-lg leading-8 text-gray-900">
 						<p>
-							“We needed to hire talent with expertise to expand our tech stack. Vett made it possible for us to pick the right people.”
+							“We needed to hire talent with expertise to expand our tech stack. Vett made it
+							possible for us to pick the right people.”
 						</p>
 					</blockquote>
 					<figcaption class="mt-10 flex items-center gap-x-6">
@@ -74,7 +75,10 @@
 				<figure class="mt-10 flex flex-auto flex-col justify-between">
 					<blockquote class="text-lg leading-8 text-gray-900">
 						<p>
-							"We've been struggling with a large influx of applicants, many of whom are using AI or inflating their experience. Now we just send our short list of candidates that seem great, and Vett saves our technical team from spending all day doing interviews. It's been a game changer."
+							"We've been struggling with a large influx of applicants, many of whom are using AI or
+							inflating their experience. Now we just send our short list of candidates that seem
+							great, and Vett saves our technical team from spending all day doing interviews. It's
+							been a game changer."
 						</p>
 					</blockquote>
 					<figcaption class="mt-10 flex items-center gap-x-6">

@@ -72,7 +72,7 @@
 					<button
 						type="submit"
 						class="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-						>Sign In With Email</button
+						>Sign Up With Email</button
 					>
 				</div>
 			</form>
@@ -83,7 +83,7 @@
 						<div class="w-full border-t border-gray-200"></div>
 					</div>
 					<div class="relative flex justify-center text-sm font-medium leading-6">
-						<span class="bg-white px-6 text-gray-900">Or Sign In With</span>
+						<span class="bg-white px-6 text-gray-900">Or Sign Up With</span>
 					</div>
 				</div>
 
