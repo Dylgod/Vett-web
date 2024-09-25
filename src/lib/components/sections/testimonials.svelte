@@ -1,14 +1,7 @@
-<section class="bg-white py-24 sm:py-32">
+<section class="bg-gray-900 py-24 sm:py-32">
 	<div class="mx-auto max-w-7xl px-6 lg:px-8">
-		<div class="mx-auto max-w-xl text-center">
-			<h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Testimonials</h2>
-			<p class="mb-4 mt-6 text-xl leading-8 text-neutral-600 sm:mb-12">
-				We have worked with thousands of amazing people
-			</p>
-		</div>
-		<div class="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2 mt-16">
+		<div class="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2">
 			<div class="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
-				<!-- <img class="h-12 self-start" src="./screenshots/canon.png" alt=""> -->
 				<svg
 					class="h-12 self-start"
 					xmlns="http://www.w3.org/2000/svg"
@@ -19,27 +12,25 @@
 						/></g
 					></svg
 				>
-
 				<figure class="mt-10 flex flex-auto flex-col justify-between">
-					<blockquote class="text-lg leading-8 text-gray-900">
+					<blockquote class="text-lg leading-8 text-white">
 						<p>
 							“We needed to hire talent with expertise to expand our tech stack. Vett made it
 							possible for us to pick the right people.”
 						</p>
 					</blockquote>
 					<figcaption class="mt-10 flex items-center gap-x-6">
-						<img class="h-14 w-14 rounded-full bg-gray-50" src="./photos/zack.webp" alt="" />
+						<img class="h-14 w-14 rounded-full bg-gray-800" src="./photos/zack.webp" alt="" />
 						<div class="text-base">
-							<div class="font-semibold text-gray-900">Zack U.</div>
-							<div class="mt-1 text-gray-500">Staffing Manager | Canon</div>
+							<div class="font-semibold text-white">Zack U.</div>
+							<div class="mt-1 text-gray-400">Staffing Manager | Canon</div>
 						</div>
 					</figcaption>
 				</figure>
 			</div>
 			<div
-				class="flex flex-col border-t border-gray-900/10 pt-10 sm:pt-16 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 xl:pl-20"
+				class="flex flex-col border-t border-white/10 pt-10 sm:pt-16 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 xl:pl-20"
 			>
-				<!-- <img class="h-12 self-start" src="https://tailwindui.com/img/logos/reform-logo-gray-900.svg" alt=""> -->
 				<svg
 					class="h-12 self-start"
 					version="1.1"
@@ -53,27 +44,27 @@
 					<path
 						fill="#E31937"
 						d="M34.137,19.762h-2.052v-4.256h2.052V19.762z M132.322,20.329h-1.951V8.982h1.951V20.329z M110.322,12.639
-		  h-1.957V8.982h1.957V12.639z M76.375,11.063V5.642h-3.152V0h-9.331v5.642h-7.346l-2.805,9.93l-2.71-9.93h-9.016l7.156,18.819
-		  l-2.617,7.061h9.141l8.164-21.372v14.404h9.363V11.063H76.375z M163.779,24.554V10.592c0-1.578-0.662-2.933-1.984-4.066
-		  c-1.262-1.074-2.648-1.608-4.191-1.578c-2.555,0.032-4.445,0.724-5.676,2.048l-0.033-1.766h-8.916v19.323h9.266V11.063h1.921v13.491
-		  H163.779z M43.213,24.554v-12.42c0-2.457-0.976-4.348-2.866-5.704c-1.767-1.261-4.035-1.891-6.841-1.859
-		  c-3.278,0.031-5.832,0.693-7.691,1.956c-1.608,1.069-2.397,2.363-2.397,3.907v0.853h8.763V8.982h1.957v3.592l-4.477,0.097
-		  c-4.6,0.092-6.936,1.922-6.965,5.454c-0.065,4.475,1.984,6.713,6.113,6.713c2.489,0,4.381-0.916,5.674-2.773l0.033,2.489H43.213z
-		   M120.06,14.687c-0.062-3.246-0.755-5.642-2.048-7.154c-1.67-1.985-4.537-2.962-8.635-2.962c-3.469,0-5.961,0.504-7.473,1.542
-		  c-2.175,1.482-3.246,4.352-3.246,8.574c0,4.13,1.135,6.968,3.404,8.513c1.545,1.072,3.971,1.606,7.281,1.639
-		  c3.184,0.031,5.609-0.473,7.282-1.578c1.479-0.975,2.52-2.52,3.089-4.6c0.094-0.41,0.156-0.757,0.189-1.07h-9.551v2.739h-1.986
-		  v-4.507h11.631C120.031,15.413,120.06,15.035,120.06,14.687 M142.029,14.687c0-4.189-1.072-6.997-3.214-8.509
-		  c-1.482-1.042-3.972-1.607-7.472-1.607c-3.498,0-5.988,0.536-7.47,1.576c-2.11,1.513-3.183,4.351-3.183,8.54
-		  c0,4.257,1.072,7.093,3.183,8.573c1.481,1.041,3.972,1.578,7.47,1.578c3.469,0,5.957-0.504,7.472-1.578
-		  C140.957,21.748,142.029,18.879,142.029,14.687 M21.908,6.557c0.063-1.828-0.539-3.373-1.673-4.633C19.07,0.63,17.523,0,15.538,0H0
-		  v24.554h9.834v-9.141h2.174v9.141h9.867v-7.753c0-1.388-0.253-2.396-0.789-3.058c-0.754-0.946-1.542-1.546-2.332-1.828
-		  c1.07-0.63,1.828-1.261,2.238-1.892C21.527,9.204,21.842,8.036,21.908,6.557 M98.061,24.554V10.149c0-1.48-0.568-2.711-1.674-3.72
-		  c-1.1-0.977-2.426-1.481-3.97-1.481c-1.104,0-2.205,0.188-3.31,0.567c-1.104,0.378-1.922,0.851-2.458,1.387V0h-9.393v24.554h9.393
-		  V11.063h1.954v13.491H98.061z M12.041,10.053H9.896V4.694h2.146V10.053z"
+  h-1.957V8.982h1.957V12.639z M76.375,11.063V5.642h-3.152V0h-9.331v5.642h-7.346l-2.805,9.93l-2.71-9.93h-9.016l7.156,18.819
+  l-2.617,7.061h9.141l8.164-21.372v14.404h9.363V11.063H76.375z M163.779,24.554V10.592c0-1.578-0.662-2.933-1.984-4.066
+  c-1.262-1.074-2.648-1.608-4.191-1.578c-2.555,0.032-4.445,0.724-5.676,2.048l-0.033-1.766h-8.916v19.323h9.266V11.063h1.921v13.491
+  H163.779z M43.213,24.554v-12.42c0-2.457-0.976-4.348-2.866-5.704c-1.767-1.261-4.035-1.891-6.841-1.859
+  c-3.278,0.031-5.832,0.693-7.691,1.956c-1.608,1.069-2.397,2.363-2.397,3.907v0.853h8.763V8.982h1.957v3.592l-4.477,0.097
+  c-4.6,0.092-6.936,1.922-6.965,5.454c-0.065,4.475,1.984,6.713,6.113,6.713c2.489,0,4.381-0.916,5.674-2.773l0.033,2.489H43.213z
+   M120.06,14.687c-0.062-3.246-0.755-5.642-2.048-7.154c-1.67-1.985-4.537-2.962-8.635-2.962c-3.469,0-5.961,0.504-7.473,1.542
+  c-2.175,1.482-3.246,4.352-3.246,8.574c0,4.13,1.135,6.968,3.404,8.513c1.545,1.072,3.971,1.606,7.281,1.639
+  c3.184,0.031,5.609-0.473,7.282-1.578c1.479-0.975,2.52-2.52,3.089-4.6c0.094-0.41,0.156-0.757,0.189-1.07h-9.551v2.739h-1.986
+  v-4.507h11.631C120.031,15.413,120.06,15.035,120.06,14.687 M142.029,14.687c0-4.189-1.072-6.997-3.214-8.509
+  c-1.482-1.042-3.972-1.607-7.472-1.607c-3.498,0-5.988,0.536-7.47,1.576c-2.11,1.513-3.183,4.351-3.183,8.54
+  c0,4.257,1.072,7.093,3.183,8.573c1.481,1.041,3.972,1.578,7.47,1.578c3.469,0,5.957-0.504,7.472-1.578
+  C140.957,21.748,142.029,18.879,142.029,14.687 M21.908,6.557c0.063-1.828-0.539-3.373-1.673-4.633C19.07,0.63,17.523,0,15.538,0H0
+  v24.554h9.834v-9.141h2.174v9.141h9.867v-7.753c0-1.388-0.253-2.396-0.789-3.058c-0.754-0.946-1.542-1.546-2.332-1.828
+  c1.07-0.63,1.828-1.261,2.238-1.892C21.527,9.204,21.842,8.036,21.908,6.557 M98.061,24.554V10.149c0-1.48-0.568-2.711-1.674-3.72
+  c-1.1-0.977-2.426-1.481-3.97-1.481c-1.104,0-2.205,0.188-3.31,0.567c-1.104,0.378-1.922,0.851-2.458,1.387V0h-9.393v24.554h9.393
+  V11.063h1.954v13.491H98.061z M12.041,10.053H9.896V4.694h2.146V10.053z"
 					/>
 				</svg>
 				<figure class="mt-10 flex flex-auto flex-col justify-between">
-					<blockquote class="text-lg leading-8 text-gray-900">
+					<blockquote class="text-lg leading-8 text-white">
 						<p>
 							"We've been struggling with a large influx of applicants, many of whom are using AI or
 							inflating their experience. Now we just send our short list of candidates that seem
@@ -82,10 +73,10 @@
 						</p>
 					</blockquote>
 					<figcaption class="mt-10 flex items-center gap-x-6">
-						<img class="h-14 w-14 rounded-full bg-gray-50" src="./photos/rob.webp" alt="" />
+						<img class="h-14 w-14 rounded-full bg-gray-800" src="./photos/rob.webp" alt="" />
 						<div class="text-base">
-							<div class="font-semibold text-gray-900">Rob M.</div>
-							<div class="mt-1 text-gray-500">Human Resources | Raytheon</div>
+							<div class="font-semibold text-white">Rob M.</div>
+							<div class="mt-1 text-gray-400">Human Resources | Raytheon</div>
 						</div>
 					</figcaption>
 				</figure>

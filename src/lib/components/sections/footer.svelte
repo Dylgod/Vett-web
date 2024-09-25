@@ -20,6 +20,9 @@
 			<div class="pb-6">
 				<a href="/" class="text-sm leading-6 text-blue-100 hover:text-white">Jobs</a>
 			</div>
+			<div class="pb-6">
+				<a href="/" class="text-sm leading-6 text-blue-100 hover:text-white">Pricing</a>
+			</div>
 		</nav>
 		<div class="mt-10 flex justify-center space-x-10">
 			<a href="/" class="text-blue-200 hover:text-white">
