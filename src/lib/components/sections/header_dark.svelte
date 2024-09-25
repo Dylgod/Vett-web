@@ -36,10 +36,10 @@
 		<div class="hidden lg:flex lg:gap-4 lg:items-center">
 			<a
 				href="/register"
-				class="rounded-md bg-blue-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 				>Sign Up</a
 			>
-			<a href="/login" class="text-sm font-semibold leading-6 text-gray-900"
+			<a href="/login" class="text-sm font-semibold leading-6 text-white"
 				>Log in <span aria-hidden="true">&rarr;</span></a
 			>
 		</div>
