@@ -1,350 +1,652 @@
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <form>
-        <div class="space-y-12">
-            <div class="border-b border-gray-900/10 pb-12 mt-10">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">Edit Company Profile</h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">
-                    This information will be displayed publicly so be careful what you share.
-                </p>
+	<form>
+		<div class="space-y-12">
+			<div class="border-b border-gray-900/10 pb-12 mt-14">
+				<h2 class="text-base font-semibold leading-7 text-gray-900">Edit Company Profile</h2>
+				<p class="mt-1 text-sm leading-6 text-gray-600">
+					This information will be displayed on your dashboard as well as in the email you send to
+					your staff.
+				</p>
 
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-4">
-                        <label for="username" class="block text-sm font-medium leading-6 text-gray-900"
-                            >Username</label
-                        >
-                        <div class="mt-2">
-                            <div
-                                class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
-                            >
-                                <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm"
-                                    >workcation.com/</span
-                                >
-                                <input
-                                    type="text"
-                                    name="username"
-                                    id="username"
-                                    autocomplete="username"
-                                    class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                    placeholder="janesmith"
-                                />
-                            </div>
-                        </div>
-                    </div>
+				<div class="col-span-full mt-10">
+					<label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
+					<div class="mt-2 flex items-center gap-x-3">
+						<svg
+							class="h-12 w-12 text-gray-300"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+						<button
+							type="button"
+							class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+							>Change</button
+						>
+					</div>
+				</div>
 
-                    <div class="col-span-full">
-                        <label for="about" class="block text-sm font-medium leading-6 text-gray-900">About</label>
-                        <div class="mt-2">
-                            <textarea
-                                id="about"
-                                name="about"
-                                rows="3"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            ></textarea>
-                        </div>
-                        <p class="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
-                    </div>
+				<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+					<div class="sm:col-span-4">
+						<label for="companyname" class="block text-sm font-medium leading-6 text-gray-900"
+							>Company Name</label
+						>
+						<div class="mt-2">
+							<div
+								class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
+							>
+								<span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm"
+									>workcation.com/</span
+								>
+								<input
+									type="text"
+									name="username"
+									id="username"
+									autocomplete="username"
+									class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+									placeholder="janesmith"
+								/>
+							</div>
+						</div>
+						<label for="companyname" class="block text-sm font-medium leading-6 text-gray-900 mt-10"
+							>Account Owner Email</label
+						>
+						<div class="mt-2">
+							<div
+								class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
+							>
+								<span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm"
+									>workcation.com/</span
+								>
+								<input
+									type="text"
+									name="username"
+									id="username"
+									autocomplete="username"
+									class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+									placeholder="janesmith"
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-                    <div class="col-span-full">
-                        <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
-                        <div class="mt-2 flex items-center gap-x-3">
-                            <svg
-                                class="h-12 w-12 text-gray-300"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                            <button
-                                type="button"
-                                class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                >Change</button
-                            >
-                        </div>
-                    </div>
+			<div class="border-b border-gray-900/10 pb-12">
+				<h2 class="text-base font-semibold leading-7 text-gray-900">Staff Panel</h2>
+				<p class="mt-1 text-sm leading-6 text-gray-600">
+					Here you can manage Administrators and Users. <br />You may have an unlimited amount of
+					both, but there can be only one Owner(You).
+				</p>
+			</div>
 
-                    <div class="col-span-full">
-                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900"
-                            >Cover photo</label
-                        >
-                        <div
-                            class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10"
-                        >
-                            <div class="text-center">
-                                <svg
-                                    class="mx-auto h-12 w-12 text-gray-300"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                                <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                                    <label
-                                        for="file-upload"
-                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                    >
-                                        <span>Upload a file</span>
-                                        <input id="file-upload" name="file-upload" type="file" class="sr-only" />
-                                    </label>
-                                    <p class="pl-1">or drag and drop</p>
-                                </div>
-                                <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			<div class="mt-10 sm:mt-16">
+				<div class="bg-white">
+					<div class="-ml-4 -mt-4 flex items-center justify-start sm:flex-nowrap">
+						<div class="ml-4 mt-4">
+							<h3 class="text-base font-semibold leading-6 text-gray-900">Administrators</h3>
+							<p class="mt-1 text-sm text-gray-500">
+								Can create and remove Users. <br>Only the Owner may remove admins.
+							</p>
+						</div>
+						<div class="ml-4 mt-4 flex-shrink-0">
+							<button
+								type="button"
+								class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								>Create new job</button
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6">
+				<div class="relative lg:col-span-3">
+					<div
+						class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]"
+					></div>
+					<div
+						class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]"
+					>
+						<ul role="list" class="divide-y divide-gray-100 ml-5 mr-5">
+							<li class="flex justify-between gap-x-6 py-5">
+								<div class="flex min-w-0 gap-x-4">
+									<img
+										class="h-12 w-12 flex-none rounded-full bg-gray-50"
+										src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+										alt=""
+									/>
+									<div class="min-w-0 flex-auto">
+										<p class="text-sm font-semibold leading-6 text-gray-900">
+											<a href="#" class="hover:underline">Leslie Alexander</a>
+										</p>
+										<p class="mt-1 flex text-xs leading-5 text-gray-500">
+											<a href="mailto:leslie.alexander@example.com" class="truncate hover:underline"
+												>leslie.alexander@example.com</a
+											>
+										</p>
+									</div>
+								</div>
+								<div class="flex shrink-0 items-center gap-x-6">
+									<div class="hidden sm:flex sm:flex-col sm:items-end">
+										<p class="text-sm leading-6 text-gray-900">Co-Founder / CEO</p>
+										<p class="mt-1 text-xs leading-5 text-gray-500">
+											Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+										</p>
+									</div>
+									<div class="relative flex-none">
+										<button
+											type="button"
+											class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900"
+											id="options-menu-0-button"
+											aria-expanded="false"
+											aria-haspopup="true"
+										>
+											<span class="sr-only">Open options</span>
+											<svg
+												class="h-5 w-5"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+												/>
+											</svg>
+										</button>
 
-            <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">
-                    Use a permanent address where you can receive mail.
-                </p>
+										<!--
+                                Dropdown menu, show/hide based on menu state.
+                      
+                                Entering: "transition ease-out duration-100"
+                                  From: "transform opacity-0 scale-95"
+                                  To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                  From: "transform opacity-100 scale-100"
+                                  To: "transform opacity-0 scale-95"
+                              -->
+										<div
+											class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+											role="menu"
+											aria-orientation="vertical"
+											aria-labelledby="options-menu-0-button"
+											tabindex="-1"
+										>
+											<!-- Active: "bg-gray-50", Not Active: "" -->
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-0-item-0"
+												>Demote User<span class="sr-only">, Leslie Alexander</span></a
+											>
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-0-item-1"
+												>Remote<span class="sr-only">, Leslie Alexander</span></a
+											>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="flex justify-between gap-x-6 py-5">
+								<div class="flex min-w-0 gap-x-4">
+									<img
+										class="h-12 w-12 flex-none rounded-full bg-gray-50"
+										src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+										alt=""
+									/>
+									<div class="min-w-0 flex-auto">
+										<p class="text-sm font-semibold leading-6 text-gray-900">
+											<a href="#" class="hover:underline">Michael Foster</a>
+										</p>
+										<p class="mt-1 flex text-xs leading-5 text-gray-500">
+											<a href="mailto:michael.foster@example.com" class="truncate hover:underline"
+												>michael.foster@example.com</a
+											>
+										</p>
+									</div>
+								</div>
+								<div class="flex shrink-0 items-center gap-x-6">
+									<div class="hidden sm:flex sm:flex-col sm:items-end">
+										<p class="text-sm leading-6 text-gray-900">Co-Founder / CTO</p>
+										<p class="mt-1 text-xs leading-5 text-gray-500">
+											Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+										</p>
+									</div>
+									<div class="relative flex-none">
+										<button
+											type="button"
+											class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900"
+											id="options-menu-1-button"
+											aria-expanded="false"
+											aria-haspopup="true"
+										>
+											<span class="sr-only">Open options</span>
+											<svg
+												class="h-5 w-5"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+												/>
+											</svg>
+										</button>
 
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-3">
-                        <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900"
-                            >First name</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                type="text"
-                                name="first-name"
-                                id="first-name"
-                                autocomplete="given-name"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
+										<!--
+                                Dropdown menu, show/hide based on menu state.
+                      
+                                Entering: "transition ease-out duration-100"
+                                  From: "transform opacity-0 scale-95"
+                                  To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                  From: "transform opacity-100 scale-100"
+                                  To: "transform opacity-0 scale-95"
+                              -->
+										<div
+											class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+											role="menu"
+											aria-orientation="vertical"
+											aria-labelledby="options-menu-1-button"
+											tabindex="-1"
+										>
+											<!-- Active: "bg-gray-50", Not Active: "" -->
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-1-item-0"
+												>Demote User<span class="sr-only">, Michael Foster</span></a
+											>
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-1-item-1"
+												>Remove<span class="sr-only">, Michael Foster</span></a
+											>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="flex justify-between gap-x-6 py-5">
+								<div class="flex min-w-0 gap-x-4">
+									<img
+										class="h-12 w-12 flex-none rounded-full bg-gray-50"
+										src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+										alt=""
+									/>
+									<div class="min-w-0 flex-auto">
+										<p class="text-sm font-semibold leading-6 text-gray-900">
+											<a href="#" class="hover:underline">Dries Vincent</a>
+										</p>
+										<p class="mt-1 flex text-xs leading-5 text-gray-500">
+											<a href="mailto:dries.vincent@example.com" class="truncate hover:underline"
+												>dries.vincent@example.com</a
+											>
+										</p>
+									</div>
+								</div>
+								<div class="flex shrink-0 items-center gap-x-6">
+									<div class="hidden sm:flex sm:flex-col sm:items-end">
+										<p class="text-sm leading-6 text-gray-900">Business Relations</p>
+										<div class="mt-1 flex items-center gap-x-1.5">
+											<div class="flex-none rounded-full bg-emerald-500/20 p-1">
+												<div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+											</div>
+											<p class="text-xs leading-5 text-gray-500">Online</p>
+										</div>
+									</div>
+									<div class="relative flex-none">
+										<button
+											type="button"
+											class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900"
+											id="options-menu-2-button"
+											aria-expanded="false"
+											aria-haspopup="true"
+										>
+											<span class="sr-only">Open options</span>
+											<svg
+												class="h-5 w-5"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+												/>
+											</svg>
+										</button>
 
-                    <div class="sm:col-span-3">
-                        <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900"
-                            >Last name</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                type="text"
-                                name="last-name"
-                                id="last-name"
-                                autocomplete="family-name"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
+										<!--
+                                Dropdown menu, show/hide based on menu state.
+                      
+                                Entering: "transition ease-out duration-100"
+                                  From: "transform opacity-0 scale-95"
+                                  To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                  From: "transform opacity-100 scale-100"
+                                  To: "transform opacity-0 scale-95"
+                              -->
+										<div
+											class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+											role="menu"
+											aria-orientation="vertical"
+											aria-labelledby="options-menu-2-button"
+											tabindex="-1"
+										>
+											<!-- Active: "bg-gray-50", Not Active: "" -->
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-2-item-0"
+												>Demote User<span class="sr-only">, Dries Vincent</span></a
+											>
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-2-item-1"
+												>Remove<span class="sr-only">, Dries Vincent</span></a
+											>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="flex justify-between gap-x-6 py-5">
+								<div class="flex min-w-0 gap-x-4">
+									<img
+										class="h-12 w-12 flex-none rounded-full bg-gray-50"
+										src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+										alt=""
+									/>
+									<div class="min-w-0 flex-auto">
+										<p class="text-sm font-semibold leading-6 text-gray-900">
+											<a href="#" class="hover:underline">Lindsay Walton</a>
+										</p>
+										<p class="mt-1 flex text-xs leading-5 text-gray-500">
+											<a href="mailto:lindsay.walton@example.com" class="truncate hover:underline"
+												>lindsay.walton@example.com</a
+											>
+										</p>
+									</div>
+								</div>
+								<div class="flex shrink-0 items-center gap-x-6">
+									<div class="hidden sm:flex sm:flex-col sm:items-end">
+										<p class="text-sm leading-6 text-gray-900">Front-end Developer</p>
+										<p class="mt-1 text-xs leading-5 text-gray-500">
+											Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+										</p>
+									</div>
+									<div class="relative flex-none">
+										<button
+											type="button"
+											class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900"
+											id="options-menu-3-button"
+											aria-expanded="false"
+											aria-haspopup="true"
+										>
+											<span class="sr-only">Open options</span>
+											<svg
+												class="h-5 w-5"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+												/>
+											</svg>
+										</button>
 
-                    <div class="sm:col-span-4">
-                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900"
-                            >Email address</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autocomplete="email"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
+										<!--
+                                Dropdown menu, show/hide based on menu state.
+                      
+                                Entering: "transition ease-out duration-100"
+                                  From: "transform opacity-0 scale-95"
+                                  To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                  From: "transform opacity-100 scale-100"
+                                  To: "transform opacity-0 scale-95"
+                              -->
+										<div
+											class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+											role="menu"
+											aria-orientation="vertical"
+											aria-labelledby="options-menu-3-button"
+											tabindex="-1"
+										>
+											<!-- Active: "bg-gray-50", Not Active: "" -->
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-3-item-0"
+												>Demote User<span class="sr-only">, Lindsay Walton</span></a
+											>
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-3-item-1"
+												>Remove<span class="sr-only">, Lindsay Walton</span></a
+											>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="flex justify-between gap-x-6 py-5">
+								<div class="flex min-w-0 gap-x-4">
+									<img
+										class="h-12 w-12 flex-none rounded-full bg-gray-50"
+										src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+										alt=""
+									/>
+									<div class="min-w-0 flex-auto">
+										<p class="text-sm font-semibold leading-6 text-gray-900">
+											<a href="#" class="hover:underline">Courtney Henry</a>
+										</p>
+										<p class="mt-1 flex text-xs leading-5 text-gray-500">
+											<a href="mailto:courtney.henry@example.com" class="truncate hover:underline"
+												>courtney.henry@example.com</a
+											>
+										</p>
+									</div>
+								</div>
+								<div class="flex shrink-0 items-center gap-x-6">
+									<div class="hidden sm:flex sm:flex-col sm:items-end">
+										<p class="text-sm leading-6 text-gray-900">Designer</p>
+										<p class="mt-1 text-xs leading-5 text-gray-500">
+											Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+										</p>
+									</div>
+									<div class="relative flex-none">
+										<button
+											type="button"
+											class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900"
+											id="options-menu-4-button"
+											aria-expanded="false"
+											aria-haspopup="true"
+										>
+											<span class="sr-only">Open options</span>
+											<svg
+												class="h-5 w-5"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+												/>
+											</svg>
+										</button>
 
-                    <div class="sm:col-span-3">
-                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900"
-                            >Country</label
-                        >
-                        <div class="mt-2">
-                            <select
-                                id="country"
-                                name="country"
-                                autocomplete="country-name"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            >
-                                <option>United States</option>
-                                <option>Canada</option>
-                                <option>Mexico</option>
-                            </select>
-                        </div>
-                    </div>
+										<!--
+                                Dropdown menu, show/hide based on menu state.
+                      
+                                Entering: "transition ease-out duration-100"
+                                  From: "transform opacity-0 scale-95"
+                                  To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                  From: "transform opacity-100 scale-100"
+                                  To: "transform opacity-0 scale-95"
+                              -->
+										<div
+											class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+											role="menu"
+											aria-orientation="vertical"
+											aria-labelledby="options-menu-4-button"
+											tabindex="-1"
+										>
+											<!-- Active: "bg-gray-50", Not Active: "" -->
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-4-item-0"
+												>Demote User<span class="sr-only">, Courtney Henry</span></a
+											>
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-4-item-1"
+												>Remove<span class="sr-only">, Courtney Henry</span></a
+											>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="flex justify-between gap-x-6 py-5">
+								<div class="flex min-w-0 gap-x-4">
+									<img
+										class="h-12 w-12 flex-none rounded-full bg-gray-50"
+										src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+										alt=""
+									/>
+									<div class="min-w-0 flex-auto">
+										<p class="text-sm font-semibold leading-6 text-gray-900">
+											<a href="#" class="hover:underline">Tom Cook</a>
+										</p>
+										<p class="mt-1 flex text-xs leading-5 text-gray-500">
+											<a href="mailto:tom.cook@example.com" class="truncate hover:underline"
+												>tom.cook@example.com</a
+											>
+										</p>
+									</div>
+								</div>
+								<div class="flex shrink-0 items-center gap-x-6">
+									<div class="hidden sm:flex sm:flex-col sm:items-end">
+										<p class="text-sm leading-6 text-gray-900">Director of Product</p>
+										<div class="mt-1 flex items-center gap-x-1.5">
+											<div class="flex-none rounded-full bg-emerald-500/20 p-1">
+												<div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+											</div>
+											<p class="text-xs leading-5 text-gray-500">Online</p>
+										</div>
+									</div>
+									<div class="relative flex-none">
+										<button
+											type="button"
+											class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900"
+											id="options-menu-5-button"
+											aria-expanded="false"
+											aria-haspopup="true"
+										>
+											<span class="sr-only">Open options</span>
+											<svg
+												class="h-5 w-5"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+												/>
+											</svg>
+										</button>
 
-                    <div class="col-span-full">
-                        <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900"
-                            >Street address</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                type="text"
-                                name="street-address"
-                                id="street-address"
-                                autocomplete="street-address"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
+										<!--
+                                Dropdown menu, show/hide based on menu state.
+                      
+                                Entering: "transition ease-out duration-100"
+                                  From: "transform opacity-0 scale-95"
+                                  To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                  From: "transform opacity-100 scale-100"
+                                  To: "transform opacity-0 scale-95"
+                              -->
+										<div
+											class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+											role="menu"
+											aria-orientation="vertical"
+											aria-labelledby="options-menu-5-button"
+											tabindex="-1"
+										>
+											<!-- Active: "bg-gray-50", Not Active: "" -->
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-5-item-0"
+												>Demote User<span class="sr-only">, Tom Cook</span></a
+											>
+											<a
+												href="#"
+												class="block px-3 py-1 text-sm leading-6 text-gray-900"
+												role="menuitem"
+												tabindex="-1"
+												id="options-menu-5-item-1">Remove<span class="sr-only">, Tom Cook</span></a
+											>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div
+						class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]"
+					></div>
+				</div>
+				<div class="relative lg:col-span-3">
+					<div class="absolute inset-px rounded-lg bg-white lg:rounded-tr-[2rem]"></div>
+					<div
+						class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]"
+					></div>
+					<div
+						class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]"
+					></div>
+				</div>
+			</div>
+		</div>
 
-                    <div class="sm:col-span-2 sm:col-start-1">
-                        <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
-                        <div class="mt-2">
-                            <input
-                                type="text"
-                                name="city"
-                                id="city"
-                                autocomplete="address-level2"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="sm:col-span-2">
-                        <label for="region" class="block text-sm font-medium leading-6 text-gray-900"
-                            >State / Province</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                type="text"
-                                name="region"
-                                id="region"
-                                autocomplete="address-level1"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="sm:col-span-2">
-                        <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900"
-                            >ZIP / Postal code</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                type="text"
-                                name="postal-code"
-                                id="postal-code"
-                                autocomplete="postal-code"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">
-                    We'll always let you know about important changes, but you pick what else you want to hear
-                    about.
-                </p>
-
-                <div class="mt-10 space-y-10">
-                    <fieldset>
-                        <legend class="text-sm font-semibold leading-6 text-gray-900">By Email</legend>
-                        <div class="mt-6 space-y-6">
-                            <div class="relative flex gap-x-3">
-                                <div class="flex h-6 items-center">
-                                    <input
-                                        id="comments"
-                                        name="comments"
-                                        type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                    />
-                                </div>
-                                <div class="text-sm leading-6">
-                                    <label for="comments" class="font-medium text-gray-900">Comments</label>
-                                    <p class="text-gray-500">
-                                        Get notified when someones posts a comment on a posting.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="relative flex gap-x-3">
-                                <div class="flex h-6 items-center">
-                                    <input
-                                        id="candidates"
-                                        name="candidates"
-                                        type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                    />
-                                </div>
-                                <div class="text-sm leading-6">
-                                    <label for="candidates" class="font-medium text-gray-900">Candidates</label>
-                                    <p class="text-gray-500">Get notified when a candidate applies for a job.</p>
-                                </div>
-                            </div>
-                            <div class="relative flex gap-x-3">
-                                <div class="flex h-6 items-center">
-                                    <input
-                                        id="offers"
-                                        name="offers"
-                                        type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                    />
-                                </div>
-                                <div class="text-sm leading-6">
-                                    <label for="offers" class="font-medium text-gray-900">Offers</label>
-                                    <p class="text-gray-500">
-                                        Get notified when a candidate accepts or rejects an offer.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend class="text-sm font-semibold leading-6 text-gray-900">Push Notifications</legend>
-                        <p class="mt-1 text-sm leading-6 text-gray-600">
-                            These are delivered via SMS to your mobile phone.
-                        </p>
-                        <div class="mt-6 space-y-6">
-                            <div class="flex items-center gap-x-3">
-                                <input
-                                    id="push-everything"
-                                    name="push-notifications"
-                                    type="radio"
-                                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                                <label for="push-everything" class="block text-sm font-medium leading-6 text-gray-900"
-                                    >Everything</label
-                                >
-                            </div>
-                            <div class="flex items-center gap-x-3">
-                                <input
-                                    id="push-email"
-                                    name="push-notifications"
-                                    type="radio"
-                                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                                <label for="push-email" class="block text-sm font-medium leading-6 text-gray-900"
-                                    >Same as email</label
-                                >
-                            </div>
-                            <div class="flex items-center gap-x-3">
-                                <input
-                                    id="push-nothing"
-                                    name="push-notifications"
-                                    type="radio"
-                                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                                <label for="push-nothing" class="block text-sm font-medium leading-6 text-gray-900"
-                                    >No push notifications</label
-                                >
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-            <button
-                type="submit"
-                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >Save</button
-            >
-        </div>
-    </form>
+		<div class="mt-6 flex items-center justify-end gap-x-6">
+			<button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+			<button
+				type="submit"
+				class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>Save</button
+			>
+		</div>
+	</form>
 </div>

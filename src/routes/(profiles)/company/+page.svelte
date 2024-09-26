@@ -17,7 +17,11 @@
 						<p class="text-sm font-medium text-gray-600">Administrator</p>
 					</div>
 				</div>
-                <a href="#" class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">View profile</a>
+				<a
+					href="#"
+					class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+					>Edit profile</a
+				>
 			</div>
 		</div>
 	</div>
@@ -81,7 +85,8 @@
 						type="button"
 						class="w-full flex justify-center rounded-lg h-fit border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 					>
-						<span class=" flex text-sm font-semibold text-gray-900 justify-center justify-items-center place-items-center gap-2"
+						<span
+							class=" flex text-sm font-semibold text-gray-900 justify-center justify-items-center place-items-center gap-2"
 							>Create a new role
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
