@@ -17,7 +17,6 @@
 						<p class="text-sm font-medium text-gray-600">Product Designer</p>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -58,9 +57,7 @@
 									class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
 									>React Developer</td
 								>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-									>4</td
-								>
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">4</td>
 								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
 									>React, Backend, JavaScript</td
 								>
@@ -68,7 +65,7 @@
 								<td
 									class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
 								>
-									<a href="#" class="text-indigo-600 hover:text-indigo-900"
+									<a href="/profile" class="text-indigo-600 hover:text-indigo-900"
 										>Edit<span class="sr-only">Edit row</span></a
 									>
 								</td>
@@ -81,7 +78,8 @@
 						type="button"
 						class="w-full flex justify-center rounded-lg h-fit border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 					>
-						<span class=" flex text-sm font-semibold text-gray-900 justify-center justify-items-center place-items-center gap-2"
+						<span
+							class=" flex text-sm font-semibold text-gray-900 justify-center justify-items-center place-items-center gap-2"
 							>Create a new role
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
