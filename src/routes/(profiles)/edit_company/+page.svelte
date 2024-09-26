@@ -9,7 +9,7 @@
 				</p>
 
 				<div class="col-span-full mt-10">
-					<label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
+					<label for="logo" class="block text-sm font-medium leading-6 text-gray-900">Logo</label>
 					<div class="mt-2 flex items-center gap-x-3">
 						<svg
 							class="h-12 w-12 text-gray-300"
@@ -85,50 +85,51 @@
 				</p>
 			</div>
 
-			<div class="mt-10 sm:mt-16">
-				<div class="bg-white">
-					<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-						<!-- First Column -->
-						<div class="bg-white p-4">
-							<div class="flex items-center justify-between">
-								<div>
-									<h3 class="text-base font-semibold leading-6 text-gray-900">Administrators</h3>
-									<p class="mt-1 text-sm text-gray-500">
-										Can create and remove Users. <br />Only the Owner may remove admins.
-									</p>
-								</div>
-								<div class="flex-shrink-0">
-									<button
-										type="button"
-										class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-										>+ Add Admin</button
-									>
+			<div class="mx-auto max-w-2xl lg:max-w-7xl bg-white">
+				<div class="mt-10 sm:mt-16">
+					<div class="bg-white">
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+							<!-- First Column -->
+							<div class="bg-white p-4">
+								<div class="flex items-center justify-between">
+									<div>
+										<h3 class="text-base font-semibold leading-6 text-gray-900">Administrators</h3>
+										<p class="mt-1 text-sm text-gray-500">
+											Can create and remove Users. <br />Only the Owner may remove admins.
+										</p>
+									</div>
+									<div class="flex-shrink-0">
+										<button
+											type="button"
+											class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+											>+ Add Admin</button
+										>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<!-- Second Column (Duplicate) -->
-						<div class="bg-white p-4">
-							<div class="flex items-center justify-between">
-								<div>
-									<h3 class="text-base font-semibold leading-6 text-gray-900">Users</h3>
-									<p class="mt-1 text-sm text-gray-500">
-										Basic purchasing permissions.<br>
-									</p>
-								</div>
-								<div class="flex-shrink-0">
-									<button
-										type="button"
-										class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-										>+ Add User</button
-									>
+							<!-- Second Column (Duplicate) -->
+							<div class="bg-white p-4">
+								<div class="flex items-center justify-between">
+									<div>
+										<h3 class="text-base font-semibold leading-6 text-gray-900">Users</h3>
+										<p class="mt-1 text-sm text-gray-500">
+											Basic purchasing permissions.<br />
+										</p>
+									</div>
+									<div class="flex-shrink-0">
+										<button
+											type="button"
+											class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+											>+ Add User</button
+										>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="mx-auto max-w-2xl lg:max-w-7xl bg-white">
+
 				<div class="grid grid-cols-1 gap-10 lg:grid-cols-6 lg:grid-rows-1">
 					<div class="relative lg:col-span-3 h-[480px]">
 						<div
