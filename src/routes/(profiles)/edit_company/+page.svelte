@@ -1,3 +1,7 @@
+<script>
+	let invisible = false;
+</script>
+
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 	<form>
 		<div class="space-y-12">
@@ -100,6 +104,11 @@
 									</div>
 									<div class="flex-shrink-0">
 										<button
+											data-modal-target="crud-modal"
+											data-modal-toggle="crud-modal"
+											id="modaltoggle"
+											name="modaltoggle"
+											on:click={() => (invisible = !invisible)}
 											type="button"
 											class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 											>+ Add Admin</button
@@ -1072,7 +1081,7 @@
 			</div>
 		</div>
 
-		<div class="mt-6 flex items-center justify-end gap-x-6">
+		<div class="mt-6 pb-10 flex items-center justify-end gap-x-6">
 			<button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
 			<button
 				type="submit"
@@ -1081,4 +1090,91 @@
 			>
 		</div>
 	</form>
+</div>
+
+<!-- Main modal -->
+<div class="invisible relative"
+	class:invisible={!invisible}
+>
+	<div class="inset-0 flex">
+		<div
+			id="crud-modal"
+			tabindex="-1"
+			aria-hidden="true"
+			
+			class="overflow-y-auto overflow-x-hidden m-auto z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)]"
+		>
+			<div class="relative p-4 w-full max-w-md max-h-full">
+				<!-- Modal content -->
+				<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+					<!-- Modal header -->
+					<div
+						class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+					>
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+							Add New Administrator
+						</h3>
+						<button
+							type="button"
+							class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+							data-modal-toggle="crud-modal"
+							on:click={() => (invisible = !invisible)}
+						>
+							<svg
+								class="w-3 h-3"
+								aria-hidden="true"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 14 14"
+							>
+								<path
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+								/>
+							</svg>
+							<span class="sr-only">Close modal</span>
+						</button>
+					</div>
+					<!-- Modal body -->
+					<form class="p-4 md:p-5 flex flex-col">
+						<div class="gap-4 mb-4">
+							<div class="">
+								<label
+									for="name"
+									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label
+								>
+								<input
+									type="text"
+									name="modalemail"
+									id="modalemail"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+									placeholder="Type admin email"
+								/>
+							</div>
+						</div>
+						<button
+							type="submit"
+							class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
+						>
+							<svg
+								class="me-1 -ms-1 w-5 h-5"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
+								><path
+									fill-rule="evenodd"
+									d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+									clip-rule="evenodd"
+								></path></svg
+							>
+							Send Invite
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
