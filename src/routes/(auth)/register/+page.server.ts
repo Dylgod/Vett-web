@@ -1,25 +1,49 @@
-import type { SignUpWithPasswordCredentials } from '@supabase/supabase-js';
-import type { Actions } from '../../$types';
-import { redirect } from '@sveltejs/kit';
-
-export const actions = {
-  default: async ({ request, locals }) => {
-    const body = Object.fromEntries(await request.formData())
+import { fail, redirect, type Actions } from "@sveltejs/kit";
 
 
-    const credentials: SignUpWithPasswordCredentials = {
-      email: body.email as string,
-      password: body.password as string,
-      options: { data: { first_name: body.first_name, last_name: body.last_name } }
+const SENDTO_COOKIE = "path_after_login"
+const ENABLED_OAUTH_PROVIDERS = ["google", "apple"]
+
+export async function load({ locals, url, cookies }) {
+  // If the user is already logged in, log them out.
+  await locals.supabase.auth.signOut()
+
+  // Save the path to redirect to after login.
+  // const sendTo = url.searchParams.get("sendTo")?.toString() || "/"
+  // cookies.set(SENDTO_COOKIE, sendTo)
+
+  return {
+    title: "Login",
+    summary: "Login to your account.",
+    providers: ENABLED_OAUTH_PROVIDERS,
+  }
+}
+
+export const actions: Actions = {
+  default: async ({ locals, request, url }) => {
+    const formData = await request.formData()
+    const email = (formData.get("email")?.toString() || "").trim()
+    if (!email) return fail(400, { ok: false, message: "A valid email is needed" })
+
+    // try {
+    const result = await locals.supabase.auth.signInWithOtp({
+      email: email,
+    })
+    if (result.error) {
+      console.warn("failed to send magic link: ", result.error)
+      return fail(500, {
+        ok: false,
+        message: result.error.message,
+      })
     }
 
-    const { error } = await locals.supabase.auth.signUp(credentials)
-
-    if (!error) {
-      redirect(303, `/auth/confirm?email=${body.email}`)
-    } else {
-      return error.message
-    }
-
-  },
-} satisfies Actions;
+    throw redirect(303, `/auth/confirm?email=${email}`)
+    // } catch (error) {
+    //   console.warn("failed to send magic link: ", error)
+    //   return fail(500, {
+    //     ok: false,
+    //     message: "Something went wrong. Please try again",
+    //   })
+    // }
+  }
+}

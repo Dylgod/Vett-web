@@ -1,3 +1,7 @@
+<script lang="ts">
+	export let data;
+</script>
+
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 	<div class="overflow-hidden rounded-lg bg-white shadow-md">
 		<h2 class="sr-only" id="profile-overview-title">User Dashboard</h2>
@@ -13,7 +17,7 @@
 					</div>
 					<div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
 						<p class="text-sm font-medium text-gray-600">Welcome back,</p>
-						<p class="text-xl font-bold text-gray-900 sm:text-2xl">Rebecca Nicholas</p>
+						<p class="text-xl font-bold text-gray-900 sm:text-2xl">{data.session?.user.email}</p>
 						<p class="text-sm font-medium text-gray-600">Product Designer</p>
 					</div>
 				</div>

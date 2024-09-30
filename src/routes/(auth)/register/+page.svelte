@@ -1,25 +1,7 @@
-<!--
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
-<!--
-  This example requires updating your template:
+<script>
+	import { enhance } from '$app/forms';
+</script>
 
-  ```
-  <html class="h-full bg-gray-50">
-  <body class="h-full">
-  ```
--->
 <div class="flex pt-20 flex-col justify-center sm:px-6 lg:px-8">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
 		<h2 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
@@ -32,7 +14,7 @@
 
 	<div class="sm:mx-auto sm:w-full sm:max-w-[480px]">
 		<div class="bg-white px-6 py-6 sm:rounded-lg sm:px-12">
-			<form class="space-y-4" action="#" method="POST">
+			<form class="space-y-4" method="POST" use:enhance>
 				<div>
 					<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
 					<div class="mt-1">
@@ -76,7 +58,6 @@
 					>
 				</div>
 			</form>
-
 			<div>
 				<div class="relative mt-4">
 					<div class="absolute inset-0 flex items-center" aria-hidden="true">
