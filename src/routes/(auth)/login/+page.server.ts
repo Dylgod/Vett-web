@@ -6,11 +6,11 @@ const ENABLED_OAUTH_PROVIDERS = ["google", "apple"]
 
 export async function load({ locals, url, cookies }) {
     // If the user is already logged in, log them out.
-    await locals.supabase.auth.signOut()
+    // await locals.supabase.auth.signOut()
 
     // Save the path to redirect to after login.
-    const sendTo = url.searchParams.get("sendTo")?.toString() || "/"
-    cookies.set(SENDTO_COOKIE, sendTo)
+    // const sendTo = url.searchParams.get("sendTo")?.toString() || "/"
+    // cookies.set(SENDTO_COOKIE, sendTo)
 
     return {
         title: "Login",
@@ -29,9 +29,6 @@ export const actions = {
         try {
             const result = await locals.supabase.auth.signInWithOtp({
                 email: email,
-                options: {
-                    emailRedirectTo: `${url.origin}/auth/confirm`,
-                }
             })
             if (result.error) {
                 console.warn("failed to send magic link: ", result.error)
@@ -41,10 +38,8 @@ export const actions = {
                 })
             }
 
-            return {
-                ok: true,
-                message: "Email sent successfully. Please check your inbox.",
-            }
+            
+
         } catch (error) {
             console.warn("failed to send magic link: ", error)
             return fail(500, {
@@ -52,6 +47,8 @@ export const actions = {
                 message: "Something went wrong. Please try again",
             })
         }
+
+        throw redirect(303, `/auth/confirm?email=${email}`)
     },
 
     // OAuth based login.

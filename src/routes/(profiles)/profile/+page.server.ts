@@ -1,13 +1,15 @@
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
-    const user_session = await locals.supabase.auth.getSession();
+    // const user_session = await locals.supabase.auth.getSession();
+    const response = await locals.supabase.auth.getUser();
+
   
-    if (!user_session.data.session){
+    if (!response.data.user){
         redirect(303 ,"/login")
     } else {
         return {
-            email: user_session.data.session?.user.email
+            user: response.data.user
         }
     }
 }

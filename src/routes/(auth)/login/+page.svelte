@@ -14,7 +14,7 @@ import { enhance } from "$app/forms";
 
 	<div class="sm:mx-auto sm:w-full sm:max-w-[480px]">
 		<div class="bg-white px-6 py-6 sm:rounded-lg sm:px-12">
-			<form class="space-y-4" method="POST" action="?/invite" use:enhance>
+			<form class="space-y-4" method="POST" action="?/magicLogin" use:enhance>
 				<div>
 					<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
 					<div class="mt-1">
