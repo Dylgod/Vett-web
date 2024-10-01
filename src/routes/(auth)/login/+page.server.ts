@@ -1,5 +1,5 @@
 import type { Provider } from "@supabase/supabase-js";
-import { fail, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 
 const SENDTO_COOKIE = "path_after_login"
 const ENABLED_OAUTH_PROVIDERS = ["google", "apple"]
@@ -12,10 +12,16 @@ export async function load({ locals, url, cookies }) {
     // const sendTo = url.searchParams.get("sendTo")?.toString() || "/"
     // cookies.set(SENDTO_COOKIE, sendTo)
 
+    // checking for expired token or other error
+    const expired = url.searchParams.get('error') as string
+    const message = url.searchParams.get('message') as string
+
     return {
         title: "Login",
         summary: "Login to your account.",
         providers: ENABLED_OAUTH_PROVIDERS,
+        expired,
+        message,
     }
 }
 
@@ -31,14 +37,8 @@ export const actions = {
                 email: email,
             })
             if (result.error) {
-                console.warn("failed to send magic link: ", result.error)
-                return fail(500, {
-                    ok: false,
-                    message: result.error.message,
-                })
+                throw redirect(303, `/login?error&message=${result.error.message}`)
             }
-
-            
 
         } catch (error) {
             console.warn("failed to send magic link: ", error)

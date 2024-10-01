@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
     //         return { email }
     //     }
     // };
+
     const token_hash = url.searchParams.get('token_hash')
     console.log(token_hash)
     const type = url.searchParams.get('type') as EmailOtpType | null
@@ -36,9 +37,10 @@ export const load: PageServerLoad = async ({ url, locals }) => {
       if (!error) {
         redirectTo.searchParams.delete('next')
         redirect(303, redirectTo)
+      } else {
+        throw redirect(303, `/login?error=true&message=${error.message}`)
       }
     } else {
-        console.log("No Error found")
         if (
             url.searchParams.has('email')
         ) {

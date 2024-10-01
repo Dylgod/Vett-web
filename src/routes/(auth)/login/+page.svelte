@@ -1,5 +1,13 @@
-<script>
-import { enhance } from "$app/forms";
+<script lang="ts">
+	import { enhance } from '$app/forms';
+	import { onMount } from 'svelte';
+	export let data;
+
+	onMount( async () => {
+		if (data.expired) {
+			alert(data.message);
+		}
+	});
 </script>
 
 <div class="flex pt-20 flex-col justify-center sm:px-6 lg:px-8">
