@@ -1,9 +1,10 @@
 <script>
+	// import Header from '$lib/components/sections/header_dark.svelte';
 	import Header from '$lib/components/sections/header.svelte';
-	import LogoutHeader from '$lib/components/sections/logout_header.svelte';
-	import Footer from '$lib/components/sections/footer.svelte';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	// import LogoutHeaderDark from '$lib/components/sections/logout_header_dark.svelte';
+	import LogoutHeader from '$lib/components/sections/logout_header.svelte';
 
 	export let data;
 	$: ({ session, supabase } = data);
@@ -27,4 +28,3 @@
 
 <slot />
 
-<Footer />

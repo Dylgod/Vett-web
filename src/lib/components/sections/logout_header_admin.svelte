@@ -37,13 +37,14 @@
 		<div class="hidden lg:flex lg:gap-4 lg:items-center">
 			<a
 				href="/profile"
-				class="rounded-md bg-red-700 px-2.5 py-1.5 text-sm font-semibold text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 				>Dashboard</a
 			>
-			<a href="/logout" class="text-sm font-semibold leading-6 text-red-700"
+			<a href="/logout" class="text-sm font-semibold leading-6 text-white"
 				>Log out<span aria-hidden="true">&rarr;</span></a
 			>
 		</div>
+
 	</nav>
 	<!-- Mobile menu, show/hide based on menu open state. -->
 	<div class="lg:hidden" role="dialog" aria-modal="true">
