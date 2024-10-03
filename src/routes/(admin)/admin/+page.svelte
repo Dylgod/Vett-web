@@ -53,7 +53,7 @@
 									<li class=" w-full bg-neutral-800 border border-gruvboxDark-blue rounded-md mt-2">
 										<button
 											on:click={() => alert('clicked')}
-											class=" min-w-0 overflow-hidden w-full"
+											class=" min-w-0 overflow-hidden w-full hover:bg-gruvboxDark-bgS"
 										>
 											<div class="flex gap-3 py-2 px-4 w-full justify-between">
 												<div class="flex gap-3 w-full">
@@ -91,14 +91,44 @@
 				</div>
 				<div class="relative lg:col-span-3 h-[480px]">
 					<div
-						class="absolute inset-0 rounded-lg gruvboxDark-bgH max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem] shadow-md shadow-red-900 outline outline-red-700"
+						class="absolute inset-0 rounded-lg gruvboxDark-bgH shadow-md shadow-gruvboxDark-red2 outline outline-gruvboxDark-red"
 					></div>
-					<div
-						class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]"
-					>
-						<div class="p-6 flex flex-col h-full">
-							<div class="overflow-y-auto flex-grow pr-2">
-								<ul role="list" class=""></ul>
+					<div class="relative flex h-full flex-col overflow-hidden rounded-md">
+						<div class="flex flex-col h-full">
+							<div class="overflow-y-auto">
+								<ul role="list" class="pl-3 pr-3">
+									<li class=" w-full bg-neutral-800 border border-gruvboxDark-blue rounded-md mt-2">
+										<button
+											on:click={() => alert('clicked')}
+											class=" min-w-0 overflow-hidden w-full hover:bg-gruvboxDark-bgS"
+										>
+											<div class="flex gap-3 py-2 px-4 w-full justify-between">
+												<div class="flex gap-3 w-full">
+													<img
+														class="h-16 w-16 flex-shrink-0 rounded-full bg-gray-50"
+														alt=""
+														src="screenshots/eric.jpg"
+													/>
+													<div class="min-w-0 flex flex-col place-items-start col-span-2">
+														<p class="font-semibold text-gruvboxDark-blue truncate text-lg">
+															TASK UPDATED
+														</p>
+														<p class="font-semibold text-gray-300 truncate text-sm">
+															Shy Apply LLC
+														</p>
+														<p class="font-semibold text-gray-300 truncate text-sm">
+															PB: Dylan Taylor
+														</p>
+													</div>
+												</div>
+												<div class="pr-2">
+													<p class="text-sm font-semibold text-gray-300 truncate">#113456</p>
+													<p class="text-sm font-semibold text-gray-300 truncate mt-7">10/30/24</p>
+												</div>
+											</div>
+										</button>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
