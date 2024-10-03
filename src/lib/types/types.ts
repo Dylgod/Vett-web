@@ -10,6 +10,8 @@ type Task = {
     status: "in_progress" | "pending" | "completed"
 }
 
+// type Order = {}
+
 // id, date, description = text-gray-300
 // theme = gruvboxDark
 // colors = aqua, purple, yellow, blue, red
