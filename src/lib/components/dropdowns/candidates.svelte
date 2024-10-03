@@ -1,16 +1,22 @@
 <script lang="ts">
-	let selectedNumber = 1;
+	import { createEventDispatcher } from 'svelte';
+
+	export let value: number = 1;
+
 	let isOpen = false;
 
 	const numbers = Array.from({ length: 15 }, (_, i) => i + 1);
+
+	const dispatch = createEventDispatcher<{ change: number }>();
 
 	function toggleMenu(): void {
 		isOpen = !isOpen;
 	}
 
 	function selectNumber(number: number): void {
-		selectedNumber = number;
+		value = number;
 		isOpen = false;
+		dispatch('change', value);
 	}
 
 	function handleClickOutside(event: MouseEvent): void {
@@ -32,7 +38,7 @@
 		aria-haspopup="true"
 		aria-expanded={isOpen}
 	>
-		<span class="mr-2">{selectedNumber}</span>
+		<span class="mr-2">{value}</span>
 		<svg
 			class="h-5 w-5"
 			xmlns="http://www.w3.org/2000/svg"

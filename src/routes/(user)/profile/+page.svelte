@@ -1,9 +1,22 @@
 <script lang="ts">
 	import Dropdown from '$lib/components/dropdowns/candidates.svelte';
+	import Skills from '$lib/components/skills/skills.svelte';
 
 	export let data;
+	let skillsList: string[] = [];
+	let role = '';
+	let numberOfCandidates: number = 1;
+	let username = data.user.email;
+
+
 	let invisible = false;
 	let addRole = false;
+
+	function handleSkillsList(event: CustomEvent<string[]>) {
+	// Updates skillslist after adding or removing a skill
+    skillsList = event.detail;
+  }
+
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -21,8 +34,8 @@
 					</div>
 					<div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
 						<p class="text-sm font-medium text-gray-600">Welcome back,</p>
-						<p class="text-xl font-bold text-gray-900 sm:text-2xl">{data.user.email}</p>
-						<p class="text-sm font-medium text-gray-600">Product Designer</p>
+						<p class="text-xl font-bold text-gray-900 sm:text-2xl">{username}</p>
+						<p class="text-sm font-medium text-gray-600">Hiring Manager</p>
 					</div>
 				</div>
 			</div>
@@ -170,19 +183,25 @@
 											type="text"
 											name="role"
 											id="role"
-											class="border bg-gray-50 border-gray-300 text-gray-900 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   dark:focus:ring-primary-500 dark:focus:border-primary-500"
+											bind:value={role}
+											class="border bg-gray-50 border-gray-300 text-gray-900 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 											placeholder="Position at the Company"
 										/>
 									</div>
 								</div>
 								<div class="gap-4 mb-4">
 									<div class="">
-										<label
-											for="name"
-											class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-											>Candidates</label
-										>
-										<Dropdown />
+										<div>
+											<label
+												for="name"
+												class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+												>Candidates</label
+											>
+											<Dropdown bind:value={numberOfCandidates} />
+										</div>
+									</div>
+									<div class="mt-5">
+										<Skills on:skillslist={handleSkillsList} />
 									</div>
 								</div>
 								<button
