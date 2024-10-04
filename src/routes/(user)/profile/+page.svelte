@@ -7,15 +7,21 @@
 	let role = '';
 	let numberOfCandidates: number = 1;
 	let username = data.user.email;
-
+	let onboarding = false;
 
 	let invisible = false;
 	let addRole = false;
 
+
 	function handleSkillsList(event: CustomEvent<string[]>) {
-	// Updates skillslist after adding or removing a skill
-    skillsList = event.detail;
-  }
+		// Updates skillslist after adding or removing a skill
+		skillsList = event.detail;
+	}
+
+	function toggleSwitch() {
+		onboarding = !onboarding;
+		console.log(onboarding)
+	}
 
 </script>
 
@@ -103,6 +109,7 @@
 						on:click={() => {
 							invisible = !invisible;
 							addRole = !addRole;
+							
 						}}
 						type="button"
 						class="w-full flex justify-center rounded-lg h-fit border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -150,6 +157,7 @@
 									on:click={() => {
 										invisible = !invisible;
 										addRole = !addRole;
+										onboarding = !onboarding
 									}}
 								>
 									<svg
@@ -184,21 +192,52 @@
 											name="role"
 											id="role"
 											bind:value={role}
-											class="border bg-gray-50 border-gray-300 text-gray-900 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+											class="border  border-gray-300 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 											placeholder="Position at the Company"
 										/>
 									</div>
 								</div>
 								<div class="gap-4 mb-4">
-									<div class="">
+									<div class="grid grid-cols-3">
 										<div>
 											<label
-												for="name"
+												for="candidates"
 												class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 												>Candidates</label
 											>
 											<Dropdown bind:value={numberOfCandidates} />
 										</div>
+										<fieldset class="col-span-2">
+											<legend class="sr-only">Preliminary Meeting</legend>
+											<div class="">
+												<div class="relative flex items-start">
+													<div class="flex items-center">
+														<button
+														  type="button"
+														  class="mt-5 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+														  class:bg-blue-700={onboarding}
+														  class:dark:bg-gray-600={!onboarding}
+														  class:bg-gray-50={!onboarding}
+														  role="switch"
+														  aria-checked={onboarding}
+														  aria-labelledby="annual-billing-label"
+														  on:click={toggleSwitch}
+														>
+														  <span
+															aria-hidden="true"
+															class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+															class:translate-x-5={onboarding}
+															class:translate-x-0={!onboarding}
+														  ></span>
+														</button>
+														<div class="flex flex-col" id="annual-billing-label">
+														  <span class="ml-3 text-sm font-semibold text-gray-900 dark:text-white">Preliminary Meeting</span>
+														  <span class="mt-1 ml-3 text-sm text-gray-900 dark:text-gray-400">Optional meeting to discuss requirements.</span>
+														</div>
+													  </div>
+												</div>
+											</div>
+										</fieldset>
 									</div>
 									<div class="mt-5">
 										<Skills on:skillslist={handleSkillsList} />
@@ -208,18 +247,7 @@
 									type="submit"
 									class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
 								>
-									<svg
-										class="me-1 -ms-1 w-5 h-5"
-										fill="currentColor"
-										viewBox="0 0 20 20"
-										xmlns="http://www.w3.org/2000/svg"
-										><path
-											fill-rule="evenodd"
-											d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-											clip-rule="evenodd"
-										></path></svg
-									>
-									Send Invite
+									Continue to Payment
 								</button>
 							</form>
 						</div>
