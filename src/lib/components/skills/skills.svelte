@@ -51,7 +51,8 @@
 			type="text"
 			bind:value={skillInput}
 			maxlength="30"
-			id="skills"
+			name="skills_input"
+			id="skills_input"
 			placeholder="Add Skill"
 			class="border rounded-l-lg bg-gray-50 border-gray-300 text-gray-900 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm focus:ring-primary-600 focus:border-primary-600 block w-full dark:focus:ring-primary-500 dark:focus:border-primary-500"
 			spellcheck="true"

@@ -2,10 +2,12 @@
 	import { enhance } from '$app/forms';
 	import Dropdown from '$lib/components/dropdowns/candidates.svelte';
 	import Skills from '$lib/components/skills/skills.svelte';
+	import { json } from '@sveltejs/kit';
 
 	export let data;
 
 	let skillsList: string[] = [];
+	let formskills: string = "";
 	let orderList: Order[] = []
 	let role = '';
 	let numberOfCandidates: number = 1;
@@ -23,6 +25,7 @@
 	function handleSkillsList(event: CustomEvent<string[]>) {
 		// Updates skillslist after adding or removing a skill
 		skillsList = event.detail;
+		formskills = JSON.stringify(skillsList)
 	}
 
 	function handleOrderList(event: CustomEvent<Order[]>) {
@@ -35,6 +38,15 @@
 		console.log(onboarding)
 	}
 
+	function resetSwitch() {
+		invisible = !invisible;
+		addRole = !addRole;
+		role = "";
+		numberOfCandidates = 1
+		onboarding = false;
+		skillsList = [];
+	}
+
 	function submitOrder() {
 		let newOrder: Order = {
 			Created_at: Date.now(),
@@ -45,13 +57,6 @@
 			Skills: skillsList,
 			Status: "Pending",
 		}
-
-		// STRIPE GOES IN IF STATEMENT. NEST IT WITH ANOTHER TO CONFIRM SUCCESS B4 ROW CREATION
-		if (newOrder) {
-			try {
-				// todo
-			} catch {}
-		} 
 	}
 
 </script>
@@ -185,9 +190,7 @@
 									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
 									data-modal-toggle="crud-modal"
 									on:click={() => {
-										invisible = !invisible;
-										addRole = !addRole;
-										onboarding = !onboarding;
+										resetSwitch();
 									}}
 								>
 									<svg
@@ -209,7 +212,7 @@
 								</button>
 							</div>
 							<!-- Modal body -->
-							<form class="p-4 md:p-5 flex flex-col" method="POST" action="?/submitorder" use:enhance>
+							<form class="p-4 md:p-5 flex flex-col" method="POST" action="?/submitorder" use:enhance on:submit={resetSwitch}>
 								<div class="gap-4 mb-4">
 									<div class="">
 										<label
@@ -222,7 +225,7 @@
 											name="role"
 											id="role"
 											bind:value={role}
-											class="border border-gray-300 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+											class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 											placeholder="Position at the Company"
 										/>
 									</div>
@@ -250,7 +253,7 @@
 															class:bg-gray-50={!onboarding}
 															role="switch"
 															aria-checked={onboarding}
-															aria-labelledby="annual-billing-label"
+															aria-labelledby="Preliminary Meeting?"
 															on:click={toggleSwitch}
 														>
 															<span
@@ -278,6 +281,7 @@
 									</div>
 									<div class="mt-5">
 										<Skills on:skillslist={handleSkillsList} />
+										<input class="invisible hidden" type="text" name="skills" id="skills" bind:value={formskills}>
 									</div>
 								</div>
 								<button

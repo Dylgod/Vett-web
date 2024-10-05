@@ -21,11 +21,16 @@ export async function load({ locals }) {
 }
 
 export const actions = {
-    // password-less magic link based login.
     submitorder: async ({ locals, request, url }) => {
         const formData = await request.formData()
         const Candidates = (formData.get("candidates")?.toString() || "").trim()
+        const Role = (formData.get("role")?.toString() || "").trim()
+        const Onboarding = formData.has("onboarding");
+        const Skills = (formData.get("skills")?.toString() || "").trim()
         console.log(Candidates)
+        console.log(Role)
+        console.log(Onboarding)
+        console.log(Skills)
         // if (!email) return fail(400, { ok: false, message: "A valid email is needed" })
 
         // try {
