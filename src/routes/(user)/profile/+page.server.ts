@@ -7,8 +7,16 @@ export async function load({ locals }) {
     if (!response.data.user){
         redirect(303 ,"/login")
     } else {
+
+        let { data: client, error } = await locals.supabase
+        .from('clients')
+        .select("*")
+        .contains('users', [response.data.user.id])
+        .single()
+
         return {
-            user: response.data.user
+            user: response.data.user,
+            client: client
         }
     }
 }

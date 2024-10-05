@@ -3,24 +3,49 @@
 	import Skills from '$lib/components/skills/skills.svelte';
 
 	export let data;
+
 	let skillsList: string[] = [];
+	let orderList: Order[] = []
 	let role = '';
 	let numberOfCandidates: number = 1;
-	let username = data.user.email;
 	let onboarding = false;
+
+	let username = data.user.email;
+	let uuid = data.user.id
+	let client = data.client
 
 	let invisible = false;
 	let addRole = false;
 
+	// order matching done by using uuid and id of row in orders table
 
 	function handleSkillsList(event: CustomEvent<string[]>) {
 		// Updates skillslist after adding or removing a skill
 		skillsList = event.detail;
 	}
 
+	function handleOrderList(event: CustomEvent<Order[]>) {
+		// Updates orderList after adding or removing an order (event: submit)
+		orderList = event.detail;
+	}
+
 	function toggleSwitch() {
 		onboarding = !onboarding;
 		console.log(onboarding)
+	}
+
+	function submitOrder() {
+		let newOrder: Order
+
+		newOrder = {
+			Created_at: Date.now(),
+			Created_by: uuid,
+			Created_for: client,
+			Role: role,
+			Candidates: numberOfCandidates,
+			Skills: skillsList,
+			Status: "Pending",
+		}
 	}
 
 </script>
@@ -109,7 +134,6 @@
 						on:click={() => {
 							invisible = !invisible;
 							addRole = !addRole;
-							
 						}}
 						type="button"
 						class="w-full flex justify-center rounded-lg h-fit border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -157,7 +181,7 @@
 									on:click={() => {
 										invisible = !invisible;
 										addRole = !addRole;
-										onboarding = !onboarding
+										onboarding = !onboarding;
 									}}
 								>
 									<svg
@@ -192,7 +216,7 @@
 											name="role"
 											id="role"
 											bind:value={role}
-											class="border  border-gray-300 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+											class="border border-gray-300 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 											placeholder="Position at the Company"
 										/>
 									</div>
@@ -213,28 +237,32 @@
 												<div class="relative flex items-start">
 													<div class="flex items-center">
 														<button
-														  type="button"
-														  class="mt-5 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
-														  class:bg-blue-700={onboarding}
-														  class:dark:bg-gray-600={!onboarding}
-														  class:bg-gray-50={!onboarding}
-														  role="switch"
-														  aria-checked={onboarding}
-														  aria-labelledby="annual-billing-label"
-														  on:click={toggleSwitch}
+															type="button"
+															class="mt-5 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+															class:bg-blue-700={onboarding}
+															class:dark:bg-gray-600={!onboarding}
+															class:bg-gray-50={!onboarding}
+															role="switch"
+															aria-checked={onboarding}
+															aria-labelledby="annual-billing-label"
+															on:click={toggleSwitch}
 														>
-														  <span
-															aria-hidden="true"
-															class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-															class:translate-x-5={onboarding}
-															class:translate-x-0={!onboarding}
-														  ></span>
+															<span
+																aria-hidden="true"
+																class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+																class:translate-x-5={onboarding}
+																class:translate-x-0={!onboarding}
+															></span>
 														</button>
 														<div class="flex flex-col" id="annual-billing-label">
-														  <span class="ml-3 text-sm font-semibold text-gray-900 dark:text-white">Preliminary Meeting</span>
-														  <span class="mt-1 ml-3 text-sm text-gray-900 dark:text-gray-400">Optional meeting to discuss requirements.</span>
+															<span class="ml-3 text-sm font-semibold text-gray-900 dark:text-white"
+																>Preliminary Meeting</span
+															>
+															<span class="mt-1 ml-3 text-sm text-gray-900 dark:text-gray-400"
+																>Optional meeting to discuss requirements.</span
+															>
 														</div>
-													  </div>
+													</div>
 												</div>
 											</div>
 										</fieldset>

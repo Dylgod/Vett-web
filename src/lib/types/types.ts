@@ -1,16 +1,24 @@
 type Task = {
-    company: string;
-    date: string;
-    logo: string;
-    manager: string | null;
-    order_id: string;
-    role: string;
-    type: "onboarding" | "review" | "create_takehome" | "tech_interview" | "update";
-    skills: string[];
-    status: "in_progress" | "pending" | "completed"
+    Company: string;
+    Date: string;
+    Logo: string;
+    Manager: string | null;
+    Order_id: string;
+    Role: string;
+    Type: "onboarding" | "review" | "create_takehome" | "tech_interview" | "update";
+    Skills: string[];
+    Status: "In-Progress" | "Pending" | "Completed"
 }
 
-// type Order = {}
+type Order = {
+    Created_at: number;
+    Created_by: string;
+    Created_for: string;
+    Role: string;
+    Candidates: number;
+    Skills: string[];
+    Status: "In-Progress" | "Pending" | "Completed"
+}
 
 // id, date, description = text-gray-300
 // theme = gruvboxDark
