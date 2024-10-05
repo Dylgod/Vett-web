@@ -53,7 +53,7 @@
 			/>
 		</svg>
 	</button>
-
+	<input class="invisible hidden" type="number" id="candidates" name="candidates" bind:value={value}>
 	{#if isOpen}
 		<div
 			class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-gray-50 border-gray-300 text-gray-900 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden z-10"

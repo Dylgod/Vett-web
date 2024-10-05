@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import Dropdown from '$lib/components/dropdowns/candidates.svelte';
 	import Skills from '$lib/components/skills/skills.svelte';
 
@@ -35,9 +36,7 @@
 	}
 
 	function submitOrder() {
-		let newOrder: Order
-
-		newOrder = {
+		let newOrder: Order = {
 			Created_at: Date.now(),
 			Created_by: uuid,
 			Created_for: client,
@@ -46,6 +45,13 @@
 			Skills: skillsList,
 			Status: "Pending",
 		}
+
+		// STRIPE GOES IN IF STATEMENT. NEST IT WITH ANOTHER TO CONFIRM SUCCESS B4 ROW CREATION
+		if (newOrder) {
+			try {
+				// todo
+			} catch {}
+		} 
 	}
 
 </script>
@@ -203,11 +209,11 @@
 								</button>
 							</div>
 							<!-- Modal body -->
-							<form class="p-4 md:p-5 flex flex-col">
+							<form class="p-4 md:p-5 flex flex-col" method="POST" action="?/submitorder" use:enhance>
 								<div class="gap-4 mb-4">
 									<div class="">
 										<label
-											for="name"
+											for="role"
 											class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 											>Role</label
 										>
@@ -254,6 +260,9 @@
 																class:translate-x-0={!onboarding}
 															></span>
 														</button>
+														<input class="invisible hidden" type="checkbox" name="onboarding" id="onboarding"
+														bind:checked={onboarding}
+														>
 														<div class="flex flex-col" id="annual-billing-label">
 															<span class="ml-3 text-sm font-semibold text-gray-900 dark:text-white"
 																>Preliminary Meeting</span
