@@ -1,21 +1,43 @@
+import { SERVICE_ROLE } from '$env/static/private';
+import { PUBLIC_SUPABASE_URL } from '$env/static/public';
+import type { Database, Tables } from '$lib/types/supabase.js';
+import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
+    const supa_client = createClient(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
     const response = await locals.supabase.auth.getUser();
 
     if (!response.data.user){
         redirect(303 ,"/login")
     } else {
-
-        let { data: client, error } = await locals.supabase
+        let { data: client, error } = await supa_client
         .from('clients')
-        .select("*")
+        .select("id")
         .contains('users', [response.data.user.id])
         .single()
+        console.log("client", client)
+
+        if (!client) {
+            // RE-ENABLE AFTER TESTING -- WORKING
+            // const { data, error } = await supa_client.auth.admin.deleteUser(
+            //     response.data.user.id
+            //   )
+            // await locals.supabase.auth.signOut()
+            // redirect(303 ,"/")
+            console.log("no client")
+        }
+
+        let { data: orders, error: ordererror } = await supa_client
+        .from('orders')
+        .select("*")
+        .eq('created_by', response.data.user.id)
 
         return {
             user: response.data.user,
-            client: client
+            client: client?.id,
+            orders,
+            
         }
     }
 }
@@ -50,5 +72,26 @@ export const actions = {
         // }
 
         // throw redirect(303, `/auth/confirm?email=${email}`)
+    },
+
+    activeorders: async ({ locals }) => {
+        const response = await locals.supabase.auth.getUser();
+
+        if (!response.data.user){
+            redirect(303 ,"/login")
+        } else {
+            let { data, error } = await locals.supabase
+            .from('orders')
+            .select("*")
+            .eq('created_by', response.data.user.id)
+
+            if (error) {
+                console.error(error);
+            }
+    
+            return {
+                data: data as Tables<"orders">[] || []
+            }
+        }
     }
 }

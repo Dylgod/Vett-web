@@ -32,7 +32,6 @@
 	"type": "module",
 	"dependencies": {
 		"@rollup/plugin-dsv": "^3.0.4",
-		"@supabase/auth-helpers-sveltekit": "^0.13.0",
 		"@supabase/ssr": "^0.5.1",
 		"@supabase/supabase-js": "^2.45.4",
 		"@tailwindcss/forms": "^0.5.9",

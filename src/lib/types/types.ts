@@ -10,7 +10,7 @@ type Task = {
     Status: "In-Progress" | "Pending" | "Completed"
 }
 
-type Order = {
+type Client_order = {
     Created_at: number;
     Created_by: string;
     Created_for: string;
@@ -18,6 +18,17 @@ type Order = {
     Candidates: number;
     Skills: string[];
     Status: "In-Progress" | "Pending" | "Completed"
+}
+
+type Supabase_returned_order_row = {
+    id: number;
+    Created_at: number;
+    Created_by: string;
+    Created_for: string;
+    Role: string;
+    Candidates: number;
+    Skills: string[];
+    Status: "In-Progress" | "Pending" | "Completed"  
 }
 
 // id, date, description = text-gray-300

@@ -2,13 +2,12 @@
 	import { enhance } from '$app/forms';
 	import Dropdown from '$lib/components/dropdowns/candidates.svelte';
 	import Skills from '$lib/components/skills/skills.svelte';
-	import { json } from '@sveltejs/kit';
 
 	export let data;
 
 	let skillsList: string[] = [];
 	let formskills: string = "";
-	let orderList: Order[] = []
+	let orderList: Client_order[] = []
 	let role = '';
 	let numberOfCandidates: number = 1;
 	let onboarding = false;
@@ -28,7 +27,7 @@
 		formskills = JSON.stringify(skillsList)
 	}
 
-	function handleOrderList(event: CustomEvent<Order[]>) {
+	function handleOrderList(event: CustomEvent<Client_order[]>) {
 		// Updates orderList after adding or removing an order (event: submit)
 		orderList = event.detail;
 	}
@@ -48,7 +47,7 @@
 	}
 
 	function submitOrder() {
-		let newOrder: Order = {
+		let newOrder: Client_order = {
 			Created_at: Date.now(),
 			Created_by: uuid,
 			Created_for: client,
