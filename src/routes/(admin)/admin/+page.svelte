@@ -3,8 +3,7 @@ import AdminRow from '$lib/components/orders/admin_row.svelte';
 import type { PageData } from './$types';
 
 export let data: PageData;
-let orders = data.orders
-console.log(orders)
+let tasks = data.tasks as Task[];
 
 // import order -> get company info -> create type Task object
 
@@ -93,8 +92,8 @@ console.log(orders)
 											</div>
 										</button>
 									</li>
-									<!-- {#each orders as order}
-										<AdminRow task={order.Task} />
+									<!-- {#each tasks as task}
+										<AdminRow company={task.Company_name} date={task.Date} manager={task.Manager} order_id={task.Order_id} task={task.Type} />
 									{/each} -->
 								</ul>
 							</div>
