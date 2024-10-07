@@ -31,12 +31,11 @@ export async function load({ locals }) {
     }
 
     if (orders) {
-        // Fetch company information for each order and create Task objects
-        const tasks: Task[] = await Promise.all(orders.map(async (order) => {
+        const tasks: Task[] = (await Promise.all(orders.map(async (order) => {
             const { data: companyData, error: companyError } = await supa_client
                 .from('clients')
                 .select('*')
-                .eq('created_by', order.created_by)
+                .contains('users', [order.created_by])
                 .single();
 
             if (companyError) {
@@ -44,7 +43,6 @@ export async function load({ locals }) {
                 return null;
             }
 
-            // Fetch manager's email from the users table
             const { data: userData, error: userError } = await supa_client.auth.admin.getUserById(order.created_by)
 
             if (userError) {
@@ -52,25 +50,27 @@ export async function load({ locals }) {
                 return null;
             }
 
-            return {
+            const task: Task = {
                 Company_id: companyData.id,
-                Company_name: companyData.company_name,
+                Company_name: companyData.company_name || '',  // Provide a default value if it can be null
                 Date: formatDate(order.created_at),
                 Manager_id: order.created_by,
-                Manager: userData.user.email as string, // Use the email from the users table
+                Manager: userData.user.email as string,  // Provide a default value if it can be null
                 Order_id: order.id.toString(),
                 Role: order.role,
                 Candidates: order.candidates,
                 Onboarding: order.onboarding,
-                Skills: order.skills,
-                Status: order.status,
-                Type: order.checkpoint
-            }; // Logo: companyData.logo
-        }));
+                Skills: order.skills,  // Provide a default value if it can be null
+                Status: (order.status as "In-Progress" | "Pending" | "Completed") || "Pending",  // Provide a default value
+                Type: (order.checkpoint as "onboarding" | "review" | "create_takehome" | "tech_interview" | "update") || "review"  // Provide a default value
+            };
+
+            return task;
+        }))).filter((task): task is Task => task !== null);  // Type guard to remove null values
 
         return {
             user: response.data.user,
-            tasks: tasks.filter(task => task !== null)
+            tasks
         };
     }
 }

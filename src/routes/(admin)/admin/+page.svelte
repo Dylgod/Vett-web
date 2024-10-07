@@ -1,12 +1,11 @@
 <script lang="ts">
-import AdminRow from '$lib/components/orders/admin_row.svelte';
-import type { PageData } from './$types';
+	import AdminRow from '$lib/components/orders/admin_row.svelte';
+	import type { PageData } from './$types';
 
-export let data: PageData;
-let tasks = data.tasks as Task[];
+	export let data: PageData;
+	let tasks = data.tasks as Task[];
 
-// import order -> get company info -> create type Task object
-
+	// import order -> get company info -> create type Task object
 </script>
 
 <div class="bg-gruvboxDark-bgH">
@@ -61,40 +60,9 @@ let tasks = data.tasks as Task[];
 						<div class="flex flex-col h-full">
 							<div class="overflow-y-auto">
 								<ul role="list" class="pl-3 pr-3">
-									<li class=" w-full bg-neutral-800 border border-gruvboxDark-blue rounded-md mt-2">
-										<button
-											on:click={() => alert('clicked')}
-											class=" min-w-0 overflow-hidden w-full hover:bg-gruvboxDark-bgS"
-										>
-											<div class="flex gap-3 py-2 px-4 w-full justify-between">
-												<div class="flex gap-3 w-full">
-													<img
-														class="h-16 w-16 flex-shrink-0 rounded-full bg-gray-50"
-														alt=""
-														src="screenshots/eric.jpg"
-													/>
-													<div class="min-w-0 flex flex-col place-items-start col-span-2">
-														<p class="font-semibold text-gruvboxDark-blue truncate text-lg">
-															TASK UPDATED
-														</p>
-														<p class="font-semibold text-gray-300 truncate text-sm">
-															Shy Apply LLC
-														</p>
-														<p class="font-semibold text-gray-300 truncate text-sm">
-															PB: Dylan Taylor
-														</p>
-													</div>
-												</div>
-												<div class="pr-2">
-													<p class="text-sm font-semibold text-gray-300 truncate">#113456</p>
-													<p class="text-sm font-semibold text-gray-300 truncate mt-7">10/30/24</p>
-												</div>
-											</div>
-										</button>
-									</li>
-									<!-- {#each tasks as task}
-										<AdminRow company={task.Company_name} date={task.Date} manager={task.Manager} order_id={task.Order_id} task={task.Type} />
-									{/each} -->
+									{#each tasks as task}
+										<AdminRow {task} />
+									{/each}
 								</ul>
 							</div>
 						</div>

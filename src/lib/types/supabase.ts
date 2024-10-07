@@ -67,30 +67,36 @@ export type Database = {
       orders: {
         Row: {
           candidates: number
+          checkpoint: string
           created_at: string
           created_by: string
           created_for: string
           id: number
+          onboarding: boolean
           role: string
           skills: string[]
           status: string
         }
         Insert: {
           candidates: number
+          checkpoint?: string
           created_at?: string
           created_by?: string
           created_for: string
           id?: number
+          onboarding?: boolean
           role: string
           skills: string[]
           status: string
         }
         Update: {
           candidates?: number
+          checkpoint?: string
           created_at?: string
           created_by?: string
           created_for?: string
           id?: number
+          onboarding?: boolean
           role?: string
           skills?: string[]
           status?: string
