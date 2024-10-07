@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
-    const supa_client = createClient(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
+    const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
     const response = await locals.supabase.auth.getUser();
 
     if (!response.data.user){
@@ -16,7 +16,6 @@ export async function load({ locals }) {
         .select("id")
         .contains('users', [response.data.user.id])
         .single()
-        console.log("client", client)
 
         if (!client) {
             // RE-ENABLE AFTER TESTING -- WORKING
@@ -32,6 +31,7 @@ export async function load({ locals }) {
         .from('orders')
         .select("*")
         .eq('created_by', response.data.user.id)
+
 
         return {
             user: response.data.user,

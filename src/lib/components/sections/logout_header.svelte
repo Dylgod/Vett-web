@@ -1,3 +1,7 @@
+<script>
+	let header_invisible = false;
+</script>
+
 <header class="bg-white">
 	<nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
 		<div class="flex items-center gap-x-12">
@@ -25,7 +29,7 @@
 			<button
 				type="button"
 				class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-			>
+				on:click={()=>header_invisible=!header_invisible}>
 				<span class="sr-only">Open main menu</span>
 				<svg
 					class="h-6 w-6"
@@ -55,7 +59,7 @@
         </div>
 	</nav>
 	<!-- Mobile menu, show/hide based on menu open state. -->
-	<div class="lg:hidden" role="dialog" aria-modal="true">
+	<div class="lg:hidden" role="dialog" aria-modal="true" class:invisible={!header_invisible}>
 		<!-- Background backdrop, show/hide based on slide-over state. -->
 		<div class="fixed inset-0 z-10"></div>
 		<div
@@ -70,7 +74,7 @@
 						alt=""
 					/>
 				</a>
-				<button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+				<button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" on:click={()=>header_invisible=!header_invisible}>
 					<span class="sr-only">Close menu</span>
 					<svg
 						class="h-6 w-6"

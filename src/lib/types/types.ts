@@ -13,7 +13,7 @@ type Task = {
 type Client_order = {
     Created_at: number;
     Created_by: string;
-    Created_for: string;
+    Created_for: number | undefined;
     Role: string;
     Candidates: number;
     Skills: string[];

@@ -2,19 +2,23 @@
 	import { enhance } from '$app/forms';
 	import Dropdown from '$lib/components/dropdowns/candidates.svelte';
 	import Skills from '$lib/components/skills/skills.svelte';
+	import type { PageData } from './$types';
+	import ProfileRow from '$lib/components/orders/profile_row.svelte';
 
-	export let data;
+	export let data: PageData;
 
 	let skillsList: string[] = [];
-	let formskills: string = "";
-	let orderList: Client_order[] = []
+	let formskills: string = '';
+
+	let orderList = data.orders;
+
 	let role = '';
 	let numberOfCandidates: number = 1;
 	let onboarding = false;
 
 	let username = data.user.email;
-	let uuid = data.user.id
-	let client = data.client
+	let uuid = data.user.id;
+	let client = data.client;
 
 	let invisible = false;
 	let addRole = false;
@@ -24,24 +28,24 @@
 	function handleSkillsList(event: CustomEvent<string[]>) {
 		// Updates skillslist after adding or removing a skill
 		skillsList = event.detail;
-		formskills = JSON.stringify(skillsList)
+		formskills = JSON.stringify(skillsList);
 	}
 
-	function handleOrderList(event: CustomEvent<Client_order[]>) {
-		// Updates orderList after adding or removing an order (event: submit)
-		orderList = event.detail;
-	}
+	// function handleOrderList(event: CustomEvent<Client_order[]>) {
+	// 	// Updates orderList after adding or removing an order (event: submit)
+	// 	orderList = event.detail;
+	// }
 
 	function toggleSwitch() {
 		onboarding = !onboarding;
-		console.log(onboarding)
+		console.log(onboarding);
 	}
 
 	function resetSwitch() {
 		invisible = !invisible;
 		addRole = !addRole;
-		role = "";
-		numberOfCandidates = 1
+		role = '';
+		numberOfCandidates = 1;
 		onboarding = false;
 		skillsList = [];
 	}
@@ -50,14 +54,13 @@
 		let newOrder: Client_order = {
 			Created_at: Date.now(),
 			Created_by: uuid,
-			Created_for: client,
+			Created_for: data.client,
 			Role: role,
 			Candidates: numberOfCandidates,
 			Skills: skillsList,
-			Status: "Pending",
-		}
+			Status: 'Pending'
+		};
 	}
-
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -91,24 +94,28 @@
 		<div class="mt-8 flow-root">
 			<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 				<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-					<table class="min-w-full divide-y divide-gray-300">
+					<table class="min-w-full table-fixed divide-y divide-gray-300">
 						<thead>
 							<tr>
 								<th
 									scope="col"
-									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+									class="w-1/5 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
 									>Role</th
 								>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+								<th
+									scope="col"
+									class="w-1/7 px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 									>Candidates</th
 								>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-									>Skills</th
+								<th
+									scope="col"
+									class="w-1/2 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Skills</th
 								>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-									>Status</th
+								<th
+									scope="col"
+									class="w-24 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th
 								>
-								<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+								<th scope="col" class="w-20 relative py-3.5 pl-3 pr-4 sm:pr-0">
 									<span class="sr-only">Edit</span>
 								</th>
 							</tr>
@@ -117,23 +124,46 @@
 							<tr>
 								<td
 									class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
-									>React Developer</td
 								>
+									<div class="truncate">React Developer</div>
+								</td>
 								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">4</td>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-									>React, Backend, JavaScript</td
-								>
+								<td class="px-3 py-4 text-sm text-gray-500">
+									<div class="flex flex-wrap gap-1">
+										<span
+											class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
+											>React</span
+										>
+										<span
+											class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+											>Backend</span
+										>
+										<span
+											class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20"
+											>JavaScript</span
+										>
+									</div>
+								</td>
 								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Pending</td>
 								<td
 									class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
 								>
 									<a href="/profile" class="text-indigo-600 hover:text-indigo-900"
-										>Edit<span class="sr-only">Edit row</span></a
+										>Edit<span class="sr-only">, React Developer</span></a
 									>
 								</td>
 							</tr>
-
-							<!-- More people... -->
+							{#if orderList}
+								{#each orderList as order}
+									<ProfileRow
+										role={order.role}
+										candidates={order.candidates}
+										skills={order.skills}
+										status={order.status}
+									/>
+								{/each}
+							{/if}
+							<!-- More rows... -->
 						</tbody>
 					</table>
 					<button
@@ -211,7 +241,13 @@
 								</button>
 							</div>
 							<!-- Modal body -->
-							<form class="p-4 md:p-5 flex flex-col" method="POST" action="?/submitorder" use:enhance on:submit={resetSwitch}>
+							<form
+								class="p-4 md:p-5 flex flex-col"
+								method="POST"
+								action="?/submitorder"
+								use:enhance
+								on:submit={resetSwitch}
+							>
 								<div class="gap-4 mb-4">
 									<div class="">
 										<label
@@ -262,9 +298,13 @@
 																class:translate-x-0={!onboarding}
 															></span>
 														</button>
-														<input class="invisible hidden" type="checkbox" name="onboarding" id="onboarding"
-														bind:checked={onboarding}
-														>
+														<input
+															class="invisible hidden"
+															type="checkbox"
+															name="onboarding"
+															id="onboarding"
+															bind:checked={onboarding}
+														/>
 														<div class="flex flex-col" id="annual-billing-label">
 															<span class="ml-3 text-sm font-semibold text-gray-900 dark:text-white"
 																>Preliminary Meeting</span
@@ -280,7 +320,13 @@
 									</div>
 									<div class="mt-5">
 										<Skills on:skillslist={handleSkillsList} />
-										<input class="invisible hidden" type="text" name="skills" id="skills" bind:value={formskills}>
+										<input
+											class="invisible hidden"
+											type="text"
+											name="skills"
+											id="skills"
+											bind:value={formskills}
+										/>
 									</div>
 								</div>
 								<button
