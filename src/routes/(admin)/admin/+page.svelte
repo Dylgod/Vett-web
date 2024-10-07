@@ -1,3 +1,15 @@
+<script lang="ts">
+import AdminRow from '$lib/components/orders/admin_row.svelte';
+import type { PageData } from './$types';
+
+export let data: PageData;
+let orders = data.orders
+console.log(orders)
+
+// import order -> get company info -> create type Task object
+
+</script>
+
 <div class="bg-gruvboxDark-bgH">
 	<div class="pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
 		<div class="overflow-hidden rounded-lg gruvboxDark-bgH shadow-md shadow-gruvboxDark-red">
@@ -81,6 +93,9 @@
 											</div>
 										</button>
 									</li>
+									<!-- {#each orders as order}
+										<AdminRow task={order.Task} />
+									{/each} -->
 								</ul>
 							</div>
 						</div>

@@ -13,7 +13,7 @@ export async function load({ locals }) {
     } else {
         let { data: client, error } = await supa_client
         .from('clients')
-        .select("id")
+        .select("*")
         .contains('users', [response.data.user.id])
         .single()
 
@@ -35,9 +35,10 @@ export async function load({ locals }) {
 
         return {
             user: response.data.user,
-            client: client?.id,
+            Company_id: client?.id,
+            Company_name: client?.company_name,
             orders,
-            
+            // Logo: client?.logo  <--- TODO!
         }
     }
 }
@@ -72,26 +73,5 @@ export const actions = {
         // }
 
         // throw redirect(303, `/auth/confirm?email=${email}`)
-    },
-
-    activeorders: async ({ locals }) => {
-        const response = await locals.supabase.auth.getUser();
-
-        if (!response.data.user){
-            redirect(303 ,"/login")
-        } else {
-            let { data, error } = await locals.supabase
-            .from('orders')
-            .select("*")
-            .eq('created_by', response.data.user.id)
-
-            if (error) {
-                console.error(error);
-            }
-    
-            return {
-                data: data as Tables<"orders">[] || []
-            }
-        }
     }
 }

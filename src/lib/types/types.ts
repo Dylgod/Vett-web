@@ -1,41 +1,33 @@
+function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  }
+
 type Task = {
-    Company: string;
+    Company_id: number;
+    Company_name: string;
     Date: string;
     Logo: string;
-    Manager: string | null;
+    Manager_id: string;
+    Manager: string;
     Order_id: string;
     Role: string;
-    Type: "onboarding" | "review" | "create_takehome" | "tech_interview" | "update";
+    Candidates: number;
+    Onboarding: boolean;
     Skills: string[];
     Status: "In-Progress" | "Pending" | "Completed"
+    Type: "onboarding" | "review" | "create_takehome" | "tech_interview" | "update";
 }
 
 type Client_order = {
-    Created_at: number;
     Created_by: string;
-    Created_for: number | undefined;
     Role: string;
     Candidates: number;
     Skills: string[];
+    Onboarding: boolean;
     Status: "In-Progress" | "Pending" | "Completed"
+    Type: "onboarding" | "review" | "create_takehome" | "tech_interview" | "update";
 }
-
-type Supabase_returned_order_row = {
-    id: number;
-    Created_at: number;
-    Created_by: string;
-    Created_for: string;
-    Role: string;
-    Candidates: number;
-    Skills: string[];
-    Status: "In-Progress" | "Pending" | "Completed"  
-}
-
-// id, date, description = text-gray-300
-// theme = gruvboxDark
-// colors = aqua, purple, yellow, blue, red
-
-// onboarding = aqua
-// create_takehome = purple
-// tech_interview = yellow
-// update & review = blue

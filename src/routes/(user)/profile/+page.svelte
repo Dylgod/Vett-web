@@ -18,7 +18,6 @@
 
 	let username = data.user.email;
 	let uuid = data.user.id;
-	let client = data.client;
 
 	let invisible = false;
 	let addRole = false;
@@ -31,7 +30,7 @@
 		formskills = JSON.stringify(skillsList);
 	}
 
-	// function handleOrderList(event: CustomEvent<Client_order[]>) {
+	// function handleOrderList(event: CustomEvent<Task[]>) {
 	// 	// Updates orderList after adding or removing an order (event: submit)
 	// 	orderList = event.detail;
 	// }
@@ -50,17 +49,22 @@
 		skillsList = [];
 	}
 
-	function submitOrder() {
-		let newOrder: Client_order = {
-			Created_at: Date.now(),
-			Created_by: uuid,
-			Created_for: data.client,
-			Role: role,
-			Candidates: numberOfCandidates,
-			Skills: skillsList,
-			Status: 'Pending'
-		};
-	}
+	// function submitOrder() {
+	// 	let newOrder: Task = {
+	// 		Company_id: data.Company_id as number,
+	// 		Company_name: data.Company_name as string,
+	// 		Date: Date.now(),
+	// 		Manager_id: uuid,
+	// 		Manager: data.user.email as string,
+	// 		Role: role,
+	// 		Candidates: numberOfCandidates,
+	// 		Onboarding: true,
+	// 		Type: "onboarding",
+	// 		Skills: skillsList,
+	// 		Status: 'Pending',
+	// 		Logo: ""
+	// 	};
+	// }
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
