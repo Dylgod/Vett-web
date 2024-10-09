@@ -125,38 +125,6 @@
 							</tr>
 						</thead>
 						<tbody class="divide-y divide-gray-200">
-							<tr>
-								<td
-									class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
-								>
-									<div class="truncate">React Developer</div>
-								</td>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">4</td>
-								<td class="px-3 py-4 text-sm text-gray-500">
-									<div class="flex flex-wrap gap-1">
-										<span
-											class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
-											>React</span
-										>
-										<span
-											class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
-											>Backend</span
-										>
-										<span
-											class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20"
-											>JavaScript</span
-										>
-									</div>
-								</td>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Pending</td>
-								<td
-									class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
-								>
-									<a href="/profile" class="text-indigo-600 hover:text-indigo-900"
-										>Edit<span class="sr-only">, React Developer</span></a
-									>
-								</td>
-							</tr>
 							{#if orderList}
 								{#each orderList as order}
 									<ProfileRow

@@ -1,3 +1,10 @@
+<script lang="ts">
+	import ProfileRow from '$lib/components/orders/profile_row.svelte';
+	import type { PageData } from './$types';
+	export let data: PageData;
+	let orderList = data.orders;
+</script>
+
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 	<div class="overflow-hidden rounded-lg bg-white shadow-md">
 		<h2 class="sr-only" id="profile-overview-title">User Dashboard</h2>
@@ -18,9 +25,9 @@
 					</div>
 				</div>
 				<a
-					href="#"
+					href="/edit_company"
 					class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-					>Edit profile</a
+					>Edit Company</a
 				>
 			</div>
 		</div>
@@ -28,7 +35,7 @@
 	<div class="px-4 sm:px-6 lg:px-8">
 		<div class="sm:flex sm:items-center">
 			<div class="sm:flex-auto">
-				<h1 class="mt-8 text-2xl font-semibold leading-6 text-gray-900">Dashboard</h1>
+				<h1 class="mt-8 text-2xl font-semibold leading-6 text-gray-900">Company Dashboard</h1>
 			</div>
 		</div>
 		<div class="mt-8 flow-root">
@@ -57,49 +64,20 @@
 							</tr>
 						</thead>
 						<tbody class="divide-y divide-gray-200">
-							<tr>
-								<td
-									class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
-									>Lindsay Walton</td
-								>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-									>Front-end Developer</td
-								>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-									>lindsay.walton@example.com</td
-								>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Member</td>
-								<td
-									class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
-								>
-									<a href="#" class="text-indigo-600 hover:text-indigo-900"
-										>Edit<span class="sr-only">Edit row</span></a
-									>
-								</td>
-							</tr>
+							{#if orderList}
+								{#each orderList as order}
+									<ProfileRow
+										role={order.role}
+										candidates={order.candidates}
+										skills={order.skills}
+										status={order.status}
+									/>
+								{/each}
+							{/if}
 
 							<!-- More people... -->
 						</tbody>
 					</table>
-					<button
-						type="button"
-						class="w-full flex justify-center rounded-lg h-fit border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-					>
-						<span
-							class=" flex text-sm font-semibold text-gray-900 justify-center justify-items-center place-items-center gap-2"
-							>Create a new role
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="size-6"
-							>
-								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-							</svg>
-						</span>
-					</button>
 				</div>
 			</div>
 		</div>

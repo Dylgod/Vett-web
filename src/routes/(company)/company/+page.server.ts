@@ -1,13 +1,55 @@
-import { redirect } from '@sveltejs/kit';
+import { SERVICE_ROLE } from '$env/static/private';
+import { PUBLIC_SUPABASE_URL } from '$env/static/public';
+import type { Database, Tables } from '$lib/types/supabase.js';
+import { createClient } from '@supabase/supabase-js';
+import { error, redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
-    const response = await locals.supabase.auth.getUser();
+    const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+    const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
 
-    if (!response.data.user){
-        redirect(303 ,"/login")
-    } else {
-        return {
-            user: response.data.user
-        }
+    if (authError || !user) {
+        console.log("authError || !user")
+        throw redirect(303, "/"); //profile
     }
+
+    const { data: client, error: clientError } = await supaClient
+        .from('clients')
+        .select("*")
+        .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
+        .single();
+
+    if (clientError) {
+        console.error('Error fetching client:', clientError);
+        throw error(500, 'Error fetching client data');
+    }
+
+    if (!client) {
+        console.log('User is not an owner or admin of any client');
+        throw redirect(303, "/"); //profile
+    }
+
+    const { data: orders, error: orderError } = await supaClient
+        .from('orders')
+        .select("*")
+        .eq('created_for', client.id);
+
+    if (orderError) {
+        console.error('Error fetching orders:', orderError);
+        throw error(500, 'Error fetching orders');
+    }
+
+    console.log({
+        user,
+        Company_id: client.id,
+        Company_name: client.company_name,
+        orders,
+})
+
+    return {
+        user,
+        Company_id: client.id,
+        Company_name: client.company_name,
+        orders,
+    };
 }
