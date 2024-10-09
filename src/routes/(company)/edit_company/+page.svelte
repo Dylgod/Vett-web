@@ -112,10 +112,11 @@
 							  
 									  Highlighted: "bg-indigo-600 text-white", Not Highlighted: "text-gray-900"
 									-->
+									<!-- role="option" -->
 										<li
 											class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900"
 											id="listbox-option-0"
-											role="option"
+											
 										>
 											<!-- Selected: "font-semibold", Not Selected: "font-normal" -->
 											<span class="block truncate font-normal">Wade Cooper</span>
@@ -247,7 +248,7 @@
 												/>
 												<div class="min-w-0 flex-auto">
 													<p class="text-sm font-semibold leading-6 text-gray-900 truncate">
-														<a href="#" class="hover:underline">Leslie Alexander</a>
+														<a href="/edit_company" class="hover:underline">Leslie Alexander</a>
 													</p>
 													<p class="mt-1 text-xs leading-5 text-gray-500 truncate">
 														<a href="mailto:leslie.alexander@example.com" class="hover:underline"
@@ -294,7 +295,7 @@
 														tabindex="-1"
 													>
 														<a
-															href="#"
+															href="/edit_company"
 															class="block px-3 py-1 text-sm leading-6 text-gray-900"
 															role="menuitem"
 															tabindex="-1"
@@ -302,7 +303,7 @@
 															>Demote User<span class="sr-only">, Leslie Alexander</span></a
 														>
 														<a
-															href="#"
+															href="/edit_company"
 															class="block px-3 py-1 text-sm leading-6 text-gray-900"
 															role="menuitem"
 															tabindex="-1"
@@ -340,7 +341,7 @@
 												/>
 												<div class="min-w-0 flex-auto">
 													<p class="text-sm font-semibold leading-6 text-gray-900 truncate">
-														<a href="#" class="hover:underline">Leslie Alexander</a>
+														<a href="/edit_company" class="hover:underline">Leslie Alexander</a>
 													</p>
 													<p class="mt-1 text-xs leading-5 text-gray-500 truncate">
 														<a href="mailto:leslie.alexander@example.com" class="hover:underline"
@@ -387,7 +388,7 @@
 														tabindex="-1"
 													>
 														<a
-															href="#"
+															href="/edit_company"
 															class="block px-3 py-1 text-sm leading-6 text-gray-900"
 															role="menuitem"
 															tabindex="-1"
@@ -395,7 +396,7 @@
 															>Promote User<span class="sr-only">, Leslie Alexander</span></a
 														>
 														<a
-															href="#"
+															href="/edit_company"
 															class="block px-3 py-1 text-sm leading-6 text-gray-900"
 															role="menuitem"
 															tabindex="-1"
