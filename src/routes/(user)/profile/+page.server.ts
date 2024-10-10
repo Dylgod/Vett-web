@@ -15,6 +15,7 @@ export async function load({ locals }) {
         .from('clients')
         .select("*")
         .contains('users', [response.data.user.id])
+        .limit(1)
         .single()
 
         if (!client) {
@@ -32,11 +33,11 @@ export async function load({ locals }) {
         .select("*")
         .eq('created_by', response.data.user.id)
 
-
         return {
             user: response.data.user,
             Company_id: client?.id,
             Company_name: client?.company_name,
+            owner: client?.owner,
             orders,
             // Logo: client?.logo  <--- TODO!
         }

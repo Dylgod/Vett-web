@@ -39,17 +39,18 @@ export async function load({ locals }) {
         throw error(500, 'Error fetching orders');
     }
 
-    console.log({
-        user,
-        Company_id: client.id,
-        Company_name: client.company_name,
-        orders,
-})
+    // if (client.admins) {
+    //     const admins: string[] = [];
+    //     client.admins.forEach((i)=> {
+    //         admins.push()
+    //     })
+    // }
 
     return {
         user,
         Company_id: client.id,
         Company_name: client.company_name,
+        admins: client.admins,
         orders,
     };
 }
