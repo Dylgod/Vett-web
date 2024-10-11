@@ -8,15 +8,15 @@ export async function load({ locals }) {
     const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
     const response = await locals.supabase.auth.getUser();
 
-    if (!response.data.user){
-        redirect(303 ,"/login")
+    if (!response.data.user) {
+        redirect(303, "/login")
     } else {
         let { data: client, error } = await supa_client
-        .from('clients')
-        .select("*")
-        .contains('users', [response.data.user.id])
-        .limit(1)
-        .single()
+            .from('clients')
+            .select("*")
+            .contains('users', [response.data.user.id])
+            .limit(1)
+            .single()
 
         if (!client) {
             // RE-ENABLE AFTER TESTING -- WORKING
@@ -29,12 +29,13 @@ export async function load({ locals }) {
         }
 
         let { data: orders, error: ordererror } = await supa_client
-        .from('orders')
-        .select("*")
-        .eq('created_by', response.data.user.id)
+            .from('orders')
+            .select("*")
+            .eq('created_by', response.data.user.id)
 
         return {
             user: response.data.user,
+            name: response.data.user.user_metadata.display_name,
             Company_id: client?.id,
             Company_name: client?.company_name,
             owner: client?.owner,
@@ -74,5 +75,16 @@ export const actions = {
         // }
 
         // throw redirect(303, `/auth/confirm?email=${email}`)
+    },
+    updateUser: async ({ locals, request, url }) => {
+        const formData = await request.formData()
+        const Fullname = (formData.get("new_profile_name")?.toString() || "").trim()
+        const { data, error } = await locals.supabase.auth.updateUser(
+            {
+                data: { display_name: Fullname }
+            })
+            if (!error) {
+                redirect(303, "/profile")
+            }
     }
 }

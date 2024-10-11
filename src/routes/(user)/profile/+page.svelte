@@ -16,11 +16,21 @@
 	let numberOfCandidates: number = 1;
 	let onboarding = false;
 
-	let username = data.user.email;
+	let user_email = data.user.email;
 	let owner = data.owner;
 
 	let invisible = false;
 	let addRole = false;
+
+	let edit_profile_invisible = false;
+	let editProfile = false;
+	let new_profile_name = data.user.user_metadata.display_name;
+
+	if (new_profile_name === undefined) {
+		new_profile_name = '';
+		edit_profile_invisible = true;
+		editProfile = true;
+	}
 
 	// order matching done by using uuid and id of row in orders table
 
@@ -47,6 +57,11 @@
 		numberOfCandidates = 1;
 		onboarding = false;
 		skillsList = [];
+	}
+
+	function resetProfileModal() {
+		edit_profile_invisible = !edit_profile_invisible;
+		editProfile = !editProfile;
 	}
 
 	// function submitOrder() {
@@ -82,20 +97,26 @@
 					</div>
 					<div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
 						<p class="text-sm font-medium text-gray-600">Welcome back,</p>
-						<p class="text-xl font-bold text-gray-900 sm:text-2xl">{username}</p>
-						{#if (owner === data.user.id)}
-						<p class="text-sm font-medium text-gray-600">Owner</p>
+						{#if data.user.user_metadata.display_name}
+							<p class="text-xl font-bold text-gray-900 sm:text-2xl">
+								{data.user.user_metadata.display_name}
+							</p>
 						{:else}
-						<p class="text-sm font-medium text-gray-600">Hiring Manager</p>
+							<p class="text-xl font-bold text-gray-900 sm:text-2xl">{user_email}</p>
+						{/if}
+						{#if owner === data.user.id}
+							<p class="text-sm font-medium text-gray-600">Owner</p>
+						{:else}
+							<p class="text-sm font-medium text-gray-600">Hiring Manager</p>
 						{/if}
 					</div>
 				</div>
-				{#if (owner === data.user.id)}
-				<a
-					href="/company"
-					class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-					>View Company</a
-				>
+				{#if owner === data.user.id}
+					<a
+						href="/company"
+						class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+						>View Company</a
+					>
 				{/if}
 			</div>
 		</div>
@@ -323,6 +344,123 @@
 					{/if}
 					<!-- Modal content -->
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="fixed z-50" class:invisible={!edit_profile_invisible}>
+	<div class="grid h-screen place-items-center">
+		<div
+			id="profile-crud-modal"
+			tabindex="-1"
+			aria-hidden="true"
+			class="fixed grid h-screen place-items-center overflow-y-auto overflow-x-auto m-auto md:inset-0 w-screen bg-slate-950/50"
+		>
+			<div class="relative w-full max-w-md max-h-full">
+				{#if editProfile}
+					<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+						<!-- Modal header -->
+						<div
+							class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+						>
+							<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+								Complete your profile
+							</h3>
+							<button
+								type="button"
+								class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+								data-modal-toggle="crud-modal"
+								on:click={() => {
+									edit_profile_invisible = !edit_profile_invisible;
+									editProfile = !editProfile;
+								}}
+							>
+								<svg
+									class="w-3 h-3"
+									aria-hidden="true"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 14 14"
+								>
+									<path
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+									/>
+								</svg>
+								<span class="sr-only">Close modal</span>
+							</button>
+						</div>
+						<form method="POST" action="?/updateUser" use:enhance on:submit={resetProfileModal}>
+							<div class="space-y-12">
+								<div class="border-b border-gray-900/10 pb-6 p-5">
+									<p class="mt-1 text-sm leading-6 text-white">
+										This information will be displayed on your profile as well as in the company
+										backend.
+									</p>
+
+									<div class="col-span-full mt-5">
+										<label for="logo" class="block text-sm font-medium leading-6 text-white"
+											>Logo (Optional)</label
+										>
+										<div class="mt-2 flex items-center gap-x-3">
+											<svg
+												class="h-12 w-12 text-gray-300"
+												viewBox="0 0 24 24"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													fill-rule="evenodd"
+													d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+													clip-rule="evenodd"
+												/>
+											</svg>
+											<button
+												type="button"
+												class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+												>Change</button
+											>
+										</div>
+									</div>
+
+									<div class="mt-6 flex gap-x-6 gap-y-2 flex-col">
+										<div class="gap-4">
+											<div class="">
+												<label
+													for="new_profile_name"
+													class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+													>Full Name</label
+												>
+												<input
+													type="text"
+													name="new_profile_name"
+													id="new_profile_name"
+													bind:value={new_profile_name}
+													class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+													placeholder="Ex: Jon Doe"
+												/>
+											</div>
+										</div>
+									</div>
+									<div class="mt-6 flex justify-end">
+										<button
+											type="submit"
+											class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+										>
+											Complete Profile
+										</button>
+									</div>
+								</div>
+							</div>
+						</form>
+						<!-- Modal body -->
+					</div>
+				{/if}
+				<!-- Modal content -->
 			</div>
 		</div>
 	</div>
