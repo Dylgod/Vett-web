@@ -26,10 +26,13 @@
 
 	let colorIndex = 0;
 
+	export let index: number;
+	export let id: number;
 	export let role: string;
 	export let candidates: number;
 	export let skills: string[];
 	export let status: string;
+	export let command;
 
 	function getNextColor(): string[] {
 		const bg = bg_colors[colorIndex];
@@ -46,20 +49,25 @@
 </script>
 
 <tr>
-    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-        <div class="truncate" title={role}>{truncateRole(role, 30)}</div>
-    </td>
-    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{candidates}</td>
-    <td class="px-3 py-4 text-sm text-gray-500">
-        <div class="flex flex-wrap gap-1">
-            {#each skills as skill}
-                {@const [bg, text, ring] = getNextColor()}
-                <span class="inline-flex items-center rounded-md {bg} px-2 py-1 text-xs font-medium {text} ring-1 ring-inset {ring}">{skill}</span>
-            {/each}
-        </div>
-    </td>
-    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{status}</td>
-    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-        <a href="/profile" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {role}</span></a>
-    </td>
+	<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+		<div class="truncate" title={role}>{truncateRole(role, 30)}</div>
+	</td>
+	<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{candidates}</td>
+	<td class="px-3 py-4 text-sm text-gray-500">
+		<div class="flex flex-wrap gap-1">
+			{#each skills as skill}
+				{@const [bg, text, ring] = getNextColor()}
+				<span
+					class="inline-flex items-center rounded-md {bg} px-2 py-1 text-xs font-medium {text} ring-1 ring-inset {ring}"
+					>{skill}</span
+				>
+			{/each}
+		</div>
+	</td>
+	<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{status}</td>
+	<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+		<button on:click={command} id={id.toString()} type="button" class="text-indigo-600 hover:text-indigo-900"
+			>Edit<span class="sr-only">, {index}</span></button
+		>
+	</td>
 </tr>

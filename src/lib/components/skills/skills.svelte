@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { writable, type Writable } from 'svelte/store';
 	import { fade } from 'svelte/transition';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 
 	interface Skill {
 		text: string;
@@ -13,6 +13,7 @@
 	const colors: string[] = ['bg-teal-500', 'bg-orange-500', 'bg-rose-500', 'bg-purple-500'];
 	let colorIndex = 0;
 	let showMaxAlert = false;
+	export let initialColorIndex: number;
 
 	const dispatch = createEventDispatcher();
 
@@ -23,6 +24,7 @@
 				colorIndex = (colorIndex + 1) % colors.length;
 				skillInput = '';
 				dispatch('skillslist', getSkillsList());
+				dispatch('colorIndexUpdate', colorIndex);
 			} else {
 				showMaxAlert = true;
 				setTimeout(() => {
@@ -34,12 +36,21 @@
 
 	function removeSkill(index: number): void {
 		$skills = $skills.filter((_, i) => i !== index);
+		colorIndex = (colorIndex - 1 + colors.length) % colors.length;
+		dispatch('colorIndexUpdate', colorIndex);
 		dispatch('skillslist', getSkillsList());
+
 	}
 
 	function getSkillsList(): string[] {
 		return $skills.map((skill) => skill.text);
 	}
+
+	export let allskills: Skill[];
+	onMount(() => {
+		skills.set(allskills);
+		colorIndex = initialColorIndex;
+	});
 </script>
 
 <div class="gap-4 mb-4 relative">
@@ -59,21 +70,21 @@
 		/>
 		<button
 			on:click={addSkill}
-				type="button"
-				class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
+			type="button"
+			class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
+		>
+			<svg
+				class="me-1 -ms-1 w-5 h-5"
+				fill="currentColor"
+				viewBox="0 0 20 20"
+				xmlns="http://www.w3.org/2000/svg"
+				><path
+					fill-rule="evenodd"
+					d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+					clip-rule="evenodd"
+				></path></svg
 			>
-				<svg
-					class="me-1 -ms-1 w-5 h-5"
-					fill="currentColor"
-					viewBox="0 0 20 20"
-					xmlns="http://www.w3.org/2000/svg"
-					><path
-						fill-rule="evenodd"
-						d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-						clip-rule="evenodd"
-					></path></svg
-				>
-				Add
+			Add
 		</button>
 	</div>
 	<div
@@ -86,6 +97,7 @@
 					style="margin-left: {index % 2 === 0 && Math.floor(index / 4) % 2 !== 0 ? '5px' : '0'}"
 				>
 					<button
+						type="button"
 						on:click={() => removeSkill(index)}
 						class="{skill.color} text-white rounded-lg px-2 py-1 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-primary-500"
 					>

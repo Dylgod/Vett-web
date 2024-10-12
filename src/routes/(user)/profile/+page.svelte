@@ -4,17 +4,28 @@
 	import Skills from '$lib/components/skills/skills.svelte';
 	import type { PageData } from './$types';
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let data: PageData;
 
+	interface Skill {
+		text: string;
+		color: string;
+	}
+
+	const colors: string[] = ['bg-teal-500', 'bg-orange-500', 'bg-rose-500', 'bg-purple-500'];
+	let allskills: Skill[] = [];
+	let colorIndex = 0;
+
 	let skillsList: string[] = [];
 	let formskills: string = '';
-
 	let orderList = data.orders;
 
 	let role = '';
 	let numberOfCandidates: number = 1;
 	let onboarding = false;
+
+	let skillsModalFormAction = "?/submitorder"
 
 	let user_email = data.user.email;
 	let owner = data.owner;
@@ -38,6 +49,13 @@
 		// Updates skillslist after adding or removing a skill
 		skillsList = event.detail;
 		formskills = JSON.stringify(skillsList);
+		console.log("skillsList",skillsList)
+		console.log("formskills",formskills)
+	}
+
+	function handleColorIndexUpdate(event: CustomEvent<number>) {
+		colorIndex = event.detail;
+		console.log(colorIndex)
 	}
 
 	// function handleOrderList(event: CustomEvent<Task[]>) {
@@ -57,6 +75,8 @@
 		numberOfCandidates = 1;
 		onboarding = false;
 		skillsList = [];
+		allskills = [];
+		skillsModalFormAction = "?/submitorder"
 	}
 
 	function resetProfileModal() {
@@ -64,22 +84,39 @@
 		editProfile = !editProfile;
 	}
 
-	// function submitOrder() {
-	// 	let newOrder: Task = {
-	// 		Company_id: data.Company_id as number,
-	// 		Company_name: data.Company_name as string,
-	// 		Date: Date.now(),
-	// 		Manager_id: uuid,
-	// 		Manager: data.user.email as string,
-	// 		Role: role,
-	// 		Candidates: numberOfCandidates,
-	// 		Onboarding: true,
-	// 		Type: "onboarding",
-	// 		Skills: skillsList,
-	// 		Status: 'Pending',
-	// 		Logo: ""
-	// 	};
-	// }
+	function editOrderRow(index: number) {
+		return () => {
+			// Populate modal with row values. Change submit formaction to update
+			console.log(`Editing order at index ${index}`);
+			let order = orderList![index];
+			colorIndex = 0;
+			skillsModalFormAction = "?/editorder"
+			// shows modal
+			invisible = !invisible;
+			addRole = !addRole;
+
+			role = order.role;
+			numberOfCandidates = order.candidates;
+			onboarding = order.onboarding;
+			skillsList = order.skills;
+
+			const ALLSKILLS: Skill[] = skillsList.map((skill) => {
+				const skillObject: Skill = {
+					text: skill,
+					color: colors[colorIndex]
+				};
+
+				// Increment colorIndex and wrap around if it exceeds colors array length
+				colorIndex = (colorIndex + 1) % colors.length;
+				console.log(colorIndex)
+
+				return skillObject;
+			});
+			allskills = ALLSKILLS
+
+		};
+	}
+
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -158,12 +195,15 @@
 						</thead>
 						<tbody class="divide-y divide-gray-200">
 							{#if orderList}
-								{#each orderList as order}
+								{#each orderList as order, index}
 									<ProfileRow
+										{index}
+										id={order.id}
 										role={order.role}
 										candidates={order.candidates}
 										skills={order.skills}
 										status={order.status}
+										command={editOrderRow(index)}
 									/>
 								{/each}
 							{/if}
@@ -248,7 +288,7 @@
 							<form
 								class="p-4 md:p-5 flex flex-col"
 								method="POST"
-								action="?/submitorder"
+								action={skillsModalFormAction}
 								use:enhance
 								on:submit={resetSwitch}
 							>
@@ -323,7 +363,7 @@
 										</fieldset>
 									</div>
 									<div class="mt-5">
-										<Skills on:skillslist={handleSkillsList} />
+										<Skills on:skillslist={handleSkillsList} allskills={allskills} initialColorIndex={colorIndex} on:colorIndexUpdate={handleColorIndexUpdate} />
 										<input
 											class="invisible hidden"
 											type="text"
@@ -414,7 +454,7 @@
 													name="new_profile_name"
 													id="new_profile_name"
 													required
-													autocomplete='off'
+													autocomplete="off"
 													bind:value={new_profile_name}
 													class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 													placeholder="Ex: Jon Doe"
