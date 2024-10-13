@@ -4,7 +4,6 @@
 	import Skills from '$lib/components/skills/skills.svelte';
 	import type { PageData } from './$types';
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
-	import { createEventDispatcher } from 'svelte';
 
 	export let data: PageData;
 
@@ -24,8 +23,10 @@
 	let role = '';
 	let numberOfCandidates: number = 1;
 	let onboarding = false;
+	let order_id: number | null = null;
 
-	let skillsModalFormAction = "?/submitorder"
+	let editing_row = false;
+	let skillsModalFormAction = '?/submitorder';
 
 	let user_email = data.user.email;
 	let owner = data.owner;
@@ -49,13 +50,13 @@
 		// Updates skillslist after adding or removing a skill
 		skillsList = event.detail;
 		formskills = JSON.stringify(skillsList);
-		console.log("skillsList",skillsList)
-		console.log("formskills",formskills)
+		console.log('skillsList', skillsList);
+		console.log('formskills', formskills);
 	}
 
 	function handleColorIndexUpdate(event: CustomEvent<number>) {
 		colorIndex = event.detail;
-		console.log(colorIndex)
+		console.log(colorIndex);
 	}
 
 	// function handleOrderList(event: CustomEvent<Task[]>) {
@@ -76,7 +77,8 @@
 		onboarding = false;
 		skillsList = [];
 		allskills = [];
-		skillsModalFormAction = "?/submitorder"
+		skillsModalFormAction = '?/submitorder';
+		editing_row = false;
 	}
 
 	function resetProfileModal() {
@@ -87,10 +89,10 @@
 	function editOrderRow(index: number) {
 		return () => {
 			// Populate modal with row values. Change submit formaction to update
-			console.log(`Editing order at index ${index}`);
 			let order = orderList![index];
+			order_id = order.id;
 			colorIndex = 0;
-			skillsModalFormAction = "?/editorder"
+			skillsModalFormAction = '?/editorder';
 			// shows modal
 			invisible = !invisible;
 			addRole = !addRole;
@@ -99,6 +101,7 @@
 			numberOfCandidates = order.candidates;
 			onboarding = order.onboarding;
 			skillsList = order.skills;
+			formskills = JSON.stringify(skillsList);
 
 			const ALLSKILLS: Skill[] = skillsList.map((skill) => {
 				const skillObject: Skill = {
@@ -108,15 +111,14 @@
 
 				// Increment colorIndex and wrap around if it exceeds colors array length
 				colorIndex = (colorIndex + 1) % colors.length;
-				console.log(colorIndex)
+				console.log(colorIndex);
 
 				return skillObject;
 			});
-			allskills = ALLSKILLS
-
+			allskills = ALLSKILLS;
+			editing_row = true;
 		};
 	}
-
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -303,6 +305,7 @@
 											type="text"
 											name="role"
 											id="role"
+											required
 											bind:value={role}
 											class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 											placeholder="Position at the Company"
@@ -363,9 +366,16 @@
 										</fieldset>
 									</div>
 									<div class="mt-5">
-										<Skills on:skillslist={handleSkillsList} allskills={allskills} initialColorIndex={colorIndex} on:colorIndexUpdate={handleColorIndexUpdate} />
+										<Skills
+											on:skillslist={handleSkillsList}
+											{allskills}
+											initialColorIndex={colorIndex}
+											on:colorIndexUpdate={handleColorIndexUpdate}
+										/>
+										<!-- required might not be doing anything. if break, remove -->
 										<input
 											class="invisible hidden"
+											required
 											type="text"
 											name="skills"
 											id="skills"
@@ -373,9 +383,19 @@
 										/>
 									</div>
 								</div>
+								{#if editing_row}
+									<input
+										class="invisible hidden"
+										type="text"
+										id="order_id"
+										name="order_id"
+										bind:value={order_id}
+									/>
+								{/if}
 								<button
 									type="submit"
-									class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
+									class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end disabled:bg-gray-600 disabled:hover:bg-gray-600"
+									disabled={skillsList.length<1}
 								>
 									Continue to Payment
 								</button>

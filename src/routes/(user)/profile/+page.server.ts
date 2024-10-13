@@ -2,7 +2,7 @@ import { SERVICE_ROLE } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database, Tables } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
     const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
@@ -47,67 +47,105 @@ export async function load({ locals }) {
 
 export const actions = {
     submitorder: async ({ locals, request, url }) => {
+        // get formdata -> create payload -> query stripe -> response 200 = create row and send email to created_by with magic links for calendly
+        const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
+        const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
+
+        if (authError || !user) {
+            console.log("authError || !user")
+            throw redirect(303, "/profile"); // if not logged in profile redirects to login. If they are and they get redirected then problem occurs
+        }
         const formData = await request.formData()
-        const Candidates = (formData.get("candidates")?.toString() || "").trim()
-        const Role = (formData.get("role")?.toString() || "").trim()
-        const Onboarding = formData.has("onboarding");
-        const Skills = (formData.get("skills")?.toString() || "").trim()
-        console.log("submitorder")
-        console.log(Candidates)
-        console.log(Role)
-        console.log(Onboarding)
-        console.log(Skills)
-        // if (!email) return fail(400, { ok: false, message: "A valid email is needed" })
 
-        // try {
-        //     const result = await locals.supabase.auth.signInWithOtp({
-        //         email: email,
-        //     })
-        //     if (result.error) {
-        //         throw redirect(303, `/login?error&message=${result.error.message}`)
-        //     }
+        const candidates = parseInt(formData.get("candidates")?.toString() || "")
+        const role = (formData.get("role")?.toString() || "").trim()
+        const onboarding = formData.has("onboarding");
+        const skillsFormData = (formData.get("skills")?.toString() || "")
+        const skills: string[] = JSON.parse(skillsFormData);
+        let checkpoint: string = "onboarding";
 
-        // } catch (error) {
-        //     console.warn("failed to send magic link: ", error)
-        //     return fail(500, {
-        //         ok: false,
-        //         message: "Something went wrong. Please try again",
-        //     })
-        // }
+        if (onboarding) {
+            checkpoint = "onboarding"
+        } else {
+            checkpoint = "create_takehome"
+        }
 
-        // throw redirect(303, `/auth/confirm?email=${email}`)
+        const { data: client, error: clientError } = await supa_client
+        .from('clients')
+        .select("*")
+        .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
+        .single();
+
+        if (client) {
+            let created_for = client.id
+            let created_by = user.id
+
+            // STRIPE GOES HERE
+
+            const { data, error } = await supa_client
+            .from('orders')
+            .insert(
+                {
+                    created_for: created_for,
+                    created_by: created_by,
+                    candidates: candidates,
+                    role: role,
+                    onboarding: onboarding,
+                    skills: skills,
+                    status: "Pending",
+                    checkpoint: checkpoint
+                }
+            )
+            .select()
+    
+            if (error) {
+                console.error('Error updating data:', error);
+            } else {
+                console.log('Data updated successfully:', data);
+            }
+        }
+
+
+
+
     },
     editorder: async ({ locals, request, url }) => {
+        const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
+
         const formData = await request.formData()
-        const Candidates = (formData.get("candidates")?.toString() || "").trim()
-        const Role = (formData.get("role")?.toString() || "").trim()
-        const Onboarding = formData.has("onboarding");
-        const Skills = (formData.get("skills")?.toString() || "").trim()
-        console.log("editorder")
-        console.log(Candidates)
-        console.log(Role)
-        console.log(Onboarding)
-        console.log(Skills)
-        // if (!email) return fail(400, { ok: false, message: "A valid email is needed" })
+        const candidates = parseInt(formData.get("candidates")?.toString() || "")
+        const role = (formData.get("role")?.toString() || "").trim()
+        const onboarding = formData.has("onboarding");
+        const skillsFormData = (formData.get("skills")?.toString() || "")
+        const order_id = parseInt(formData.get("order_id")?.toString() || "")
 
-        // try {
-        //     const result = await locals.supabase.auth.signInWithOtp({
-        //         email: email,
-        //     })
-        //     if (result.error) {
-        //         throw redirect(303, `/login?error&message=${result.error.message}`)
-        //     }
+        const skills: string[] = JSON.parse(skillsFormData);
+        console.log("candidates",candidates)
+        console.log("role",role)
+        console.log("onboarding",onboarding)
+        console.log("skills",skills)
 
-        // } catch (error) {
-        //     console.warn("failed to send magic link: ", error)
-        //     return fail(500, {
-        //         ok: false,
-        //         message: "Something went wrong. Please try again",
-        //     })
-        // }
+        const { data, error } = await supa_client
+            .from('orders')
+            .update(
+                {
+                    candidates: candidates,
+                    role: role,
+                    onboarding: onboarding,
+                    skills: skills,
+                    checkpoint: "update"
+                }
+            )
+            .eq("id", order_id)
+            .select()
 
-        // throw redirect(303, `/auth/confirm?email=${email}`)
+        if (error) {
+            console.error('Error updating data:', error);
+        } else {
+            console.log('Data updated successfully:', data);
+        }
     },
+
     updateUser: async ({ locals, request, url }) => {
         const formData = await request.formData()
         const Fullname = (formData.get("new_profile_name")?.toString() || "").trim()
@@ -115,8 +153,8 @@ export const actions = {
             {
                 data: { display_name: Fullname }
             })
-            if (!error) {
-                redirect(303, "/profile")
-            }
+        if (!error) {
+            redirect(303, "/profile")
+        }
     }
 }
