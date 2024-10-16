@@ -23,6 +23,10 @@
 
 	let role = '';
 	let numberOfCandidates: number = 1;
+
+	// init here. value assigned on btn press
+	let candidates_before_edit: number = 1;
+
 	let onboarding = false;
 	let order_id: number | null = null;
 
@@ -100,6 +104,7 @@
 
 			role = order.role;
 			numberOfCandidates = order.candidates;
+			candidates_before_edit = order.candidates;
 			onboarding = order.onboarding;
 			skillsList = order.skills;
 			formskills = JSON.stringify(skillsList);
@@ -334,7 +339,11 @@
 												class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 												>Candidates</label
 											>
-											<Dropdown bind:value={numberOfCandidates} />
+											{#if editing_row}
+												<Dropdown bind:value={numberOfCandidates} start={candidates_before_edit} />
+											{:else}
+												<Dropdown bind:value={numberOfCandidates} />
+											{/if}
 										</div>
 										<fieldset class="col-span-2">
 											<legend class="sr-only">Preliminary Meeting</legend>
@@ -405,13 +414,26 @@
 										name="order_id"
 										bind:value={order_id}
 									/>
+									<input
+										class="invisible hidden"
+										type="text"
+										id="candidates_before_edit"
+										name="candidates_before_edit"
+										bind:value={candidates_before_edit}
+									/>
 								{/if}
 								<button
 									type="submit"
 									class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end disabled:bg-gray-600 disabled:hover:bg-gray-600"
 									disabled={skillsList.length < 1}
 								>
-									Continue to Payment
+									{#if editing_row}
+										{candidates_before_edit != numberOfCandidates
+											? 'Continue to Payment'
+											: 'Finish Editing'}
+									{:else}
+										Continue to Payment
+									{/if}
 								</button>
 							</form>
 						</div>

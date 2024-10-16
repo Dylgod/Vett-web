@@ -2,10 +2,11 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let value: number = 1;
+	export let start: number = 1;
 
 	let isOpen = false;
 
-	const numbers = Array.from({ length: 15 }, (_, i) => i + 1);
+	const numbers = Array.from({ length: 16 - start }, (_, i) => i + start);
 
 	const dispatch = createEventDispatcher<{ change: number }>();
 
