@@ -20,7 +20,7 @@
 	let skillsList: string[] = [];
 	let formskills: string = '';
 	let orderList = data.orders;
-
+	$: ({ orders } = data);
 	let role = '';
 	let numberOfCandidates: number = 1;
 
@@ -64,11 +64,6 @@
 		console.log(colorIndex);
 	}
 
-	// function handleOrderList(event: CustomEvent<Task[]>) {
-	// 	// Updates orderList after adding or removing an order (event: submit)
-	// 	orderList = event.detail;
-	// }
-
 	function toggleSwitch() {
 		onboarding = !onboarding;
 		console.log(onboarding);
@@ -94,7 +89,7 @@
 	function editOrderRow(index: number) {
 		return () => {
 			// Populate modal with row values. Change submit formaction to update
-			let order = orderList![index];
+			let order = orders![index];
 			order_id = order.id;
 			colorIndex = 0;
 			skillsModalFormAction = '?/editorder';
@@ -215,8 +210,8 @@
 							</tr>
 						</thead>
 						<tbody class="divide-y divide-gray-200">
-							{#if orderList}
-								{#each orderList as order, index}
+							{#if orders}
+								{#each orders as order, index (order.id)}
 									<ProfileRow
 										{index}
 										id={order.id}
@@ -228,7 +223,6 @@
 									/>
 								{/each}
 							{/if}
-							<!-- More rows... -->
 						</tbody>
 					</table>
 					<button
