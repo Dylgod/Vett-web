@@ -1,5 +1,6 @@
-import { SERVICE_ROLE } from '$env/static/private';
-import { PUBLIC_SUPABASE_URL } from '$env/static/public';
+import { SERVICE_ROLE, PRODUCT_PRICE_IN_PENNIES, PRICE_ID } from '$env/static/private';
+import { PUBLIC_HOSTNAME, PUBLIC_SUPABASE_URL } from '$env/static/public';
+import { stripe } from '$lib/stripe';
 import type { Database, Tables } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { error, redirect } from '@sveltejs/kit';
@@ -61,7 +62,7 @@ export const actions = {
         const role = (formData.get("role")?.toString() || "").trim()
         const onboarding = formData.has("onboarding");
         const skillsFormData = (formData.get("skills")?.toString() || "")
-        const skills: string[] = JSON.parse(skillsFormData);
+
         let checkpoint: string = "onboarding";
 
         if (onboarding) {
@@ -71,43 +72,46 @@ export const actions = {
         }
 
         const { data: client, error: clientError } = await supa_client
-        .from('clients')
-        .select("*")
-        .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
-        .single();
+            .from('clients')
+            .select("*")
+            .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
+            .single();
 
         if (client) {
             let created_for = client.id
             let created_by = user.id
 
-            // STRIPE GOES HERE
-
-            const { data, error } = await supa_client
-            .from('orders')
-            .insert(
-                {
+            const session = await stripe.checkout.sessions.create({
+                line_items: [
+                    {
+                        price: PRICE_ID,
+                        quantity: candidates
+                    }
+                ],
+                mode: 'payment',
+                success_url: `${PUBLIC_HOSTNAME}/profile?success=${150000*candidates}`,
+                cancel_url: `${PUBLIC_HOSTNAME}/profile`,
+                automatic_tax: { enabled: true },
+                customer_creation: 'if_required',
+                client_reference_id: client.id.toString(),
+                metadata: {
                     created_for: created_for,
                     created_by: created_by,
                     candidates: candidates,
                     role: role,
-                    onboarding: onboarding,
-                    skills: skills,
+                    onboarding: onboarding ? 1 : 0,
+                    skills: skillsFormData,
                     status: "Pending",
                     checkpoint: checkpoint
                 }
-            )
-            .select()
-    
-            if (error) {
-                console.error('Error updating data:', error);
-            } else {
-                console.log('Data updated successfully:', data);
-            }
+            });
+
+            if (session.url) {
+                redirect(303, session.url)
+              } else {
+                throw new Error('Failed to redirect you to Stripe')
+              }
         }
-
-
-
-
     },
     editorder: async ({ locals, request, url }) => {
         const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
@@ -120,10 +124,8 @@ export const actions = {
         const order_id = parseInt(formData.get("order_id")?.toString() || "")
 
         const skills: string[] = JSON.parse(skillsFormData);
-        console.log("candidates",candidates)
-        console.log("role",role)
-        console.log("onboarding",onboarding)
-        console.log("skills",skills)
+
+        // check if num candidates has increased and if so, redirect to stripe
 
         const { data, error } = await supa_client
             .from('orders')
@@ -145,7 +147,6 @@ export const actions = {
             console.log('Data updated successfully:', data);
         }
     },
-
     updateUser: async ({ locals, request, url }) => {
         const formData = await request.formData()
         const Fullname = (formData.get("new_profile_name")?.toString() || "").trim()

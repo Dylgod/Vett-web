@@ -4,7 +4,8 @@
 	import Skills from '$lib/components/skills/skills.svelte';
 	import type { PageData } from './$types';
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
-
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 	export let data: PageData;
 
 	interface Skill {
@@ -119,6 +120,19 @@
 			editing_row = true;
 		};
 	}
+
+	onMount(() => {
+		const url = new URL($page.url);
+		const stripe_success = $page.url.searchParams.get('success');
+
+		if (stripe_success) {
+			alert('Payment Successful!\nYour order will be displayed on your Profile.');
+
+			// Remove the 'success' parameter from the URL
+			url.searchParams.delete('success');
+			window.history.replaceState({}, '', url);
+		}
+	});
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -395,7 +409,7 @@
 								<button
 									type="submit"
 									class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end disabled:bg-gray-600 disabled:hover:bg-gray-600"
-									disabled={skillsList.length<1}
+									disabled={skillsList.length < 1}
 								>
 									Continue to Payment
 								</button>
