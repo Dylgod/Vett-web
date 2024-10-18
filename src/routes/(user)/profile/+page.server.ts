@@ -125,7 +125,7 @@ export const actions = {
 
         const formData = await request.formData()
         const candidates = parseInt(formData.get("candidates")?.toString() || "")
-        const candidates_before_edit = parseInt(formData.get("candidates")?.toString() || "")
+        const candidates_before_edit = parseInt(formData.get("candidates_before_edit")?.toString() || "")
         const role = (formData.get("role")?.toString() || "").trim()
         const onboarding = formData.has("onboarding");
         const skillsFormData = (formData.get("skills")?.toString() || "")
@@ -133,6 +133,8 @@ export const actions = {
 
         const skills: string[] = JSON.parse(skillsFormData);
         // check if num candidates has increased and if so, redirect to stripe
+        console.log("candidates", candidates)
+        console.log("candidates_before_edit", candidates_before_edit)
         if (candidates - candidates_before_edit > 0) {
             let remainder: number = candidates - candidates_before_edit
 
@@ -198,7 +200,6 @@ export const actions = {
             if (error) {
                 console.error('Error updating data:', error);
             } else {
-                console.log('Data updated successfully:', data);
                 return { success: true };
             }
         }

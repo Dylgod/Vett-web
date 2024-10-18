@@ -19,8 +19,10 @@
 
 	let skillsList: string[] = [];
 	let formskills: string = '';
-	let orderList = data.orders;
+
+	// Makes ProfileRow reactive to changes in Supabase
 	$: ({ orders } = data);
+	
 	let role = '';
 	let numberOfCandidates: number = 1;
 
