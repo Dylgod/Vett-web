@@ -39,13 +39,18 @@ export async function load({ locals }) {
         throw error(500, 'Error fetching orders');
     }
 
-    // if (client.admins) {
-    //     const admins: string[] = [];
-    //     client.admins.forEach((i)=> {
-    //         admins.push()
-    //     })
-    // }
+    const admins: string[] = [];
+    client.admins?.forEach(async element => {
+        const { data: employeeData, error: employeeError } = await locals.supabase.auth.admin.getUserById(element)
+        console.log(employeeData.user?.user_metadata.display_name)
 
+        if (employeeError) {
+            console.error('Error fetching orders:', employeeError);
+        }
+    });
+
+
+    
     return {
         user,
         Company_id: client.id,

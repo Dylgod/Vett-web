@@ -66,8 +66,14 @@
 	</td>
 	<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{status}</td>
 	<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-		<button on:click={command} id={id.toString()} type="button" class="text-indigo-600 hover:text-indigo-900"
-			>Edit<span class="sr-only">, {index}</span></button
-		>
+		{#if command !== 'hidden'}
+			<button
+				on:click={command}
+				id={id.toString()}
+				type="button"
+				class="text-indigo-600 hover:text-indigo-900"
+				>Edit<span class="sr-only">, {index}</span></button
+			>
+		{/if}
 	</td>
 </tr>

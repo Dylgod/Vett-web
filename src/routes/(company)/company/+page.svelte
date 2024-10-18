@@ -1,8 +1,9 @@
 <script lang="ts">
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
+	import AdminUser from '$lib/components/employees/admin_user.svelte';
 	import type { PageData } from './$types';
 	export let data: PageData;
-	let orderList = data.orders;
+	let orders = data.orders;
 	let admins = data.admins;
 	let invisible = false;
 	let addAdmin = false;
@@ -11,9 +12,8 @@
 	let editCompany = false;
 
 	let new_company_name = data.Company_name;
-	let new_company_owner = "";
+	let new_company_owner = '';
 	// let new_company_logo = ""; ???
-
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -61,44 +61,47 @@
 				</p>
 			</div>
 		</div>
-		{#if orderList}
-			{#if orderList.length < 0}
+		{#if orders}
+			{#if orders.length > 0}
 				<div class="mt-8 flow-root">
 					<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 						<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-							<table class="min-w-full divide-y divide-gray-300">
+							<table class="min-w-full table-fixed divide-y divide-gray-300">
 								<thead>
 									<tr>
 										<th
 											scope="col"
-											class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+											class="w-1/5 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
 											>Role</th
 										>
 										<th
 											scope="col"
-											class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+											class="w-1/7 px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 											>Candidates</th
 										>
 										<th
 											scope="col"
-											class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Skills</th
+											class="w-1/2 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Skills</th
 										>
 										<th
 											scope="col"
-											class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th
+											class="w-24 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th
 										>
-										<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+										<th scope="col" class="w-20 relative py-3.5 pl-3 pr-4 sm:pr-0">
 											<span class="sr-only">Edit</span>
 										</th>
 									</tr>
 								</thead>
 								<tbody class="divide-y divide-gray-200">
-									{#each orderList as order}
+									{#each orders as order, index (order.id)}
 										<ProfileRow
+											{index}
+											id={order.id}
 											role={order.role}
 											candidates={order.candidates}
 											skills={order.skills}
 											status={order.status}
+											command="hidden"
 										/>
 									{/each}
 								</tbody>
@@ -197,6 +200,9 @@
 					<div class="p-6 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
 							<ul role="list" class="divide-y divide-gray-100">
+								<!-- {#each admins as admin, index (admin.id)}
+								<AdminUser />
+							{/each} -->
 								<li class="flex justify-between py-5">
 									<div class="flex min-w-0 gap-x-4 flex-grow overflow-hidden">
 										<img
