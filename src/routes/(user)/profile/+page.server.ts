@@ -1,4 +1,3 @@
-import { invalidateAll } from '$app/navigation';
 import { SERVICE_ROLE, PRODUCT_PRICE_IN_PENNIES, PRICE_ID } from '$env/static/private';
 import { PUBLIC_HOSTNAME, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { stripe } from '$lib/stripe';

@@ -1,17 +1,11 @@
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-	type User = {
-		uuid: string;
-		name: string | undefined;
-		email: string | undefined;
-        type: "User"
-		// logo: any?
-	};
-
-	export let user: User;
+    export let name: string | undefined;
+    export let email: string | undefined;
 	export let rank: string;
 	export let index: number;
+    export let uuid: string;
 
 	let isMenuOpen = false;
 	let menuButton: HTMLButtonElement;
@@ -23,25 +17,11 @@
 		isMenuOpen = !isMenuOpen;
 	}
 
-    function closeMenu(event: MouseEvent) {
-    if (!menuButton || !menuContent) return;
-    if (!menuButton.contains(event.target as Node) && !menuContent.contains(event.target as Node)) {
-        isMenuOpen = false;
-    }
-}
-
-	function handleAction(action: 'demote' | 'delete') {
-		dispatch(action, { user, index });
+	function handleAction(action: 'promote' | 'delete') {
+		dispatch(action, { name, email, uuid, index });
 		isMenuOpen = false;
 	}
 
-    onMount(() => {
-        document.addEventListener('click', closeMenu);
-    });
-
-    onDestroy(() => {
-        document.removeEventListener('click', closeMenu);
-    });
 </script>
 
 <li class="flex justify-between py-5">
@@ -53,10 +33,10 @@
 		/>
 		<div class="min-w-0 flex-auto">
 			<p class="text-sm font-semibold leading-6 text-gray-900 truncate">
-				<a href="/company" class="hover:underline">{user.name}</a>
+				<a href="/company" class="hover:underline">{name}</a>
 			</p>
 			<p class="mt-1 text-xs leading-5 text-gray-500 truncate">
-				<a href="mailto:leslie.alexander@example.com" class="hover:underline">{user.email}</a>
+				<a href="mailto:leslie.alexander@example.com" class="hover:underline">{email}</a>
 			</p>
 		</div>
 	</div>
@@ -90,17 +70,18 @@
 					class="absolute right-0 z-10 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
 					style="top: 100%; margin-top: 0.5rem;"
 					role="menu"
+                    id={uuid}
 					aria-orientation="vertical"
 					aria-labelledby="options-menu-{index}-button"
 					tabindex="-1"
 				>
 					<button
-						on:click={() => handleAction('demote')}
+						on:click={() => handleAction('promote')}
 						class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-slate-100/50 w-full text-left"
 						role="menuitem"
 						tabindex="-1"
 					>
-						Demote User<span class="sr-only">, {user.name}</span>
+						Promote User<span class="sr-only">, {name}</span>
 					</button>
 					<button
 						on:click={() => handleAction('delete')}
@@ -108,7 +89,7 @@
 						role="menuitem"
 						tabindex="-1"
 					>
-						Remove<span class="sr-only">, {user.name}</span>
+						Delete User<span class="sr-only">, {name}</span>
 					</button>
 				</div>
 			{/if}

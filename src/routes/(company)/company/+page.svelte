@@ -1,16 +1,17 @@
 <script lang="ts">
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
-	import EmployeeRow from '$lib/components/employees/admin_user_row.svelte';
+	import AdminRow from '$lib/components/employees/admin_user_row.svelte';
+	import UserRow from '$lib/components/employees/user_row.svelte';
 	import type { PageData } from './$types';
+	import { writable } from 'svelte/store';
 
 	export let data: PageData;
 	let orders = data.orders;
-	let admins = data.admins;
 	let invisible = false;
 	let addAdmin = false;
 
-	$: ({ admins } = data);
-	$: ({ users } = data);
+	let adminsStore = writable(data.admins);
+	let usersStore = writable(data.users);
 
 	let edit_company_invisible = false;
 	let editCompany = false;
@@ -19,11 +20,51 @@
 	let new_company_owner = '';
 	// let new_company_logo = ""; ???
 
-	function handleDemote(event: CustomEvent<{ index: number }>) {
-		const { index } = event.detail;
-		// Your demote logic here
-		console.log(`Demoting at index ${index}`);
-	}
+	async function handleDemote(event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>) {
+    const { uuid, index, name, email } = event.detail;
+    try {
+        const response = await fetch('/api/demote_admin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ uuid })
+        });
+        const result = await response.json();
+        if (result.success) {
+            console.log(`Demoted admin at index ${index}`);
+            adminsStore.update(admins => admins.filter(admin => admin.uuid !== uuid));
+            usersStore.update(users => [...users, { uuid, name, email, type: 'User' }]);
+        } else {
+            console.error('Failed to demote admin:', result.error);
+        }
+    } catch (error) {
+        console.error('Error demoting admin:', error);
+    }
+}
+
+	async function handlePromote(event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>) {
+    const { uuid, index, name, email } = event.detail;
+    try {
+        const response = await fetch('/api/promote_user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ uuid })
+        });
+        const result = await response.json();
+        if (result.success) {
+            console.log(`Promoted user at index ${index}`);
+            usersStore.update(users => users.filter(user => user.uuid !== uuid));
+            adminsStore.update(admins => [...admins, { uuid, name, email, type: 'Administrator' }]);
+        } else {
+            console.error('Failed to promote user:', result.error);
+        }
+    } catch (error) {
+        console.error('Error promoting user:', error);
+    }
+}
 
 	function handleDelete(event: CustomEvent<{ index: number }>) {
 		const { index } = event.detail;
@@ -218,12 +259,13 @@
 					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
 							<ul role="list" class="divide-y divide-gray-100">
-								{#each admins as admin, index (admin.uuid)}
-									<EmployeeRow
-										index={index}
+								{#each $adminsStore as admin, index (admin.uuid)}
+									<AdminRow
+										{index}
 										name={admin.name}
 										email={admin.email}
 										rank={admin.type}
+										uuid={admin.uuid}
 										on:demote={handleDemote}
 										on:delete={handleDelete}
 									/>
@@ -246,15 +288,17 @@
 					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
 							<ul role="list" class="divide-y divide-gray-100">
-								<!-- {#each admins as admin, index (admin.uuid)}
-									<EmployeeRow
+								{#each $usersStore as user, index (user.uuid)}
+									<UserRow
 										{index}
-										{admin}
-										rank="Administrator"
-										on:demote={handleDemote}
+										name={user.name}
+										email={user.email}
+										rank={user.type}
+										uuid={user.uuid}
+										on:promote={handlePromote}
 										on:delete={handleDelete}
 									/>
-								{/each} -->
+								{/each}
 							</ul>
 						</div>
 					</div>

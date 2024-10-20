@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-    export let name;
-    export let email;
+    export let name: string | undefined;
+    export let email: string | undefined;
 	export let rank: string;
 	export let index: number;
+    export let uuid: string;
 
 	let isMenuOpen = false;
 	let menuButton: HTMLButtonElement;
@@ -16,25 +17,11 @@
 		isMenuOpen = !isMenuOpen;
 	}
 
-    function closeMenu(event: MouseEvent) {
-    if (!menuButton || !menuContent) return;
-    if (!menuButton.contains(event.target as Node) && !menuContent.contains(event.target as Node)) {
-        isMenuOpen = false;
-    }
-}
-
 	function handleAction(action: 'demote' | 'delete') {
-		dispatch(action, { index });
+		dispatch(action, { uuid, index, name, email });
 		isMenuOpen = false;
 	}
 
-    onMount(() => {
-        document.addEventListener('click', closeMenu);
-    });
-
-    onDestroy(() => {
-        document.removeEventListener('click', closeMenu);
-    });
 </script>
 
 <li class="flex justify-between py-5">
@@ -83,6 +70,7 @@
 					class="absolute right-0 z-10 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
 					style="top: 100%; margin-top: 0.5rem;"
 					role="menu"
+                    id={uuid}
 					aria-orientation="vertical"
 					aria-labelledby="options-menu-{index}-button"
 					tabindex="-1"
@@ -101,7 +89,7 @@
 						role="menuitem"
 						tabindex="-1"
 					>
-						Remove<span class="sr-only">, {name}</span>
+						Delete User<span class="sr-only">, {name}</span>
 					</button>
 				</div>
 			{/if}
