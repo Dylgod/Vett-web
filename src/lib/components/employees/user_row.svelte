@@ -1,8 +1,15 @@
 <script lang="ts">
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 
-    export let name;
-    export let email;
+	type User = {
+		uuid: string;
+		name: string | undefined;
+		email: string | undefined;
+        type: "User"
+		// logo: any?
+	};
+
+	export let user: User;
 	export let rank: string;
 	export let index: number;
 
@@ -24,7 +31,7 @@
 }
 
 	function handleAction(action: 'demote' | 'delete') {
-		dispatch(action, { index });
+		dispatch(action, { user, index });
 		isMenuOpen = false;
 	}
 
@@ -46,10 +53,10 @@
 		/>
 		<div class="min-w-0 flex-auto">
 			<p class="text-sm font-semibold leading-6 text-gray-900 truncate">
-				<a href="/company" class="hover:underline">{name}</a>
+				<a href="/company" class="hover:underline">{user.name}</a>
 			</p>
 			<p class="mt-1 text-xs leading-5 text-gray-500 truncate">
-				<a href="mailto:leslie.alexander@example.com" class="hover:underline">{email}</a>
+				<a href="mailto:leslie.alexander@example.com" class="hover:underline">{user.email}</a>
 			</p>
 		</div>
 	</div>
@@ -93,7 +100,7 @@
 						role="menuitem"
 						tabindex="-1"
 					>
-						Demote User<span class="sr-only">, {name}</span>
+						Demote User<span class="sr-only">, {user.name}</span>
 					</button>
 					<button
 						on:click={() => handleAction('delete')}
@@ -101,7 +108,7 @@
 						role="menuitem"
 						tabindex="-1"
 					>
-						Remove<span class="sr-only">, {name}</span>
+						Remove<span class="sr-only">, {user.name}</span>
 					</button>
 				</div>
 			{/if}

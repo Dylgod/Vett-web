@@ -3,12 +3,6 @@
 	import EmployeeRow from '$lib/components/employees/admin_user_row.svelte';
 	import type { PageData } from './$types';
 
-	type Admin = {
-		uuid: string;
-		name: string | undefined;
-		email: string | undefined;
-	};
-
 	export let data: PageData;
 	let orders = data.orders;
 	let admins = data.admins;
@@ -16,6 +10,7 @@
 	let addAdmin = false;
 
 	$: ({ admins } = data);
+	$: ({ users } = data);
 
 	let edit_company_invisible = false;
 	let editCompany = false;
@@ -24,16 +19,16 @@
 	let new_company_owner = '';
 	// let new_company_logo = ""; ???
 
-	function handleDemote(event: CustomEvent<{ admin: Admin; index: number }>) {
-		const { admin, index } = event.detail;
+	function handleDemote(event: CustomEvent<{ index: number }>) {
+		const { index } = event.detail;
 		// Your demote logic here
-		console.log(`Demoting admin: ${admin.name} at index ${index}`);
+		console.log(`Demoting at index ${index}`);
 	}
 
-	function handleDelete(event: CustomEvent<{ admin: Admin; index: number }>) {
-		const { admin, index } = event.detail;
+	function handleDelete(event: CustomEvent<{ index: number }>) {
+		const { index } = event.detail;
 		// Your delete logic here
-		console.log(`Deleting admin: ${admin.name} at index ${index}`);
+		console.log(`Deleting at index ${index}`);
 	}
 </script>
 
@@ -225,9 +220,10 @@
 							<ul role="list" class="divide-y divide-gray-100">
 								{#each admins as admin, index (admin.uuid)}
 									<EmployeeRow
-										{index}
-										{admin}
-										rank="Administrator"
+										index={index}
+										name={admin.name}
+										email={admin.email}
+										rank={admin.type}
 										on:demote={handleDemote}
 										on:delete={handleDelete}
 									/>
@@ -250,7 +246,7 @@
 					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
 							<ul role="list" class="divide-y divide-gray-100">
-								{#each admins as admin, index (admin.uuid)}
+								<!-- {#each admins as admin, index (admin.uuid)}
 									<EmployeeRow
 										{index}
 										{admin}
@@ -258,7 +254,7 @@
 										on:demote={handleDemote}
 										on:delete={handleDelete}
 									/>
-								{/each}
+								{/each} -->
 							</ul>
 						</div>
 					</div>
