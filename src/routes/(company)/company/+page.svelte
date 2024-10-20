@@ -1,12 +1,21 @@
 <script lang="ts">
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
-	import AdminUser from '$lib/components/employees/admin_user.svelte';
+	import EmployeeRow from '$lib/components/employees/admin_user_row.svelte';
 	import type { PageData } from './$types';
+
+	type Admin = {
+		uuid: string;
+		name: string | undefined;
+		email: string | undefined;
+	};
+
 	export let data: PageData;
 	let orders = data.orders;
 	let admins = data.admins;
 	let invisible = false;
 	let addAdmin = false;
+
+	$: ({ admins } = data);
 
 	let edit_company_invisible = false;
 	let editCompany = false;
@@ -14,6 +23,18 @@
 	let new_company_name = data.Company_name;
 	let new_company_owner = '';
 	// let new_company_logo = ""; ???
+
+	function handleDemote(event: CustomEvent<{ admin: Admin; index: number }>) {
+		const { admin, index } = event.detail;
+		// Your demote logic here
+		console.log(`Demoting admin: ${admin.name} at index ${index}`);
+	}
+
+	function handleDelete(event: CustomEvent<{ admin: Admin; index: number }>) {
+		const { admin, index } = event.detail;
+		// Your delete logic here
+		console.log(`Deleting admin: ${admin.name} at index ${index}`);
+	}
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -81,11 +102,13 @@
 										>
 										<th
 											scope="col"
-											class="w-1/2 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Skills</th
+											class="w-1/2 px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+											>Skills</th
 										>
 										<th
 											scope="col"
-											class="w-24 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th
+											class="w-24 px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+											>Status</th
 										>
 										<th scope="col" class="w-20 relative py-3.5 pl-3 pr-4 sm:pr-0">
 											<span class="sr-only">Edit</span>
@@ -197,87 +220,18 @@
 				<div
 					class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]"
 				>
-					<div class="p-6 flex flex-col h-full">
+					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
 							<ul role="list" class="divide-y divide-gray-100">
-								<!-- {#each admins as admin, index (admin.id)}
-								<AdminUser />
-							{/each} -->
-								<li class="flex justify-between py-5">
-									<div class="flex min-w-0 gap-x-4 flex-grow overflow-hidden">
-										<img
-											class="h-12 w-12 flex-shrink-0 rounded-full bg-gray-50"
-											src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-											alt=""
-										/>
-										<div class="min-w-0 flex-auto">
-											<p class="text-sm font-semibold leading-6 text-gray-900 truncate">
-												<a href="/company" class="hover:underline">Leslie Alexander</a>
-											</p>
-											<p class="mt-1 text-xs leading-5 text-gray-500 truncate">
-												<a href="mailto:leslie.alexander@example.com" class="hover:underline"
-													>leslie.alexander@example.com</a
-												>
-											</p>
-										</div>
-									</div>
-									<div class="flex shrink-0 items-center gap-x-4 ml-4">
-										<div class="hidden sm:flex sm:flex-col sm:items-end">
-											<p class="text-sm leading-6 text-gray-900 whitespace-nowrap">
-												Co-Founder / CEO
-											</p>
-											<p class="mt-1 text-xs leading-5 text-gray-500 whitespace-nowrap">
-												Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
-											</p>
-										</div>
-										<div class="relative flex-none">
-											<button
-												type="button"
-												class="block p-2 text-gray-500 hover:text-gray-900"
-												id="options-menu-0-button"
-												aria-expanded="false"
-												aria-haspopup="true"
-											>
-												<span class="sr-only">Open options</span>
-												<svg
-													class="h-5 w-5"
-													viewBox="0 0 20 20"
-													fill="currentColor"
-													aria-hidden="true"
-												>
-													<path
-														d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-													/>
-												</svg>
-											</button>
-
-											<div
-												class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
-												role="menu"
-												aria-orientation="vertical"
-												aria-labelledby="options-menu-0-button"
-												tabindex="-1"
-											>
-												<a
-													href="/company"
-													class="block px-3 py-1 text-sm leading-6 text-gray-900"
-													role="menuitem"
-													tabindex="-1"
-													id="options-menu-0-item-0"
-													>Demote User<span class="sr-only">, Leslie Alexander</span></a
-												>
-												<a
-													href="/company"
-													class="block px-3 py-1 text-sm leading-6 text-gray-900"
-													role="menuitem"
-													tabindex="-1"
-													id="options-menu-0-item-1"
-													>Remove<span class="sr-only">, Leslie Alexander</span></a
-												>
-											</div>
-										</div>
-									</div>
-								</li>
+								{#each admins as admin, index (admin.uuid)}
+									<EmployeeRow
+										{index}
+										{admin}
+										rank="Administrator"
+										on:demote={handleDemote}
+										on:delete={handleDelete}
+									/>
+								{/each}
 							</ul>
 						</div>
 					</div>
@@ -293,84 +247,18 @@
 				<div
 					class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tr-[calc(2rem+1px)]"
 				>
-					<div class="p-6 flex flex-col h-full">
+					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
 							<ul role="list" class="divide-y divide-gray-100">
-								<li class="flex justify-between py-5">
-									<div class="flex min-w-0 gap-x-4 flex-grow overflow-hidden">
-										<img
-											class="h-12 w-12 flex-shrink-0 rounded-full bg-gray-50"
-											src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-											alt=""
-										/>
-										<div class="min-w-0 flex-auto">
-											<p class="text-sm font-semibold leading-6 text-gray-900 truncate">
-												<a href="/company" class="hover:underline">Leslie Alexander</a>
-											</p>
-											<p class="mt-1 text-xs leading-5 text-gray-500 truncate">
-												<a href="mailto:leslie.alexander@example.com" class="hover:underline"
-													>leslie.alexander@example.com</a
-												>
-											</p>
-										</div>
-									</div>
-									<div class="flex shrink-0 items-center gap-x-4 ml-4">
-										<div class="hidden sm:flex sm:flex-col sm:items-end">
-											<p class="text-sm leading-6 text-gray-900 whitespace-nowrap">
-												Co-Founder / CEO
-											</p>
-											<p class="mt-1 text-xs leading-5 text-gray-500 whitespace-nowrap">
-												Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
-											</p>
-										</div>
-										<div class="relative flex-none">
-											<button
-												type="button"
-												class="block p-2 text-gray-500 hover:text-gray-900"
-												id="options-menu-0-button"
-												aria-expanded="false"
-												aria-haspopup="true"
-											>
-												<span class="sr-only">Open options</span>
-												<svg
-													class="h-5 w-5"
-													viewBox="0 0 20 20"
-													fill="currentColor"
-													aria-hidden="true"
-												>
-													<path
-														d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-													/>
-												</svg>
-											</button>
-
-											<div
-												class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
-												role="menu"
-												aria-orientation="vertical"
-												aria-labelledby="options-menu-0-button"
-												tabindex="-1"
-											>
-												<a
-													href="/company"
-													class="block px-3 py-1 text-sm leading-6 text-gray-900"
-													role="menuitem"
-													tabindex="-1"
-													id="options-menu-0-item-0"
-													>Promote User<span class="sr-only">, Leslie Alexander</span></a
-												>
-												<a
-													href="/company"
-													class="block px-3 py-1 text-sm leading-6 text-gray-900"
-													role="menuitem"
-													tabindex="-1"
-													id="options-menu-0-item-1"
-													>Remove<span class="sr-only">, Leslie Alexander</span></a
-												>
-											</div>
-										</div>
-									</div>
-								</li>
+								{#each admins as admin, index (admin.uuid)}
+									<EmployeeRow
+										{index}
+										{admin}
+										rank="Administrator"
+										on:demote={handleDemote}
+										on:delete={handleDelete}
+									/>
+								{/each}
 							</ul>
 						</div>
 					</div>

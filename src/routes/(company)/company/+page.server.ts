@@ -39,23 +39,36 @@ export async function load({ locals }) {
         throw error(500, 'Error fetching orders');
     }
 
-    const admins: string[] = [];
-    client.admins?.forEach(async element => {
-        const { data: employeeData, error: employeeError } = await locals.supabase.auth.admin.getUserById(element)
-        console.log(employeeData.user?.user_metadata.display_name)
+    type Admin = {
+        uuid: string;
+        name: string | undefined;
+        email: string | undefined;
+        // logo: any?
+      };
+
+    // Use Promise.all to handle multiple async operations
+    const adminPromises = client.admins?.map(async (element) => {
+        const { data: employeeData, error: employeeError } = await locals.supabase.auth.admin.getUserById(element);
 
         if (employeeError) {
-            console.error('Error fetching orders:', employeeError);
+            console.error('Error fetching admin:', employeeError);
+            return null; // Return null for failed fetches. Do we throw error instead?
         }
-    });
 
+        return {
+            uuid: element,
+            name: employeeData.user?.user_metadata.display_name,
+            email: employeeData.user?.email
+        };
+    }) || [];
 
-    
+    const admins = (await Promise.all(adminPromises)).filter((admin): admin is Admin => admin !== null);
+
     return {
         user,
         Company_id: client.id,
         Company_name: client.company_name,
-        admins: client.admins,
+        admins: admins,
         orders,
     };
 }

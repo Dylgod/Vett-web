@@ -133,8 +133,7 @@ export const actions = {
 
         const skills: string[] = JSON.parse(skillsFormData);
         // check if num candidates has increased and if so, redirect to stripe
-        console.log("candidates", candidates)
-        console.log("candidates_before_edit", candidates_before_edit)
+
         if (candidates - candidates_before_edit > 0) {
             let remainder: number = candidates - candidates_before_edit
 
