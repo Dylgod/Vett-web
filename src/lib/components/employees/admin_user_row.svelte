@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
-    export let name: string | undefined;
-    export let email: string | undefined;
+	export let name: string | undefined;
+	export let email: string | undefined;
 	export let rank: string;
 	export let index: number;
-    export let uuid: string;
+	export let uuid: string;
+	export let isowner: boolean;
 
 	let isMenuOpen = false;
 	let menuButton: HTMLButtonElement;
@@ -18,10 +19,9 @@
 	}
 
 	function handleAction(action: 'demote' | 'delete') {
-		dispatch(action, { uuid, index, name, email });
+		dispatch(action, { uuid, index, name, email, isowner });
 		isMenuOpen = false;
 	}
-
 </script>
 
 <li class="flex justify-between py-5">
@@ -43,34 +43,54 @@
 	<div class="flex shrink-0 items-center gap-x-4 ml-4">
 		<div class="hidden sm:flex sm:flex-col sm:items-end">
 			<p class="text-sm leading-6 text-gray-900 whitespace-nowrap">
-				{rank}
+				{#if isowner}
+					{'Owner'}
+				{:else}
+					{rank}
+				{/if}
 			</p>
 		</div>
 		<div class="relative flex-none">
-			<button
-				bind:this={menuButton}
-				type="button"
-				class="block p-2 text-gray-500 hover:text-gray-900"
-				id="options-menu-{index}-button"
-				aria-expanded={isMenuOpen}
-				aria-haspopup="true"
-				on:click={toggleMenu}
-			>
-				<span class="sr-only">Open options</span>
-				<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-					<path
-						d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-					/>
-				</svg>
-			</button>
-
+			{#if !isowner}
+				<button
+					bind:this={menuButton}
+					type="button"
+					class="block p-2 text-gray-500 hover:text-gray-900"
+					id="options-menu-{index}-button"
+					aria-expanded={isMenuOpen}
+					aria-haspopup="true"
+					on:click={toggleMenu}
+				>
+					<span class="sr-only">Open options</span>
+					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+						<path
+							d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+						/>
+					</svg>
+				</button>
+			{:else}
+				<button
+					type="button"
+					class="block p-2 text-gray-500"
+					id="options-menu-{index}-button"
+					aria-expanded="false"
+					aria-haspopup="false"
+				>
+					<span class="sr-only">Open options</span>
+					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+						<path
+							d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+						/>
+					</svg>
+				</button>
+			{/if}
 			{#if isMenuOpen}
 				<div
 					bind:this={menuContent}
 					class="absolute right-0 z-10 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
 					style="top: 100%; margin-top: 0.5rem;"
 					role="menu"
-                    id={uuid}
+					id={uuid}
 					aria-orientation="vertical"
 					aria-labelledby="options-menu-{index}-button"
 					tabindex="-1"

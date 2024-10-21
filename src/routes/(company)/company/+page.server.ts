@@ -44,6 +44,7 @@ export async function load({ locals }) {
         name: string | undefined;
         email: string | undefined;
         type: 'Administrator';
+        isowner : boolean
         // logo: any?
     };
 
@@ -52,6 +53,7 @@ export async function load({ locals }) {
         name: string | undefined;
         email: string | undefined;
         type: 'User';
+        isowner : boolean
         // logo: any?
     };
 
@@ -60,6 +62,7 @@ export async function load({ locals }) {
         name: string | undefined;
         email: string | undefined;
         type: 'Administrator' | 'User';
+        isowner : boolean
         // logo: any?
     };
 
@@ -77,19 +80,22 @@ export async function load({ locals }) {
             uuid,
             name: userData.user?.user_metadata.display_name,
             email: userData.user?.email,
-            type: client.admins?.includes(uuid) ? 'Administrator' : 'User'
+            type: client.admins?.includes(uuid) ? 'Administrator' : 'User',
+            isowner: client.owner?.includes(uuid) ? true : false
         };
     });
 
     const people = (await Promise.all(personPromises)).filter((person): person is Person => person !== null);
 
-    const admins = people.filter(person => person.type === 'Administrator') as Admin[];
-    const users = people.filter(person => person.type === 'User') as User[];
+    const owner = people.filter(person => person.type === 'Administrator' && person.isowner === true) as Admin[];
+    const admins = people.filter(person => person.type === 'Administrator' && person.isowner === false) as Admin[];
+    const users = people.filter(person => person.type === 'User' && person.isowner === false) as User[];
 
     return {
         user,
         Company_id: client.id,
         Company_name: client.company_name,
+        owner,
         admins,
         users,
         orders,

@@ -12,6 +12,7 @@
 
 	let adminsStore = writable(data.admins);
 	let usersStore = writable(data.users);
+	let ownerStore = writable(data.owner);
 
 	let edit_company_invisible = false;
 	let editCompany = false;
@@ -20,51 +21,61 @@
 	let new_company_owner = '';
 	// let new_company_logo = ""; ???
 
-	async function handleDemote(event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>) {
-    const { uuid, index, name, email } = event.detail;
-    try {
-        const response = await fetch('/api/demote_admin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ uuid })
-        });
-        const result = await response.json();
-        if (result.success) {
-            console.log(`Demoted admin at index ${index}`);
-            adminsStore.update(admins => admins.filter(admin => admin.uuid !== uuid));
-            usersStore.update(users => [...users, { uuid, name, email, type: 'User' }]);
-        } else {
-            console.error('Failed to demote admin:', result.error);
-        }
-    } catch (error) {
-        console.error('Error demoting admin:', error);
-    }
-}
+	async function handleDemote(
+		event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>
+	) {
+		const { uuid, index, name, email } = event.detail;
+		try {
+			const response = await fetch('/api/demote_admin', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ uuid })
+			});
+			const result = await response.json();
+			if (result.success) {
+				console.log(`Demoted admin at index ${index}`);
+				adminsStore.update((admins) => admins.filter((admin) => admin.uuid !== uuid));
+				usersStore.update((users) => [
+					...users,
+					{ uuid, name, email, type: 'User', isowner: false }
+				]);
+			} else {
+				console.error('Failed to demote admin:', result.error);
+			}
+		} catch (error) {
+			console.error('Error demoting admin:', error);
+		}
+	}
 
-	async function handlePromote(event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>) {
-    const { uuid, index, name, email } = event.detail;
-    try {
-        const response = await fetch('/api/promote_user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ uuid })
-        });
-        const result = await response.json();
-        if (result.success) {
-            console.log(`Promoted user at index ${index}`);
-            usersStore.update(users => users.filter(user => user.uuid !== uuid));
-            adminsStore.update(admins => [...admins, { uuid, name, email, type: 'Administrator' }]);
-        } else {
-            console.error('Failed to promote user:', result.error);
-        }
-    } catch (error) {
-        console.error('Error promoting user:', error);
-    }
-}
+	async function handlePromote(
+		event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>
+	) {
+		const { uuid, index, name, email } = event.detail;
+		try {
+			const response = await fetch('/api/promote_user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ uuid })
+			});
+			const result = await response.json();
+			if (result.success) {
+				console.log(`Promoted user at index ${index}`);
+				usersStore.update((users) => users.filter((user) => user.uuid !== uuid));
+				adminsStore.update((admins) => [
+					...admins,
+					{ uuid, name, email, type: 'Administrator', isowner: false }
+				]);
+			} else {
+				console.error('Failed to promote user:', result.error);
+			}
+		} catch (error) {
+			console.error('Error promoting user:', error);
+		}
+	}
 
 	function handleDelete(event: CustomEvent<{ index: number }>) {
 		const { index } = event.detail;
@@ -259,6 +270,17 @@
 					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
 							<ul role="list" class="divide-y divide-gray-100">
+								{#each $ownerStore as owner, index (owner.uuid)}
+									<AdminRow
+										{index}
+										name={owner.name}
+										email={owner.email}
+										rank={owner.type}
+										uuid={owner.uuid}
+										isowner={owner.isowner}
+									/>
+								{/each}
+
 								{#each $adminsStore as admin, index (admin.uuid)}
 									<AdminRow
 										{index}
@@ -266,6 +288,7 @@
 										email={admin.email}
 										rank={admin.type}
 										uuid={admin.uuid}
+										isowner={admin.isowner}
 										on:demote={handleDemote}
 										on:delete={handleDelete}
 									/>
