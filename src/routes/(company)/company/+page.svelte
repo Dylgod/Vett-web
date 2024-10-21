@@ -1,9 +1,11 @@
 <script lang="ts">
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
 	import AdminRow from '$lib/components/employees/admin_user_row.svelte';
+	import NewOwner from '$lib/components/dropdowns/new_owner.svelte';
 	import UserRow from '$lib/components/employees/user_row.svelte';
 	import type { PageData } from './$types';
 	import { writable } from 'svelte/store';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
 	let orders = data.orders;
@@ -13,12 +15,16 @@
 	let adminsStore = writable(data.admins);
 	let usersStore = writable(data.users);
 	let ownerStore = writable(data.owner);
+	let staffStore = writable(data.staff)
 
 	let edit_company_invisible = false;
 	let editCompany = false;
 
+	let company_owner_uuid = data.owner.uuid;
+	let current_user = data.user.id;
+	let new_company_owner_uuid = data.owner.uuid; // initialized to prevent NaN on form submit without touching the field
 	let new_company_name = data.Company_name;
-	let new_company_owner = '';
+
 	// let new_company_logo = ""; ???
 
 	async function handleDemote(
@@ -41,6 +47,7 @@
 					...users,
 					{ uuid, name, email, type: 'User', isowner: false }
 				]);
+				staffStore.update((staff) => staff.filter((admin) => admin.uuid !== uuid));
 			} else {
 				console.error('Failed to demote admin:', result.error);
 			}
@@ -69,6 +76,10 @@
 					...admins,
 					{ uuid, name, email, type: 'Administrator', isowner: false }
 				]);
+				staffStore.update((admins) => [
+					...admins,
+					{ uuid, name, email, type: 'Administrator', isowner: false }
+				]);
 			} else {
 				console.error('Failed to promote user:', result.error);
 			}
@@ -81,6 +92,16 @@
 		const { index } = event.detail;
 		// Your delete logic here
 		console.log(`Deleting at index ${index}`);
+	}
+
+	function handleNewOwner(event: CustomEvent<{ uuid: string }>) {
+		const { uuid } = event.detail;
+		new_company_owner_uuid = uuid;
+	}
+
+	function resetSwitch() {
+		edit_company_invisible = !edit_company_invisible;
+		editCompany = !editCompany;
 	}
 </script>
 
@@ -109,11 +130,14 @@
 					name="companymodaltoggle"
 					type="button"
 					on:click={() => {
-						edit_company_invisible = !edit_company_invisible;
-						editCompany = !editCompany;
+						if (company_owner_uuid === current_user) {
+							edit_company_invisible = !edit_company_invisible;
+							editCompany = !editCompany;
+						}
 					}}
-					class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-					>Edit Company</button
+					class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 cursor-default"
+					class:hover:bg-gray-50={company_owner_uuid === current_user}
+					class:cursor-pointer={company_owner_uuid === current_user}>Edit Company</button
 				>
 			</div>
 		</div>
@@ -269,18 +293,15 @@
 				>
 					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
-							<ul role="list" class="divide-y divide-gray-100">
-								{#each $ownerStore as owner, index (owner.uuid)}
-									<AdminRow
-										{index}
-										name={owner.name}
-										email={owner.email}
-										rank={owner.type}
-										uuid={owner.uuid}
-										isowner={owner.isowner}
-									/>
-								{/each}
-
+							<ul>
+								<AdminRow
+									index={0}
+									name={$ownerStore.name}
+									email={$ownerStore.email}
+									rank={$ownerStore.type}
+									uuid={$ownerStore.uuid}
+									isowner={$ownerStore.isowner}
+								/>
 								{#each $adminsStore as admin, index (admin.uuid)}
 									<AdminRow
 										{index}
@@ -524,14 +545,14 @@
 			aria-hidden="true"
 			class="fixed grid h-screen place-items-center overflow-y-auto overflow-x-auto m-auto md:inset-0 w-screen bg-slate-950/50"
 		>
-			<div class="relative w-full max-w-md max-h-full">
+			<div class="relative w-1/3 p-8 max-h-full">
 				{#if editCompany}
 					<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
 						<!-- Modal header -->
 						<div
 							class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
 						>
-							<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+							<h3 class="pl-5 text-lg font-semibold text-gray-900 dark:text-white">
 								Edit Company Profile
 							</h3>
 							<button
@@ -561,15 +582,20 @@
 								<span class="sr-only">Close modal</span>
 							</button>
 						</div>
-						<form>
+						<form
+							method="POST"
+							action="?/editcompany"
+							use:enhance
+							on:submit={resetSwitch}
+						>
 							<div class="space-y-12">
-								<div class="border-b border-gray-900/10 pb-12 p-5">
-									<p class="mt-1 text-sm leading-6 text-white">
+								<div class="border-b border-gray-900/10 pb-6 p-5 pl-10">
+									<p class="mt-1 text-sm leading-6 text-white w-11/12">
 										This information will be displayed on your dashboard as well as in the email you
 										send to your staff.
 									</p>
 
-									<div class="col-span-full mt-5">
+									<div class="col-span-full mt-8">
 										<label for="logo" class="block text-sm font-medium leading-6 text-white"
 											>Logo</label
 										>
@@ -594,7 +620,7 @@
 										</div>
 									</div>
 
-									<div class="mt-6 flex gap-x-6 gap-y-2 flex-col">
+									<div class="mt-8 flex gap-x-6 gap-y-2 flex-col">
 										<div class="gap-4">
 											<div class="">
 												<label
@@ -607,112 +633,31 @@
 													name="new_company_name"
 													id="new_company_name"
 													bind:value={new_company_name}
-													class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+													class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-60 p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 													placeholder="The Name of the Company"
 												/>
 											</div>
 										</div>
 										<label
-											for="companyname"
-											class="mt-6 mb-2 block text-sm font-medium leading-6 text-white"
-											>Account Owner Email</label
+											for="new_company_owner"
+											class="block mt-8 text-sm font-medium text-gray-900 dark:text-white"
+											>Company Owner</label
 										>
-										<div class="">
-											<div class="">
-												<div class="relative">
-													<button
-														type="button"
-														class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-														aria-haspopup="listbox"
-														aria-expanded="true"
-														aria-labelledby="listbox-label"
-													>
-														<span class="block truncate">Tom Cook</span>
-														<span
-															class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
-														>
-															<svg
-																class="h-5 w-5 text-gray-400"
-																viewBox="0 0 20 20"
-																fill="currentColor"
-																aria-hidden="true"
-															>
-																<path
-																	fill-rule="evenodd"
-																	d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z"
-																	clip-rule="evenodd"
-																/>
-															</svg>
-														</span>
-													</button>
-
-													<!--
-														Select popover, show/hide based on select state.
-												  
-														Entering: ""
-														  From: ""
-														  To: ""
-														Leaving: "transition ease-in duration-100"
-														  From: "opacity-100"
-														  To: "opacity-0"
-													  -->
-													<ul
-														class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-														tabindex="-1"
-														role="listbox"
-														aria-labelledby="listbox-label"
-														aria-activedescendant="listbox-option-3"
-													>
-														<!--
-														  Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
-												  
-														  Highlighted: "bg-indigo-600 text-white", Not Highlighted: "text-gray-900"
-														-->
-														<!-- role="option" -->
-														<li
-															class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900"
-															id="listbox-option-0"
-														>
-															<!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-															<span class="block truncate font-normal">Wade Cooper</span>
-
-															<!--
-															Checkmark, only display for selected option.
-												  
-															Highlighted: "text-white", Not Highlighted: "text-indigo-600"
-														  -->
-															<span
-																class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-															>
-																<svg
-																	class="h-5 w-5"
-																	viewBox="0 0 20 20"
-																	fill="currentColor"
-																	aria-hidden="true"
-																>
-																	<path
-																		fill-rule="evenodd"
-																		d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-																		clip-rule="evenodd"
-																	/>
-																</svg>
-															</span>
-														</li>
-														<!-- More items... -->
-													</ul>
-												</div>
-												<div class="mt-3 flex items-center justify-end gap-x-6">
-													<button
-														type="button"
-														class="text-sm font-semibold leading-6 text-gray-900">Cancel</button
-													>
-													<button
-														type="submit"
-														class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-														>Save</button
-													>
-												</div>
-											</div>
+										<NewOwner people={$staffStore} on:change={handleNewOwner} />
+										<input
+											type="text"
+											name="new_company_owner"
+											id="new_company_owner"
+											bind:value={new_company_owner_uuid}
+											class="invisible hidden"
+											placeholder="The Owner of the Company"
+										/>
+										<div class="mt-8 flex items-center justify-end gap-x-6 pr-5">
+											<button
+												type="submit"
+												class="rounded-md bg-blue-600 w-24 px-4 py-2 text-md font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+												>Save</button
+											>
 										</div>
 									</div>
 								</div>

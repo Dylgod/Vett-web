@@ -87,9 +87,12 @@ export async function load({ locals }) {
 
     const people = (await Promise.all(personPromises)).filter((person): person is Person => person !== null);
 
-    const owner = people.filter(person => person.type === 'Administrator' && person.isowner === true) as Admin[];
+    const owner = people.filter(person => person.type === 'Administrator' && person.isowner === true)[0] as Admin;
     const admins = people.filter(person => person.type === 'Administrator' && person.isowner === false) as Admin[];
     const users = people.filter(person => person.type === 'User' && person.isowner === false) as User[];
+
+    // This exists for the new_owner component
+    const staff = people.filter(person => person.type === 'Administrator') as Admin[];
 
     return {
         user,
@@ -99,5 +102,19 @@ export async function load({ locals }) {
         admins,
         users,
         orders,
+        staff
     };
+}
+
+export const actions = {
+    editcompany: async ({ locals, request, url }) => {
+
+        const formData = await request.formData()
+        
+        const new_company_name = (formData.get("new_company_name")?.toString() || "").trim()
+        const new_company_owner = (formData.get("new_company_owner")?.toString() || "").trim()
+        // const new_company_logo = (formData.get("new_company_logo")
+
+        console.log(new_company_name, new_company_owner)
+    }
 }

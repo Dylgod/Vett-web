@@ -22,7 +22,17 @@
 		dispatch(action, { uuid, index, name, email, isowner });
 		isMenuOpen = false;
 	}
+
+	function handleClickOutside(event: MouseEvent): void {
+		if (isMenuOpen && !event.target) return;
+		const target = event.target as HTMLElement;
+		if (isMenuOpen && !target.closest('.justify-between')) {
+			isMenuOpen = false;
+		}
+	}
 </script>
+
+<svelte:window on:click={handleClickOutside} />
 
 <li class="flex justify-between py-5">
 	<div class="flex min-w-0 gap-x-4 flex-grow overflow-hidden">
