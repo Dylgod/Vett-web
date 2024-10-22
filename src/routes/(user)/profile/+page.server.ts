@@ -8,6 +8,7 @@ import { error, redirect } from '@sveltejs/kit';
 export async function load({ locals }) {
     const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
     const response = await locals.supabase.auth.getUser();
+    let rank: string = "user";
 
     if (!response.data.user) {
         redirect(303, "/login")
@@ -34,13 +35,19 @@ export async function load({ locals }) {
             .select("*")
             .eq('created_by', response.data.user.id)
 
+        if (client?.owner === response.data.user.id) {
+            rank = "owner"
+        } else if (client?.admins?.includes(response.data.user.id)) {
+            rank = "admin"
+        }
+
         return {
             user: response.data.user,
             name: response.data.user.user_metadata.display_name,
             Company_id: client?.id,
             Company_name: client?.company_name,
-            owner: client?.owner,
             orders,
+            rank
             // Logo: client?.logo  <--- TODO!
         }
     }

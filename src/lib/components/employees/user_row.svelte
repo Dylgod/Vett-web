@@ -4,6 +4,10 @@
     export let name: string | undefined;
     export let email: string | undefined;
 	export let rank: string;
+	
+	// This is the rank of the person viewing the page
+	export let rank_of_user: string
+
 	export let index: number;
     export let uuid: string;
 
@@ -14,7 +18,9 @@
 	const dispatch = createEventDispatcher();
 
 	function toggleMenu() {
-		isMenuOpen = !isMenuOpen;
+		if (rank_of_user === 'owner') {
+			isMenuOpen = !isMenuOpen;
+		}
 	}
 
 	function handleAction(action: 'promote' | 'delete') {
@@ -60,6 +66,8 @@
 				bind:this={menuButton}
 				type="button"
 				class="block p-2 text-gray-500 hover:text-gray-900"
+				class:hover:text-gray-500={rank_of_user !== "owner"}
+				class:cursor-default={rank_of_user !== "owner"}
 				id="options-menu-{index}-button"
 				aria-expanded={isMenuOpen}
 				aria-haspopup="true"

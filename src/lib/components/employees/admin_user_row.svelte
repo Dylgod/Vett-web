@@ -4,6 +4,10 @@
 	export let name: string | undefined;
 	export let email: string | undefined;
 	export let rank: string;
+
+	// This is the rank of the person viewing the page
+	export let rank_of_user: string
+
 	export let index: number;
 	export let uuid: string;
 	export let isowner: boolean;
@@ -15,7 +19,9 @@
 	const dispatch = createEventDispatcher();
 
 	function toggleMenu() {
-		isMenuOpen = !isMenuOpen;
+		if (rank_of_user === 'owner') {
+			isMenuOpen = !isMenuOpen;
+		}
 	}
 
 	function handleAction(action: 'demote' | 'delete') {
@@ -61,39 +67,25 @@
 			</p>
 		</div>
 		<div class="relative flex-none">
-			{#if !isowner}
-				<button
-					bind:this={menuButton}
-					type="button"
-					class="block p-2 text-gray-500 hover:text-gray-900"
-					id="options-menu-{index}-button"
-					aria-expanded={isMenuOpen}
-					aria-haspopup="true"
-					on:click={toggleMenu}
-				>
-					<span class="sr-only">Open options</span>
-					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-						<path
-							d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-						/>
-					</svg>
-				</button>
-			{:else}
-				<button
-					type="button"
-					class="block p-2 text-gray-500"
-					id="options-menu-{index}-button"
-					aria-expanded="false"
-					aria-haspopup="false"
-				>
-					<span class="sr-only">Open options</span>
-					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-						<path
-							d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-						/>
-					</svg>
-				</button>
-			{/if}
+			<button
+				bind:this={menuButton}
+				type="button"
+				class="block p-2 text-gray-500 hover:text-gray-900"
+				class:hover:text-gray-500={rank_of_user !== "owner"}
+				class:cursor-default={rank_of_user !== "owner"}
+				id="options-menu-{index}-button"
+				aria-expanded={isMenuOpen}
+				aria-haspopup="true"
+				on:click={toggleMenu}
+			>
+				<span class="sr-only">Open options</span>
+				<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+					<path
+						d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+					/>
+				</svg>
+			</button>
+
 			{#if isMenuOpen}
 				<div
 					bind:this={menuContent}

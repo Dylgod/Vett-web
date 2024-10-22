@@ -36,7 +36,7 @@
 	let skillsModalFormAction = '?/submitorder';
 
 	let user_email = data.user.email;
-	let owner = data.owner;
+	let rank = data.rank;
 
 	let invisible = false;
 	let addRole = false;
@@ -159,14 +159,16 @@
 						{:else}
 							<p class="text-xl font-bold text-gray-900 sm:text-2xl">{user_email}</p>
 						{/if}
-						{#if owner === data.user.id}
+						{#if rank === "owner"}
 							<p class="text-sm font-medium text-gray-600">Owner</p>
+						{:else if rank === "admin"}
+							<p class="text-sm font-medium text-gray-600">Administrator</p>
 						{:else}
 							<p class="text-sm font-medium text-gray-600">Hiring Manager</p>
 						{/if}
 					</div>
 				</div>
-				{#if owner === data.user.id}
+				{#if rank === "owner" || "admin"}
 					<a
 						href="/company"
 						class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"

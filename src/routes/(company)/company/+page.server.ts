@@ -7,6 +7,7 @@ import { error, redirect } from '@sveltejs/kit';
 export async function load({ locals }) {
     const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
     const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
+    let rank = 'user'
 
     if (authError || !user) {
         console.log("authError || !user")
@@ -39,12 +40,18 @@ export async function load({ locals }) {
         throw error(500, 'Error fetching orders');
     }
 
+    if (client?.owner === user.id) {
+        rank = "owner"
+    } else if (client?.admins?.includes(user.id)) {
+        rank = "admin"
+    }
+
     type Admin = {
         uuid: string;
         name: string | undefined;
         email: string | undefined;
         type: 'Administrator';
-        isowner : boolean
+        isowner: boolean
         // logo: any?
     };
 
@@ -53,7 +60,7 @@ export async function load({ locals }) {
         name: string | undefined;
         email: string | undefined;
         type: 'User';
-        isowner : boolean
+        isowner: boolean
         // logo: any?
     };
 
@@ -62,7 +69,7 @@ export async function load({ locals }) {
         name: string | undefined;
         email: string | undefined;
         type: 'Administrator' | 'User';
-        isowner : boolean
+        isowner: boolean
         // logo: any?
     };
 
@@ -96,6 +103,7 @@ export async function load({ locals }) {
 
     return {
         user,
+        rank,
         Company_id: client.id,
         Company_name: client.company_name,
         owner,
@@ -108,13 +116,71 @@ export async function load({ locals }) {
 
 export const actions = {
     editcompany: async ({ locals, request, url }) => {
-
+        const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+        const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
         const formData = await request.formData()
-        
-        const new_company_name = (formData.get("new_company_name")?.toString() || "").trim()
-        const new_company_owner = (formData.get("new_company_owner")?.toString() || "").trim()
-        // const new_company_logo = (formData.get("new_company_logo")
 
-        console.log(new_company_name, new_company_owner)
+        if (authError || !user) {
+            console.log("authError || !user")
+            throw redirect(303, "/"); //profile
+        }
+
+        const { data: client, error: clientError } = await supaClient
+            .from('clients')
+            .select("*")
+            .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
+            .single();
+
+        if (clientError) {
+            console.error('Error fetching client:', clientError);
+            throw error(500, 'Error fetching client data');
+        }
+
+        if (!client) {
+            console.log('User is not an owner or admin of any client');
+            throw redirect(303, "/"); //profile
+        }
+
+        if (client.owner === user.id) {
+            const new_company_name = (formData.get("new_company_name")?.toString() || "").trim()
+            const new_company_owner = (formData.get("new_company_owner")?.toString() || "").trim()
+            // const new_company_logo = (formData.get("new_company_logo")
+
+            if (client.owner !== new_company_owner) {
+                const { data, error: updateError } = await supaClient
+                    .from('clients')
+                    .update({
+                        owner: new_company_owner,
+                        company_name: new_company_name,
+                        // logo: new_company_logo
+                    })
+                    .eq("id", client.id)
+
+                if (updateError) {
+                    console.error('Could not transfer ownership');
+                    throw redirect(303, "/profile")
+                } else {
+                    console.log("Ownership transfer successful.")
+                    throw redirect(303, "/profile")
+                }
+            } else {
+                const { data, error: updateError } = await supaClient
+                    .from('clients')
+                    .update({
+                        company_name: new_company_name,
+                        // logo: new_company_logo
+                    })
+                    .eq("id", client.id)
+                    .single()
+
+                if (updateError) {
+                    console.error('Failed to update company profile.');
+                    throw redirect(303, "/company")
+                }
+            }
+        } else {
+            console.log("Only the owner may edit company information.")
+            throw redirect(303, "/profile")
+        }
     }
 }

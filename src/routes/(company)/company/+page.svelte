@@ -11,6 +11,7 @@
 	let orders = data.orders;
 	let invisible = false;
 	let addAdmin = false;
+	let rank_of_user = data.rank
 
 	let adminsStore = writable(data.admins);
 	let usersStore = writable(data.users);
@@ -293,7 +294,7 @@
 				>
 					<div class="px-6 py-2 flex flex-col h-full">
 						<div class="overflow-y-auto flex-grow pr-2">
-							<ul>
+							<ul class="divide-y divide-gray-100">
 								<AdminRow
 									index={0}
 									name={$ownerStore.name}
@@ -301,6 +302,7 @@
 									rank={$ownerStore.type}
 									uuid={$ownerStore.uuid}
 									isowner={$ownerStore.isowner}
+									rank_of_user={"disabled"}
 								/>
 								{#each $adminsStore as admin, index (admin.uuid)}
 									<AdminRow
@@ -310,6 +312,7 @@
 										rank={admin.type}
 										uuid={admin.uuid}
 										isowner={admin.isowner}
+										rank_of_user={rank_of_user}
 										on:demote={handleDemote}
 										on:delete={handleDelete}
 									/>
@@ -339,6 +342,7 @@
 										email={user.email}
 										rank={user.type}
 										uuid={user.uuid}
+										rank_of_user={rank_of_user}
 										on:promote={handlePromote}
 										on:delete={handleDelete}
 									/>
