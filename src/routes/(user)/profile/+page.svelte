@@ -22,7 +22,7 @@
 
 	// Makes ProfileRow reactive to changes in Supabase
 	$: ({ orders } = data);
-	
+
 	let role = '';
 	let numberOfCandidates: number = 1;
 
@@ -135,6 +135,8 @@
 			window.history.replaceState({}, '', url);
 		}
 	});
+
+	console.log('rank', rank);
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -159,20 +161,39 @@
 						{:else}
 							<p class="text-xl font-bold text-gray-900 sm:text-2xl">{user_email}</p>
 						{/if}
-						{#if rank === "owner"}
+						{#if rank === 'owner'}
 							<p class="text-sm font-medium text-gray-600">Owner</p>
-						{:else if rank === "admin"}
+						{:else if rank === 'admin'}
 							<p class="text-sm font-medium text-gray-600">Administrator</p>
 						{:else}
 							<p class="text-sm font-medium text-gray-600">Hiring Manager</p>
 						{/if}
 					</div>
 				</div>
-				{#if rank === "owner" || "admin"}
+				{#if rank !== 'user'}
+				<div class="flex gap-2">
 					<a
 						href="/company"
 						class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 						>View Company</a
+					>
+					<button
+						type="button"
+						class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+						on:click={() => {
+							edit_profile_invisible = !edit_profile_invisible;
+							editProfile = !editProfile;
+						}}>Edit Profile</button
+					>
+				</div>
+				{:else}
+					<button
+						type="button"
+						class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+						on:click={() => {
+							edit_profile_invisible = !edit_profile_invisible;
+							editProfile = !editProfile;
+						}}>Edit Profile</button
 					>
 				{/if}
 			</div>

@@ -1,6 +1,6 @@
 import { SERVICE_ROLE } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
-import type { Database, Tables } from '$lib/types/supabase.js';
+import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { error, fail, redirect } from '@sveltejs/kit';
 
@@ -263,7 +263,7 @@ export const actions = {
             const new_user_name = (formData.get("new_user_name")?.toString() || "").trim()
             const new_user_email = (formData.get("new_user_email")?.toString() || "").trim()
 
-            const { error } = await supaClient.auth.signInWithOtp({
+            const { data, error } = await supaClient.auth.signInWithOtp({
                 email: new_user_email,
                 options: {
                     data: {
@@ -273,6 +273,7 @@ export const actions = {
                     },
                 },
             })
+            console.log("data", data)
             if (error) {
                 console.warn("failed to send magic link: ", error)
                 return fail(500, {

@@ -36,17 +36,12 @@ export const load: PageServerLoad = async ({ url, locals }) => {
         const { data, error } = await locals.supabase.auth.verifyOtp({ token_hash, type })
 
         if (!error) {
+
             if (data.user?.user_metadata.display_name && data.user?.user_metadata.client_id && data.user?.user_metadata.rank) {
                 const newName: string = data.user?.user_metadata.display_name;
                 const newRank: string = data.user?.user_metadata.rank;
                 const client_id: number = data.user?.user_metadata.client_id;
                 const user_uuid: string = data.user.id
-
-                // console.log("newName",newName)
-                // console.log("newRank",newRank)
-                // console.log("client_id",client_id)
-                // console.log("user_uuid",user_uuid)
-                // console.log(newRank === "admin")
 
                 const { data: updatedData, error } = await locals.supabase.auth.updateUser(
                     {
@@ -61,26 +56,45 @@ export const load: PageServerLoad = async ({ url, locals }) => {
                         .eq("id", client_id)
                         .single()
 
-                        console.log("clientdata", clientdata)
-
                     if (!clientfetchError) {
                         const adminscolumn = clientdata.admins
                         const userscolumn = clientdata.users
-                        console.log([...adminscolumn!, user_uuid])
                         const { error: updateError } = await supaClient
                             .from('clients')
-                            .update({
-                                admins: [...adminscolumn!, user_uuid],
-                                users: [...userscolumn!, user_uuid],
-                                // logo: new_company_logo
-                            })
+                            .update
+                            (
+                                {
+                                    admins: [...adminscolumn!, user_uuid],
+                                    users: [...userscolumn!, user_uuid],
+                                    // logo: new_company_logo
+                                }
+                            )
                             .eq("id", client_id)
 
                         if (updateError) {
                             console.log("Failed to update user", updateError)
                         }
+                    } else {
+                        const user_uuid = data.user?.id
+                        const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+                        const { data: insertData, error: inserterror } = await supaClient
+                            .from('clients')
+                            .insert
+                            (
+                                {
+                                    admins: [user_uuid as string],
+                                    users: [user_uuid as string],
+                                    owner: user_uuid,
+                                }
+                            )
+                        if (inserterror) {
+                            console.log("No Client + Failed to create new client. ID: 1")
+                        }
                     }
-                } else if (newRank === "user") {
+                }
+
+                if (newRank === "user") {
+                    console.log("newRank", newRank)
                     const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
                     const { data: clientdata, error: clientfetchError } = await supaClient
                         .from('clients')
@@ -90,25 +104,56 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 
                     if (!clientfetchError) {
                         const userscolumn = clientdata.users
-                        console.log([...userscolumn!, user_uuid])
                         const { error: updateError } = await supaClient
                             .from('clients')
-                            .update({
-                                users: [...userscolumn!, user_uuid],
-                                // logo: new_company_logo
-                            })
+                            .update
+                            (
+                                {
+                                    users: [...userscolumn!, user_uuid],
+                                    // logo: new_company_logo
+                                }
+                            )
                             .eq("id", client_id)
 
                         if (updateError) {
                             console.log("Failed to update user", updateError)
                         }
+                    } else {
+                        const user_uuid = data.user?.id
+                        const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+                        const { data: insertData, error: inserterror2 } = await supaClient
+                            .from('clients')
+                            .insert
+                            (
+                                {
+                                    admins: [user_uuid as string],
+                                    users: [user_uuid as string],
+                                    owner: user_uuid,
+                                }
+                            )
+                        if (inserterror2) {
+                            console.log("No Client + Failed to create new client. ID: 2")
+                        }
+                    }
+
+                    if (!clientdata) {
+                        console.log("COULD NOT FIND CLIENT DATA && NO SUPABASE ERROR")
                     }
                 }
+            } else {
+                const user_uuid = data.user?.id
+                const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+                const { data: insertData, error } = await supaClient
+                    .from('clients')
+                    .insert
+                    (
+                        {
+                            admins: [user_uuid as string],
+                            users: [user_uuid as string],
+                            owner: user_uuid,
+                        }
+                    )
             }
-
-            // inner else -> same thing with note saying fix later
-            // else -> create client in client table and assign uuid to owner and related fields
-
 
             redirectTo.searchParams.delete('next')
             redirect(303, redirectTo)

@@ -11,6 +11,7 @@
 	let orders = data.orders;
 	let invisible = false;
 	let addAdmin = false;
+	let showNotification = false;
 	let rank_of_user = data.rank;
 
 	let adminsStore = writable(data.admins);
@@ -108,14 +109,28 @@
 	function resetAddAdmin() {
 		invisible = !invisible;
 		addAdmin = !addAdmin;
-		alert("Invite Sent!")
+		showNotification = true;
+
+		// Hide notification after 3 seconds
+		setTimeout(() => {
+			showNotification = false;
+		}, 3000);
 	}
 
 	function resetAddUser() {
 		invisible = !invisible;
-		alert("Invite Sent!")
+		showNotification = true;
+
+		// Hide notification after 3 seconds
+		setTimeout(() => {
+			showNotification = false;
+		}, 3000);
 	}
 </script>
+
+{#if showNotification}
+	<div class="notification font-semibold">Invite Sent!</div>
+{/if}
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 	<div class="overflow-hidden rounded-lg bg-white shadow-md">
@@ -132,7 +147,11 @@
 					</div>
 					<div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
 						<p class="text-sm font-medium text-gray-600">Company Dashboard</p>
-						<p class="mt-2 text-xl font-bold text-gray-900 sm:text-3xl">{data.Company_name}</p>
+						{#if data.Company_name}
+							<p class="mt-2 text-xl font-bold text-gray-900 sm:text-3xl">{data.Company_name}</p>
+						{:else}
+							<p class="mt-2 text-xl font-bold text-gray-900 sm:text-3xl">My Company</p>
+						{/if}
 					</div>
 				</div>
 				<button
@@ -218,7 +237,7 @@
 			{:else}
 				<button
 					type="button"
-					class="mt-5 p-5 relative w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+					class="mt-5 p-5 relative w-full rounded-lg border-2 border-dashed border-gray-300 text-center cursor-default focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 				>
 					<span class="text-sm font-semibold text-gray-900">No Active Orders</span>
 				</button>
@@ -233,7 +252,7 @@
 			<h1 class="mt-8 text-2xl font-semibold leading-6 text-gray-900">Manage Staff</h1>
 			<p class="mt-2 text-sm font-medium text-gray-600">
 				Here you can manage Administrators and Users. <br />You may have an unlimited amount of
-				both, but there can be only one Owner(You).
+				both, but there can be only one Owner.
 			</p>
 		</div>
 	</div>
@@ -693,3 +712,32 @@
 		</div>
 	</div>
 </div>
+
+<style>
+    .notification {
+        position: fixed;
+        top: 8%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #4CAF50;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 4px;
+        text-align: center;
+        z-index: 9999;
+        animation: fadeIn 0.3s ease-in;
+        min-width: 200px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes fadeIn {
+        from { 
+            opacity: 0;
+            transform: translate(-50%, -60%);
+        }
+        to { 
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+</style>

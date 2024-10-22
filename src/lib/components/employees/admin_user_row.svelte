@@ -32,7 +32,7 @@
 	function handleClickOutside(event: MouseEvent): void {
 		if (isMenuOpen && !event.target) return;
 		const target = event.target as HTMLElement;
-		if (isMenuOpen && !target.closest('.justify-between')) {
+		if (isMenuOpen && !target.closest('.flex-none')) {
 			isMenuOpen = false;
 		}
 	}
@@ -48,17 +48,17 @@
 			alt=""
 		/>
 		<div class="min-w-0 flex-auto">
-			<p class="text-sm font-semibold leading-6 text-gray-900 truncate">
-				<a href="/company" class="hover:underline">{name}</a>
+			<p class="text-sm font-semibold leading-6 text-gray-900 truncate cursor-default">
+				{name}
 			</p>
 			<p class="mt-1 text-xs leading-5 text-gray-500 truncate">
-				<a href="mailto:leslie.alexander@example.com" class="hover:underline">{email}</a>
+				<a href="mailto:{email}" class="hover:underline">{email}</a>
 			</p>
 		</div>
 	</div>
 	<div class="flex shrink-0 items-center gap-x-4 ml-4">
 		<div class="hidden sm:flex sm:flex-col sm:items-end">
-			<p class="text-sm leading-6 text-gray-900 whitespace-nowrap">
+			<p class="text-sm leading-6 text-gray-900 whitespace-nowrap cursor-default">
 				{#if isowner}
 					{'Owner'}
 				{:else}
