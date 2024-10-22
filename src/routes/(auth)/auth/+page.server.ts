@@ -1,5 +1,4 @@
 import { redirect } from '@sveltejs/kit'
-import type { PageServerLoad } from '../../$types'
 
 import type { Actions } from '../../$types'
 

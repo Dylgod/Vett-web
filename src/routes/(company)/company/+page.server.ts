@@ -2,7 +2,7 @@ import { SERVICE_ROLE } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database, Tables } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
-import { error, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
     const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
@@ -182,5 +182,105 @@ export const actions = {
             console.log("Only the owner may edit company information.")
             throw redirect(303, "/profile")
         }
-    }
+    },
+    addAdmin: async ({ locals, request, url }) => {
+        const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+        const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
+        const formData = await request.formData()
+
+        if (authError || !user) {
+            console.log("authError || !user")
+            throw redirect(303, "/"); //profile
+        }
+
+        const { data: client, error: clientError } = await supaClient
+            .from('clients')
+            .select("*")
+            .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
+            .single();
+
+        if (clientError) {
+            console.error('Error fetching client:', clientError);
+            throw error(500, 'Error fetching client data');
+        }
+
+        if (!client) {
+            console.log('User is not an owner or admin of any client');
+            throw redirect(303, "/"); //profile
+        }
+
+        if (client.owner === user.id) {
+            const new_admin_name = (formData.get("new_admin_name")?.toString() || "").trim()
+            const new_admin_email = (formData.get("new_admin_email")?.toString() || "").trim()
+
+            const { error } = await supaClient.auth.signInWithOtp({
+                email: new_admin_email,
+                options: {
+                    data: {
+                        display_name: new_admin_name,
+                        rank: "admin",
+                        client_id: client.id
+                    },
+                },
+            })
+            if (error) {
+                console.warn("failed to send magic link: ", error)
+                return fail(500, {
+                    ok: false,
+                    message: error.message,
+                })
+            }
+
+        }
+    },
+    addUser: async ({ locals, request, url }) => {
+        const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+        const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
+        const formData = await request.formData()
+
+        if (authError || !user) {
+            console.log("authError || !user")
+            throw redirect(303, "/"); //profile
+        }
+
+        const { data: client, error: clientError } = await supaClient
+            .from('clients')
+            .select("*")
+            .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
+            .single();
+
+        if (clientError) {
+            console.error('Error fetching client:', clientError);
+            throw error(500, 'Error fetching client data');
+        }
+
+        if (!client) {
+            console.log('User is not an owner or admin of any client');
+            throw redirect(303, "/"); //profile
+        }
+
+        if (client.owner === user.id) {
+            const new_user_name = (formData.get("new_user_name")?.toString() || "").trim()
+            const new_user_email = (formData.get("new_user_email")?.toString() || "").trim()
+
+            const { error } = await supaClient.auth.signInWithOtp({
+                email: new_user_email,
+                options: {
+                    data: {
+                        display_name: new_user_name,
+                        rank: "user",
+                        client_id: client.id
+                    },
+                },
+            })
+            if (error) {
+                console.warn("failed to send magic link: ", error)
+                return fail(500, {
+                    ok: false,
+                    message: error.message,
+                })
+            }
+
+        }
+    },
 }

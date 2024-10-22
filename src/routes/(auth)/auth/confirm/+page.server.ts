@@ -2,6 +2,10 @@ import type { ResendParams } from "@supabase/supabase-js";
 import type { Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import type { EmailOtpType } from '@supabase/supabase-js'
+import { SERVICE_ROLE } from '$env/static/private';
+import { PUBLIC_SUPABASE_URL } from '$env/static/public';
+import type { Database } from '$lib/types/supabase.js';
+import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit'
 
 export const load: PageServerLoad = async ({ url, locals }) => {
@@ -16,11 +20,8 @@ export const load: PageServerLoad = async ({ url, locals }) => {
     // };
 
     const token_hash = url.searchParams.get('token_hash')
-    console.log(token_hash)
     const type = url.searchParams.get('type') as EmailOtpType | null
-    console.log(type)
     const next = url.searchParams.get('next') ?? '/'
-    console.log(next)
     /**
      * Clean up the redirect URL by deleting the Auth flow parameters.
      *
@@ -30,16 +31,90 @@ export const load: PageServerLoad = async ({ url, locals }) => {
     redirectTo.pathname = next
     // redirectTo.searchParams.delete('token_hash')
     // redirectTo.searchParams.delete('type')
-  
+
     if (token_hash && type) {
-      const { error } = await locals.supabase.auth.verifyOtp({ token_hash, type })
-      console.log(error)
-      if (!error) {
-        redirectTo.searchParams.delete('next')
-        redirect(303, redirectTo)
-      } else {
-        throw redirect(303, `/login?error=true&message=${error.message}`)
-      }
+        const { data, error } = await locals.supabase.auth.verifyOtp({ token_hash, type })
+
+        if (!error) {
+            if (data.user?.user_metadata.display_name && data.user?.user_metadata.client_id && data.user?.user_metadata.rank) {
+                const newName: string = data.user?.user_metadata.display_name;
+                const newRank: string = data.user?.user_metadata.rank;
+                const client_id: number = data.user?.user_metadata.client_id;
+                const user_uuid: string = data.user.id
+
+                // console.log("newName",newName)
+                // console.log("newRank",newRank)
+                // console.log("client_id",client_id)
+                // console.log("user_uuid",user_uuid)
+                // console.log(newRank === "admin")
+
+                const { data: updatedData, error } = await locals.supabase.auth.updateUser(
+                    {
+                        data: { display_name: newName }
+                    })
+
+                if (newRank === "admin") {
+                    const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+                    const { data: clientdata, error: clientfetchError } = await supaClient
+                        .from('clients')
+                        .select("*")
+                        .eq("id", client_id)
+                        .single()
+
+                        console.log("clientdata", clientdata)
+
+                    if (!clientfetchError) {
+                        const adminscolumn = clientdata.admins
+                        const userscolumn = clientdata.users
+                        console.log([...adminscolumn!, user_uuid])
+                        const { error: updateError } = await supaClient
+                            .from('clients')
+                            .update({
+                                admins: [...adminscolumn!, user_uuid],
+                                users: [...userscolumn!, user_uuid],
+                                // logo: new_company_logo
+                            })
+                            .eq("id", client_id)
+
+                        if (updateError) {
+                            console.log("Failed to update user", updateError)
+                        }
+                    }
+                } else if (newRank === "user") {
+                    const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+                    const { data: clientdata, error: clientfetchError } = await supaClient
+                        .from('clients')
+                        .select("*")
+                        .eq("id", client_id)
+                        .single()
+
+                    if (!clientfetchError) {
+                        const userscolumn = clientdata.users
+                        console.log([...userscolumn!, user_uuid])
+                        const { error: updateError } = await supaClient
+                            .from('clients')
+                            .update({
+                                users: [...userscolumn!, user_uuid],
+                                // logo: new_company_logo
+                            })
+                            .eq("id", client_id)
+
+                        if (updateError) {
+                            console.log("Failed to update user", updateError)
+                        }
+                    }
+                }
+            }
+
+            // inner else -> same thing with note saying fix later
+            // else -> create client in client table and assign uuid to owner and related fields
+
+
+            redirectTo.searchParams.delete('next')
+            redirect(303, redirectTo)
+        } else {
+            throw redirect(303, `/login?error=true&message=${error.message}`)
+        }
     } else {
         if (
             url.searchParams.has('email')
@@ -49,7 +124,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
             if (email) {
                 return { email }
             }
-        }; 
+        };
     }
 
     // redirectTo.pathname = '/auth/error'

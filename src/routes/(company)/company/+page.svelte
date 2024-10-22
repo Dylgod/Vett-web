@@ -11,12 +11,12 @@
 	let orders = data.orders;
 	let invisible = false;
 	let addAdmin = false;
-	let rank_of_user = data.rank
+	let rank_of_user = data.rank;
 
 	let adminsStore = writable(data.admins);
 	let usersStore = writable(data.users);
 	let ownerStore = writable(data.owner);
-	let staffStore = writable(data.staff)
+	let staffStore = writable(data.staff);
 
 	let edit_company_invisible = false;
 	let editCompany = false;
@@ -103,6 +103,17 @@
 	function resetSwitch() {
 		edit_company_invisible = !edit_company_invisible;
 		editCompany = !editCompany;
+	}
+
+	function resetAddAdmin() {
+		invisible = !invisible;
+		addAdmin = !addAdmin;
+		alert("Invite Sent!")
+	}
+
+	function resetAddUser() {
+		invisible = !invisible;
+		alert("Invite Sent!")
 	}
 </script>
 
@@ -302,7 +313,7 @@
 									rank={$ownerStore.type}
 									uuid={$ownerStore.uuid}
 									isowner={$ownerStore.isowner}
-									rank_of_user={"disabled"}
+									rank_of_user={'disabled'}
 								/>
 								{#each $adminsStore as admin, index (admin.uuid)}
 									<AdminRow
@@ -312,7 +323,7 @@
 										rank={admin.type}
 										uuid={admin.uuid}
 										isowner={admin.isowner}
-										rank_of_user={rank_of_user}
+										{rank_of_user}
 										on:demote={handleDemote}
 										on:delete={handleDelete}
 									/>
@@ -342,7 +353,7 @@
 										email={user.email}
 										rank={user.type}
 										uuid={user.uuid}
-										rank_of_user={rank_of_user}
+										{rank_of_user}
 										on:promote={handlePromote}
 										on:delete={handleDelete}
 									/>
@@ -406,30 +417,36 @@
 							</button>
 						</div>
 						<!-- Modal body -->
-						<form class="p-4 md:p-5 flex flex-col">
+						<form
+							class="p-4 md:p-5 flex flex-col"
+							method="POST"
+							action="?/addAdmin"
+							use:enhance
+							on:submit={resetAddAdmin}
+						>
 							<div class="gap-4 mb-4">
 								<div class="">
 									<label
-										for="name"
+										for="new_admin_name"
 										class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 										>Full Name</label
 									>
 									<input
 										type="text"
-										name="modalname"
-										id="modalname"
+										name="new_admin_name"
+										id="new_admin_name"
 										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 										placeholder="Full Name"
 									/>
 									<label
-										for="email"
+										for="new_admin_email"
 										class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white"
 										>Email</label
 									>
 									<input
 										type="text"
-										name="modalemail"
-										id="modalemail"
+										name="new_admin_email"
+										id="new_admin_email"
 										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 										placeholder="Email Address"
 									/>
@@ -486,30 +503,36 @@
 							</button>
 						</div>
 						<!-- Modal body -->
-						<form class="p-4 md:p-5 flex flex-col">
+						<form
+							class="p-4 md:p-5 flex flex-col"
+							method="POST"
+							action="?/addUser"
+							use:enhance
+							on:submit={resetAddUser}
+						>
 							<div class="gap-4 mb-4">
 								<div class="">
 									<label
-										for="name"
+										for="new_user_name"
 										class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 										>Full Name</label
 									>
 									<input
 										type="text"
-										name="modalname"
-										id="modalname"
+										name="new_user_name"
+										id="new_user_name"
 										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 										placeholder="Full Name"
 									/>
 									<label
-										for="email"
+										for="new_user_email"
 										class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white"
 										>Email</label
 									>
 									<input
 										type="text"
-										name="modalemail"
-										id="modalemail"
+										name="new_user_email"
+										id="new_user_email"
 										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 										placeholder="Email Address"
 									/>
@@ -586,12 +609,7 @@
 								<span class="sr-only">Close modal</span>
 							</button>
 						</div>
-						<form
-							method="POST"
-							action="?/editcompany"
-							use:enhance
-							on:submit={resetSwitch}
-						>
+						<form method="POST" action="?/editcompany" use:enhance on:submit={resetSwitch}>
 							<div class="space-y-12">
 								<div class="border-b border-gray-900/10 pb-6 p-5 pl-10">
 									<p class="mt-1 text-sm leading-6 text-white w-11/12">
