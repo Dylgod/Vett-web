@@ -30,9 +30,9 @@
 	// let new_company_logo = ""; ???
 
 	async function handleDemote(
-		event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>
+		event: CustomEvent<{ uuid: string; index: number; name: string; email: string, logo: string | null | undefined }>
 	) {
-		const { uuid, index, name, email } = event.detail;
+		const { uuid, index, name, email, logo } = event.detail;
 		try {
 			const response = await fetch('/api/demote_admin', {
 				method: 'POST',
@@ -47,8 +47,9 @@
 				adminsStore.update((admins) => admins.filter((admin) => admin.uuid !== uuid));
 				usersStore.update((users) => [
 					...users,
-					{ uuid, name, email, type: 'User', isowner: false }
+					{ uuid, name, email, type: 'User', isowner: false, logo }
 				]);
+				console.log("DEMOTING",{ uuid, name, email, type: 'Administrator', isowner: false, logo })
 				staffStore.update((staff) => staff.filter((admin) => admin.uuid !== uuid));
 			} else {
 				console.error('Failed to demote admin:', result.error);
@@ -59,9 +60,9 @@
 	}
 
 	async function handlePromote(
-		event: CustomEvent<{ uuid: string; index: number; name: string; email: string }>
+		event: CustomEvent<{ uuid: string; index: number; name: string; email: string, logo: string | null | undefined }>
 	) {
-		const { uuid, index, name, email } = event.detail;
+		const { uuid, index, name, email, logo } = event.detail;
 		try {
 			const response = await fetch('/api/promote_user', {
 				method: 'POST',
@@ -76,11 +77,12 @@
 				usersStore.update((users) => users.filter((user) => user.uuid !== uuid));
 				adminsStore.update((admins) => [
 					...admins,
-					{ uuid, name, email, type: 'Administrator', isowner: false }
+					{ uuid, name, email, type: 'Administrator', isowner: false, logo }
 				]);
+				console.log("PROMOTING",{ uuid, name, email, type: 'Administrator', isowner: false, logo })
 				staffStore.update((admins) => [
 					...admins,
-					{ uuid, name, email, type: 'Administrator', isowner: false }
+					{ uuid, name, email, type: 'Administrator', isowner: false, logo }
 				]);
 			} else {
 				console.error('Failed to promote user:', result.error);
@@ -332,6 +334,7 @@
 									rank={$ownerStore.type}
 									uuid={$ownerStore.uuid}
 									isowner={$ownerStore.isowner}
+									picture={$ownerStore.logo}
 									rank_of_user={'disabled'}
 								/>
 								{#each $adminsStore as admin, index (admin.uuid)}
@@ -342,6 +345,7 @@
 										rank={admin.type}
 										uuid={admin.uuid}
 										isowner={admin.isowner}
+										picture={admin.logo}
 										{rank_of_user}
 										on:demote={handleDemote}
 										on:delete={handleDelete}
@@ -372,6 +376,7 @@
 										email={user.email}
 										rank={user.type}
 										uuid={user.uuid}
+										picture={user.logo}
 										{rank_of_user}
 										on:promote={handlePromote}
 										on:delete={handleDelete}

@@ -11,6 +11,7 @@
 	export let index: number;
 	export let uuid: string;
 	export let isowner: boolean;
+	export let picture: string | null | undefined
 
 	let isMenuOpen = false;
 	let menuButton: HTMLButtonElement;
@@ -25,7 +26,7 @@
 	}
 
 	function handleAction(action: 'demote' | 'delete') {
-		dispatch(action, { uuid, index, name, email, isowner });
+		dispatch(action, { uuid, index, name, email, isowner, picture });
 		isMenuOpen = false;
 	}
 
@@ -42,11 +43,19 @@
 
 <li class="flex justify-between py-5">
 	<div class="flex min-w-0 gap-x-4 flex-grow overflow-hidden">
+		{#if picture}
 		<img
 			class="h-12 w-12 flex-shrink-0 rounded-full bg-gray-50"
-			src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+			src={picture}
 			alt=""
 		/>
+		{:else}
+		<img
+			class="h-12 w-12 flex-shrink-0 rounded-full bg-gray-50"
+			src="/screenshots/vett-default.webp"
+			alt=""
+		/>
+		{/if}
 		<div class="min-w-0 flex-auto">
 			<p class="text-sm font-semibold leading-6 text-gray-900 truncate cursor-default">
 				{name}

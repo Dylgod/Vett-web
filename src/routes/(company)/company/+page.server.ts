@@ -30,6 +30,22 @@ export async function load({ locals }) {
         throw redirect(303, "/"); //profile
     }
 
+    const { data: files } = await supaClient
+        .storage
+        .from('logos')
+        .list('clients/', {
+            search: `${client.id}.webp`
+        });
+
+
+    const clientImage = files && files.length > 0
+        ? (await (supaClient.storage
+            .from('logos')
+            .createSignedUrl(`clients/${client.id}.webp`, 604800)) // 3600 seconds = 1 hour
+        ) // 3600 seconds = 1 hour
+            .data?.signedUrl
+        : null;
+
     const { data: orders, error: orderError } = await supaClient
         .from('orders')
         .select("*")
@@ -52,7 +68,7 @@ export async function load({ locals }) {
         email: string | undefined;
         type: 'Administrator';
         isowner: boolean
-        // logo: any?
+        logo: string | null | undefined
     };
 
     type User = {
@@ -61,7 +77,7 @@ export async function load({ locals }) {
         email: string | undefined;
         type: 'User';
         isowner: boolean
-        // logo: any?
+        logo: string | null | undefined
     };
 
     type Person = {
@@ -70,7 +86,7 @@ export async function load({ locals }) {
         email: string | undefined;
         type: 'Administrator' | 'User';
         isowner: boolean
-        // logo: any?
+        logo: string | null | undefined
     };
 
     const allUUIDs = [...new Set([...(client.admins || []), ...(client.users || [])])];
@@ -83,12 +99,29 @@ export async function load({ locals }) {
             return null;
         }
 
+        const { data: files } = await supaClient
+            .storage
+            .from('logos')
+            .list('people/', {
+                search: `${uuid}.webp`
+            });
+
+
+        const profileImage = files && files.length > 0
+            ? (await (supaClient.storage
+                .from('logos')
+                .createSignedUrl(`people/${uuid}.webp`, 604800)) // 3600 seconds = 1 hour
+            ) // 3600 seconds = 1 hour
+                .data?.signedUrl
+            : null;
+
         return {
             uuid,
             name: userData.user?.user_metadata.display_name,
             email: userData.user?.email,
             type: client.admins?.includes(uuid) ? 'Administrator' : 'User',
-            isowner: client.owner?.includes(uuid) ? true : false
+            isowner: client.owner?.includes(uuid) ? true : false,
+            logo: profileImage
         };
     });
 
@@ -106,6 +139,7 @@ export async function load({ locals }) {
         rank,
         Company_id: client.id,
         Company_name: client.company_name,
+        Company_logo: clientImage,
         owner,
         admins,
         users,
