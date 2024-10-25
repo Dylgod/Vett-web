@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import Dropdown from '$lib/components/dropdowns/candidates.svelte';
 	import Skills from '$lib/components/skills/skills.svelte';
+	import ImageCropper from '$lib/components/images/image_cropper.svelte';
 	import type { PageData } from './$types';
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
 	import { onMount } from 'svelte';
@@ -22,6 +23,10 @@
 
 	// Makes ProfileRow reactive to changes in Supabase
 	$: ({ orders } = data);
+	$: ({ profileImage } = data);
+
+	let default_profile_img = 'screenshots/eric.jpg';
+	let current_image = data.profileImage;
 
 	let role = '';
 	let numberOfCandidates: number = 1;
@@ -44,6 +49,7 @@
 	let edit_profile_invisible = false;
 	let editProfile = false;
 	let new_profile_name = data.user.user_metadata.display_name;
+	let old_profile_name = data.user.user_metadata.display_name;
 
 	if (new_profile_name === undefined) {
 		new_profile_name = '';
@@ -123,7 +129,27 @@
 		};
 	}
 
+	let formElement: HTMLFormElement;
+
+	async function handleCroppedImage(blob: Blob) {
+		// Create a new file with the user's ID as the name
+		const imageFile = new File([blob], `${data.user.id}.webp`, { type: 'image/webp' });
+
+		// Find or create a hidden input for the image
+		let imageInput = formElement.querySelector('input[name="image"]');
+		console.log("imageInput", imageInput)
+
+		// Create a DataTransfer object to set the file
+		const dataTransfer = new DataTransfer();
+		dataTransfer.items.add(imageFile);
+		(imageInput as HTMLInputElement).files = dataTransfer.files;
+	}
+
 	onMount(() => {
+		if (!profileImage) {
+			profileImage = default_profile_img;
+		}
+
 		const url = new URL($page.url);
 		const stripe_success = $page.url.searchParams.get('success');
 
@@ -135,8 +161,6 @@
 			window.history.replaceState({}, '', url);
 		}
 	});
-
-	console.log('rank', rank);
 </script>
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -146,11 +170,7 @@
 			<div class="sm:flex sm:items-center sm:justify-between">
 				<div class="sm:flex sm:space-x-5">
 					<div class="flex-shrink-0">
-						<img
-							class="mx-auto h-20 w-20 rounded-full"
-							src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-							alt=""
-						/>
+						<img class="mx-auto h-20 w-20 rounded-full" src={profileImage} alt="" />
 					</div>
 					<div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
 						<p class="text-sm font-medium text-gray-600">Welcome back,</p>
@@ -171,21 +191,21 @@
 					</div>
 				</div>
 				{#if rank !== 'user'}
-				<div class="flex gap-2">
-					<a
-						href="/company"
-						class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-						>View Company</a
-					>
-					<button
-						type="button"
-						class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-						on:click={() => {
-							edit_profile_invisible = !edit_profile_invisible;
-							editProfile = !editProfile;
-						}}>Edit Profile</button
-					>
-				</div>
+					<div class="flex gap-2">
+						<a
+							href="/company"
+							class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+							>View Company</a
+						>
+						<button
+							type="button"
+							class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+							on:click={() => {
+								edit_profile_invisible = !edit_profile_invisible;
+								editProfile = !editProfile;
+							}}>Edit Profile</button
+						>
+					</div>
 				{:else}
 					<button
 						type="button"
@@ -482,8 +502,43 @@
 							<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
 								Complete your profile
 							</h3>
+							{#if new_profile_name !== undefined}
+								<button
+									type="button"
+									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+									data-modal-toggle="crud-modal"
+									on:click={() => {
+										edit_profile_invisible = !edit_profile_invisible;
+										editProfile = !editProfile;
+									}}
+								>
+									<svg
+										class="w-3 h-3"
+										aria-hidden="true"
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 14 14"
+									>
+										<path
+											stroke="currentColor"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+										/>
+									</svg>
+									<span class="sr-only">Close modal</span>
+								</button>
+							{/if}
 						</div>
-						<form method="POST" action="?/updateUser" use:enhance on:submit={resetProfileModal}>
+						<form
+							bind:this={formElement}
+							method="POST"
+							action="?/updateProfile"
+							use:enhance
+							on:submit={resetProfileModal}
+							enctype="multipart/form-data"
+						>
 							<div class="space-y-12">
 								<div class="border-b border-gray-900/10 pb-6 p-5">
 									<p class="mt-1 text-sm leading-6 text-white">
@@ -491,30 +546,12 @@
 										backend.
 									</p>
 
-									<div class="col-span-full mt-5">
-										<label for="logo" class="block text-sm font-medium leading-6 text-white"
-											>Logo (Optional)</label
-										>
-										<div class="mt-2 flex items-center gap-x-3">
-											<svg
-												class="h-12 w-12 text-gray-300"
-												viewBox="0 0 24 24"
-												fill="currentColor"
-												aria-hidden="true"
-											>
-												<path
-													fill-rule="evenodd"
-													d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-													clip-rule="evenodd"
-												/>
-											</svg>
-											<button
-												type="button"
-												class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-												>Change</button
-											>
-										</div>
-									</div>
+									<ImageCropper
+										defaultImage={default_profile_img}
+										currentImage={profileImage}
+										onImageCropped={handleCroppedImage}
+									/>
+									<input type="file" name="image" id="image" style="display: none;" />
 
 									<div class="mt-6 flex gap-x-6 gap-y-2 flex-col">
 										<div class="gap-4">
@@ -533,6 +570,14 @@
 													bind:value={new_profile_name}
 													class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 													placeholder="Ex: Jon Doe"
+												/>
+												<input
+													type="text"
+													name="old_profile_name"
+													id="old_profile_name"
+													autocomplete="off"
+													bind:value={old_profile_name}
+													class="invisible hidden"
 												/>
 											</div>
 										</div>

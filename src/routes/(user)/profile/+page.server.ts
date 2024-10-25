@@ -3,7 +3,7 @@ import { PUBLIC_HOSTNAME, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { stripe } from '$lib/stripe';
 import type { Database, Tables } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
-import { error, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
     const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
@@ -41,14 +41,32 @@ export async function load({ locals }) {
             rank = "admin"
         }
 
+        const { data: files } = await supa_client
+            .storage
+            .from('logos')
+            .list('people/', {
+                search: `${response.data.user.id}.webp`
+            });
+
+
+        const profileImage = files && files.length > 0
+            ? (await (supa_client.storage
+                .from('logos')
+                .createSignedUrl(`people/${response.data.user.id}.webp`, 604800)) // 3600 seconds = 1 hour
+            ) // 3600 seconds = 1 hour
+                .data?.signedUrl
+            : null;
+
+
+
         return {
             user: response.data.user,
             name: response.data.user.user_metadata.display_name,
             Company_id: client?.id,
             Company_name: client?.company_name,
             orders,
-            rank
-            // Logo: client?.logo  <--- TODO!
+            rank,
+            profileImage
         }
     }
 }
@@ -209,15 +227,50 @@ export const actions = {
             }
         }
     },
-    updateUser: async ({ locals, request, url }) => {
-        const formData = await request.formData()
-        const Fullname = (formData.get("new_profile_name")?.toString() || "").trim()
-        const { data, error } = await locals.supabase.auth.updateUser(
-            {
-                data: { display_name: Fullname }
-            })
-        if (!error) {
-            redirect(303, "/profile")
+    updateProfile: async ({ request, locals }) => {
+        const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
+        const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
+
+        if (authError || !user) {
+            redirect(303, "/profile");
+        }
+
+        const formData = await request.formData();
+        const newName = (formData.get("new_profile_name")?.toString() || "").trim();
+        const oldName = (formData.get("old_profile_name")?.toString() || "").trim();
+        const imageFile = formData.get('image') as File | null;
+
+
+        try {
+            // Only update name if it changed
+            if (newName && newName !== oldName) {
+                const { error: nameError } = await locals.supabase.auth.updateUser({
+                    data: { display_name: newName }
+                });
+                if (nameError) throw nameError;
+            }
+
+            // Only upload image if one was provided
+            if (imageFile) {
+                const { data: imageData, error: imageError } = await supa_client
+                    .storage
+                    .from('logos/people')
+                    .upload(`${user.id}.webp`, imageFile, {
+                        upsert: true
+                    });
+
+                if (imageError) throw imageError;
+
+                return { success: true, path: imageData.path };
+            }
+            return { success: true };
+
+        } catch (error) {
+            console.error("Update failed:", error);
+            return fail(500, {
+                message: 'Failed to update profile',
+                error: error instanceof Error ? error.message : 'Unknown error'
+            });
         }
     }
 }
