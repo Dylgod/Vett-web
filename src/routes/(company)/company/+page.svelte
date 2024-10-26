@@ -327,12 +327,17 @@
 									id="modaltoggle"
 									name="modaltoggle"
 									on:click={() => {
-										invisible = !invisible;
-										addAdmin = !addAdmin;
+										if (rank_of_user === 'owner') {
+											invisible = !invisible;
+											addAdmin = !addAdmin;
+										}
 									}}
 									type="button"
 									class="relative inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-									>+ Add Admin</button
+									class:hover:bg-gray-400={rank_of_user !== 'owner'}
+									class:bg-gray-400={rank_of_user !== 'owner'}
+									class:focus-visible:outline-indigo-400={rank_of_user !== 'owner'}
+									class:cursor-default={rank_of_user !== 'owner'}>+ Add Admin</button
 								>
 							</div>
 						</div>
@@ -353,10 +358,17 @@
 									data-modal-toggle="crud-modal"
 									id="modaltoggle"
 									name="modaltoggle"
-									on:click={() => (invisible = !invisible)}
+									on:click={() => {
+										if (rank_of_user !== 'user') {
+											invisible = !invisible;
+										}
+									}}
 									type="button"
 									class="relative inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-									>+ Add User</button
+									class:hover:bg-gray-400={rank_of_user === 'user'}
+									class:bg-gray-400={rank_of_user === 'user'}
+									class:focus-visible:outline-indigo-400={rank_of_user === 'user'}
+									class:cursor-default={rank_of_user === 'user'}>+ Add User</button
 								>
 							</div>
 						</div>

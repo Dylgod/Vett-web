@@ -19,7 +19,7 @@
 	const dispatch = createEventDispatcher();
 
 	function toggleMenu() {
-		if (rank_of_user === 'owner') {
+		if (rank_of_user !== 'user') {
 			isMenuOpen = !isMenuOpen;
 		}
 	}
@@ -75,8 +75,8 @@
 				bind:this={menuButton}
 				type="button"
 				class="block p-2 text-gray-500 hover:text-gray-900"
-				class:hover:text-gray-500={rank_of_user !== "owner"}
-				class:cursor-default={rank_of_user !== "owner"}
+				class:hover:text-gray-500={rank_of_user === "user"}
+				class:cursor-default={rank_of_user === "user"}
 				id="options-menu-{index}-button"
 				aria-expanded={isMenuOpen}
 				aria-haspopup="true"

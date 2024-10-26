@@ -155,8 +155,7 @@ export const actions = {
         const formData = await request.formData()
 
         if (authError || !user) {
-            console.log("authError || !user")
-            throw redirect(303, "/"); //profile
+            throw redirect(303, "/");
         }
 
         const { data: client, error: clientError } = await supaClient
@@ -171,8 +170,7 @@ export const actions = {
         }
 
         if (!client) {
-            console.log('User is not an owner or admin of any client');
-            throw redirect(303, "/"); //profile
+            throw redirect(303, "/");
         }
 
         if (client.owner === user.id) {
@@ -181,12 +179,12 @@ export const actions = {
             const new_company_owner = (formData.get("new_company_owner")?.toString() || "").trim()
             const new_company_logo = formData.get('companyimage') as File | null;
             let ownership_transfered = false;
+            let uploadedImagePath: string | undefined;
 
             try {
                 // Only update company name if it changed
                 if (new_company_name && new_company_name !== old_company_name) {
-
-                    const { data, error: updateError } = await supaClient
+                    const { error: updateError } = await supaClient
                         .from('clients')
                         .update({
                             company_name: new_company_name,
@@ -194,13 +192,13 @@ export const actions = {
                         .eq("id", client.id)
 
                     if (updateError) {
-                        console.error('Failed to update Company name');
+                        throw new Error('Failed to update Company name');
                     }
                 }
 
-                // Only changed owner if owner changed
+                // Only change owner if owner changed
                 if (client.owner !== new_company_owner) {
-                    const { data, error: updateError } = await supaClient
+                    const { error: updateError } = await supaClient
                         .from('clients')
                         .update({
                             owner: new_company_owner,
@@ -208,35 +206,31 @@ export const actions = {
                         .eq("id", client.id)
 
                     if (updateError) {
-                        console.error('Could not transfer ownership');
-                    } else {
-                        console.log("Ownership transfer successful.")
-                        ownership_transfered = true
+                        throw new Error('Could not transfer ownership');
                     }
+                    ownership_transfered = true;
                 }
 
                 // Only upload image if one was provided
-                if (new_company_logo) {
+                if (new_company_logo && new_company_logo.size > 0) {
+                    // Convert the File to a Blob with explicit MIME type
+                    const imageBlob = new Blob([await new_company_logo.arrayBuffer()], {
+                        type: 'image/webp'
+                    });
+
                     const { data: imageData, error: imageError } = await supaClient
                         .storage
                         .from('logos/clients')
-                        .upload(`${client.id}.webp`, new_company_logo, {
-                            upsert: true
+                        .upload(`${client.id}.webp`, imageBlob, {
+                            upsert: true,
+                            contentType: 'image/webp'
                         });
 
-                    if (imageError) throw imageError;
-
-                    if (ownership_transfered) {
-                        throw redirect(303, "/profile")
-                    } else {
-                        return { success: true, path: imageData.path };
+                    if (imageError) {
+                        throw imageError;
                     }
 
-                }
-                if (ownership_transfered) {
-                    throw redirect(303, "/profile")
-                } else {
-                    return { success: true };
+                    uploadedImagePath = imageData?.path;
                 }
             } catch (error) {
                 console.error("Update failed:", error);
@@ -245,6 +239,15 @@ export const actions = {
                     error: error instanceof Error ? error.message : 'Unknown error'
                 });
             }
+            // Handle redirect after all operations are complete
+            if (ownership_transfered) {
+                return redirect(303, "/profile");
+            }
+
+            return {
+                success: true,
+                path: uploadedImagePath
+            };
         }
     },
     addAdmin: async ({ locals, request, url }) => {
