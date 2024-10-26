@@ -176,45 +176,75 @@ export const actions = {
         }
 
         if (client.owner === user.id) {
+            const old_company_name = (formData.get("old_company_name")?.toString() || "").trim()
             const new_company_name = (formData.get("new_company_name")?.toString() || "").trim()
             const new_company_owner = (formData.get("new_company_owner")?.toString() || "").trim()
-            // const new_company_logo = (formData.get("new_company_logo")
+            const new_company_logo = formData.get('companyimage') as File | null;
+            let ownership_transfered = false;
 
-            if (client.owner !== new_company_owner) {
-                const { data, error: updateError } = await supaClient
-                    .from('clients')
-                    .update({
-                        owner: new_company_owner,
-                        company_name: new_company_name,
-                        // logo: new_company_logo
-                    })
-                    .eq("id", client.id)
+            try {
+                // Only update company name if it changed
+                if (new_company_name && new_company_name !== old_company_name) {
 
-                if (updateError) {
-                    console.error('Could not transfer ownership');
+                    const { data, error: updateError } = await supaClient
+                        .from('clients')
+                        .update({
+                            company_name: new_company_name,
+                        })
+                        .eq("id", client.id)
+
+                    if (updateError) {
+                        console.error('Failed to update Company name');
+                    }
+                }
+
+                // Only changed owner if owner changed
+                if (client.owner !== new_company_owner) {
+                    const { data, error: updateError } = await supaClient
+                        .from('clients')
+                        .update({
+                            owner: new_company_owner,
+                        })
+                        .eq("id", client.id)
+
+                    if (updateError) {
+                        console.error('Could not transfer ownership');
+                    } else {
+                        console.log("Ownership transfer successful.")
+                        ownership_transfered = true
+                    }
+                }
+
+                // Only upload image if one was provided
+                if (new_company_logo) {
+                    const { data: imageData, error: imageError } = await supaClient
+                        .storage
+                        .from('logos/clients')
+                        .upload(`${client.id}.webp`, new_company_logo, {
+                            upsert: true
+                        });
+
+                    if (imageError) throw imageError;
+
+                    if (ownership_transfered) {
+                        throw redirect(303, "/profile")
+                    } else {
+                        return { success: true, path: imageData.path };
+                    }
+
+                }
+                if (ownership_transfered) {
                     throw redirect(303, "/profile")
                 } else {
-                    console.log("Ownership transfer successful.")
-                    throw redirect(303, "/profile")
+                    return { success: true };
                 }
-            } else {
-                const { data, error: updateError } = await supaClient
-                    .from('clients')
-                    .update({
-                        company_name: new_company_name,
-                        // logo: new_company_logo
-                    })
-                    .eq("id", client.id)
-                    .single()
-
-                if (updateError) {
-                    console.error('Failed to update company profile.');
-                    throw redirect(303, "/company")
-                }
+            } catch (error) {
+                console.error("Update failed:", error);
+                return fail(500, {
+                    message: 'Failed to update Company profile',
+                    error: error instanceof Error ? error.message : 'Unknown error'
+                });
             }
-        } else {
-            console.log("Only the owner may edit company information.")
-            throw redirect(303, "/profile")
         }
     },
     addAdmin: async ({ locals, request, url }) => {

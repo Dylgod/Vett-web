@@ -3,7 +3,7 @@
 	import Cropper from 'cropperjs';
 	import 'cropperjs/dist/cropper.css';
 
-	export let defaultImage: string = 'screenshots/eric.jpg'; // Path to default image
+	export let defaultImage: string = "screenshots/vett-default.webp"; // Path to default image
 	export let currentImage: string | null = null; // Current profile image URL
 	export let onImageCropped: (blob: Blob) => Promise<void>; // Callback for handling cropped image
 

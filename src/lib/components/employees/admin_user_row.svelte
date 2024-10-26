@@ -11,7 +11,7 @@
 	export let index: number;
 	export let uuid: string;
 	export let isowner: boolean;
-	export let picture: string | null | undefined
+	export let logo: string | null | undefined
 
 	let isMenuOpen = false;
 	let menuButton: HTMLButtonElement;
@@ -26,7 +26,7 @@
 	}
 
 	function handleAction(action: 'demote' | 'delete') {
-		dispatch(action, { uuid, index, name, email, isowner, picture });
+		dispatch(action, { uuid, index, name, email, isowner, logo });
 		isMenuOpen = false;
 	}
 
@@ -43,10 +43,10 @@
 
 <li class="flex justify-between py-5">
 	<div class="flex min-w-0 gap-x-4 flex-grow overflow-hidden">
-		{#if picture}
+		{#if logo}
 		<img
 			class="h-12 w-12 flex-shrink-0 rounded-full bg-gray-50"
-			src={picture}
+			src={logo}
 			alt=""
 		/>
 		{:else}

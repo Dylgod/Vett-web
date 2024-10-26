@@ -3,9 +3,11 @@
 	import AdminRow from '$lib/components/employees/admin_user_row.svelte';
 	import NewOwner from '$lib/components/dropdowns/new_owner.svelte';
 	import UserRow from '$lib/components/employees/user_row.svelte';
+	import ImageCropper from '$lib/components/images/image_cropper.svelte';
 	import type { PageData } from './$types';
 	import { writable } from 'svelte/store';
 	import { enhance } from '$app/forms';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 	let orders = data.orders;
@@ -13,6 +15,11 @@
 	let addAdmin = false;
 	let showNotification = false;
 	let rank_of_user = data.rank;
+
+	$: ({ Company_logo } = data);
+
+	let default_company_img = 'screenshots/vett-default.webp';
+	let current_image = data.Company_logo;
 
 	let adminsStore = writable(data.admins);
 	let usersStore = writable(data.users);
@@ -26,11 +33,18 @@
 	let current_user = data.user.id;
 	let new_company_owner_uuid = data.owner.uuid; // initialized to prevent NaN on form submit without touching the field
 	let new_company_name = data.Company_name;
+	let old_company_name = data.Company_name;
 
 	// let new_company_logo = ""; ???
 
 	async function handleDemote(
-		event: CustomEvent<{ uuid: string; index: number; name: string; email: string, logo: string | null | undefined }>
+		event: CustomEvent<{
+			uuid: string;
+			index: number;
+			name: string;
+			email: string;
+			logo: string | null | undefined;
+		}>
 	) {
 		const { uuid, index, name, email, logo } = event.detail;
 		try {
@@ -49,7 +63,7 @@
 					...users,
 					{ uuid, name, email, type: 'User', isowner: false, logo }
 				]);
-				console.log("DEMOTING",{ uuid, name, email, type: 'Administrator', isowner: false, logo })
+				console.log('DEMOTING', { uuid, name, email, type: 'Administrator', isowner: false, logo });
 				staffStore.update((staff) => staff.filter((admin) => admin.uuid !== uuid));
 			} else {
 				console.error('Failed to demote admin:', result.error);
@@ -60,7 +74,13 @@
 	}
 
 	async function handlePromote(
-		event: CustomEvent<{ uuid: string; index: number; name: string; email: string, logo: string | null | undefined }>
+		event: CustomEvent<{
+			uuid: string;
+			index: number;
+			name: string;
+			email: string;
+			logo: string | null | undefined;
+		}>
 	) {
 		const { uuid, index, name, email, logo } = event.detail;
 		try {
@@ -79,7 +99,14 @@
 					...admins,
 					{ uuid, name, email, type: 'Administrator', isowner: false, logo }
 				]);
-				console.log("PROMOTING",{ uuid, name, email, type: 'Administrator', isowner: false, logo })
+				console.log('PROMOTING', {
+					uuid,
+					name,
+					email,
+					type: 'Administrator',
+					isowner: false,
+					logo
+				});
 				staffStore.update((admins) => [
 					...admins,
 					{ uuid, name, email, type: 'Administrator', isowner: false, logo }
@@ -90,6 +117,22 @@
 		} catch (error) {
 			console.error('Error promoting user:', error);
 		}
+	}
+
+	let formElement: HTMLFormElement;
+
+	async function handleCroppedImage(blob: Blob) {
+		// Create a new file with the user's ID as the name
+		const imageFile = new File([blob], `${data.Company_id}.webp`, { type: 'image/webp' });
+
+		// Find or create a hidden input for the image
+		let imageInput = formElement.querySelector('input[name="companyimage"]');
+		console.log('imageInput', imageInput);
+
+		// Create a DataTransfer object to set the file
+		const dataTransfer = new DataTransfer();
+		dataTransfer.items.add(imageFile);
+		(imageInput as HTMLInputElement).files = dataTransfer.files;
 	}
 
 	function handleDelete(event: CustomEvent<{ index: number }>) {
@@ -128,6 +171,12 @@
 			showNotification = false;
 		}, 3000);
 	}
+
+	onMount(() => {
+		if (!Company_logo) {
+			Company_logo = default_company_img;
+		}
+	});
 </script>
 
 {#if showNotification}
@@ -142,8 +191,8 @@
 				<div class="sm:flex sm:space-x-5">
 					<div class="flex-shrink-0">
 						<img
-							class="mx-auto h-20 w-20 rounded-full"
-							src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+							class="mx-auto h-20 w-20 rounded-full outline outline-1 outline-slate-300"
+							src={Company_logo}
 							alt=""
 						/>
 					</div>
@@ -334,7 +383,7 @@
 									rank={$ownerStore.type}
 									uuid={$ownerStore.uuid}
 									isowner={$ownerStore.isowner}
-									picture={$ownerStore.logo}
+									logo={$ownerStore.logo}
 									rank_of_user={'disabled'}
 								/>
 								{#each $adminsStore as admin, index (admin.uuid)}
@@ -345,7 +394,7 @@
 										rank={admin.type}
 										uuid={admin.uuid}
 										isowner={admin.isowner}
-										picture={admin.logo}
+										logo={admin.logo}
 										{rank_of_user}
 										on:demote={handleDemote}
 										on:delete={handleDelete}
@@ -376,7 +425,7 @@
 										email={user.email}
 										rank={user.type}
 										uuid={user.uuid}
-										picture={user.logo}
+										logo={user.logo}
 										{rank_of_user}
 										on:promote={handlePromote}
 										on:delete={handleDelete}
@@ -633,7 +682,14 @@
 								<span class="sr-only">Close modal</span>
 							</button>
 						</div>
-						<form method="POST" action="?/editcompany" use:enhance on:submit={resetSwitch}>
+						<form
+							bind:this={formElement}
+							method="POST"
+							action="?/editcompany"
+							use:enhance
+							on:submit={resetSwitch}
+							enctype="multipart/form-data"
+						>
 							<div class="space-y-12">
 								<div class="border-b border-gray-900/10 pb-6 p-5 pl-10">
 									<p class="mt-1 text-sm leading-6 text-white w-11/12">
@@ -641,30 +697,12 @@
 										send to your staff.
 									</p>
 
-									<div class="col-span-full mt-8">
-										<label for="logo" class="block text-sm font-medium leading-6 text-white"
-											>Logo</label
-										>
-										<div class="mt-2 flex items-center gap-x-3">
-											<svg
-												class="h-12 w-12 text-gray-300"
-												viewBox="0 0 24 24"
-												fill="currentColor"
-												aria-hidden="true"
-											>
-												<path
-													fill-rule="evenodd"
-													d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-													clip-rule="evenodd"
-												/>
-											</svg>
-											<button
-												type="button"
-												class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-												>Change</button
-											>
-										</div>
-									</div>
+									<ImageCropper
+										defaultImage={default_company_img}
+										currentImage={Company_logo}
+										onImageCropped={handleCroppedImage}
+									/>
+									<input type="file" name="companyimage" id="companyimage" style="display: none;" />
 
 									<div class="mt-8 flex gap-x-6 gap-y-2 flex-col">
 										<div class="gap-4">
@@ -681,6 +719,14 @@
 													bind:value={new_company_name}
 													class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-60 p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 													placeholder="The Name of the Company"
+												/>
+												<input
+													type="text"
+													name="old_company_name"
+													id="old_company_name"
+													autocomplete="off"
+													bind:value={old_company_name}
+													class="invisible hidden"
 												/>
 											</div>
 										</div>
@@ -719,30 +765,30 @@
 </div>
 
 <style>
-    .notification {
-        position: fixed;
-        top: 8%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #4CAF50;
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 4px;
-        text-align: center;
-        z-index: 9999;
-        animation: fadeIn 0.3s ease-in;
-        min-width: 200px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+	.notification {
+		position: fixed;
+		top: 8%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #4caf50;
+		color: white;
+		padding: 1rem 2rem;
+		border-radius: 4px;
+		text-align: center;
+		z-index: 9999;
+		animation: fadeIn 0.3s ease-in;
+		min-width: 200px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
 
-    @keyframes fadeIn {
-        from { 
-            opacity: 0;
-            transform: translate(-50%, -60%);
-        }
-        to { 
-            opacity: 1;
-            transform: translate(-50%, -50%);
-        }
-    }
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translate(-50%, -60%);
+		}
+		to {
+			opacity: 1;
+			transform: translate(-50%, -50%);
+		}
+	}
 </style>

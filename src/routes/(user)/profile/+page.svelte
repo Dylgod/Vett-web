@@ -25,7 +25,7 @@
 	$: ({ orders } = data);
 	$: ({ profileImage } = data);
 
-	let default_profile_img = 'screenshots/eric.jpg';
+	let default_profile_img = "screenshots/vett-default.webp";
 	let current_image = data.profileImage;
 
 	let role = '';
@@ -170,7 +170,7 @@
 			<div class="sm:flex sm:items-center sm:justify-between">
 				<div class="sm:flex sm:space-x-5">
 					<div class="flex-shrink-0">
-						<img class="mx-auto h-20 w-20 rounded-full" src={profileImage} alt="" />
+						<img class="mx-auto h-20 w-20 rounded-full outline outline-1 outline-slate-300" src={profileImage} alt="" />
 					</div>
 					<div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
 						<p class="text-sm font-medium text-gray-600">Welcome back,</p>
