@@ -25,7 +25,13 @@
 	}
 
 	function handleAction(action: 'promote' | 'delete') {
-		dispatch(action, { name, email, uuid, index, logo });
+		if (action === 'delete' && rank_of_user !== 'user') {
+			dispatch(action, { name, email, uuid, index, logo });
+		}
+
+		if (action === 'promote' && rank_of_user === 'owner') {
+			dispatch(action, { name, email, uuid, index, logo });
+		}
 		isMenuOpen = false;
 	}
 

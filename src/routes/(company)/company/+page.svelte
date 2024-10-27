@@ -119,6 +119,47 @@
 		}
 	}
 
+	async function handleDelete(
+		event: CustomEvent<{
+			uuid: string;
+			index: number;
+			name: string;
+			email: string;
+			logo: string | null | undefined;
+		}>
+	) {
+		const { uuid, index, name } = event.detail;
+
+		try {
+			const response = await fetch('/api/delete_user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ uuid })
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				console.log(`Deleted user at index ${index}`);
+
+				usersStore.update((users) => users.filter((user) => user.uuid !== uuid));
+				adminsStore.update((admins) => admins.filter((admin) => admin.uuid !== uuid));
+				staffStore.update((admins) => admins.filter((admin) => admin.uuid !== uuid));
+
+				console.log('DELETING', {
+					uuid,
+					name
+				});
+			} else {
+				console.error('Failed to delete user:', result.error);
+			}
+		} catch (error) {
+			console.error('Error deleting user:', error);
+		}
+	}
+
 	let formElement: HTMLFormElement;
 
 	async function handleCroppedImage(blob: Blob) {
@@ -133,12 +174,6 @@
 		const dataTransfer = new DataTransfer();
 		dataTransfer.items.add(imageFile);
 		(imageInput as HTMLInputElement).files = dataTransfer.files;
-	}
-
-	function handleDelete(event: CustomEvent<{ index: number }>) {
-		const { index } = event.detail;
-		// Your delete logic here
-		console.log(`Deleting at index ${index}`);
 	}
 
 	function handleNewOwner(event: CustomEvent<{ uuid: string }>) {
@@ -317,7 +352,7 @@
 							<div>
 								<h3 class="text-base font-semibold leading-6 text-gray-900">Administrators</h3>
 								<p class="mt-1 text-sm text-gray-500">
-									Can create and remove Users. <br />Only the Owner may remove admins.
+									Can create and remove Users. <br />Only the Owner may promote and remove admins.
 								</p>
 							</div>
 							<div class="flex-shrink-0">

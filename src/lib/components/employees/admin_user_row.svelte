@@ -26,7 +26,9 @@
 	}
 
 	function handleAction(action: 'demote' | 'delete') {
-		dispatch(action, { uuid, index, name, email, isowner, logo });
+		if (rank_of_user === 'owner') {
+			dispatch(action, { uuid, index, name, email, isowner, logo });
+		}
 		isMenuOpen = false;
 	}
 
