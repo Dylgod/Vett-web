@@ -35,6 +35,7 @@
 
 	let candidateEmails: string[] = [];
 	let formemails: string = '';
+	let persistedEmails: string[] = [];
 
 	let default_profile_img = 'screenshots/vett-default.webp';
 
@@ -71,10 +72,10 @@
 	function handleEmailsChange(event: CustomEvent<string[]>) {
 		candidateEmails = event.detail;
 		formemails = JSON.stringify(candidateEmails);
+		persistedEmails = candidateEmails;
 	}
 
 	function handleSkillsList(event: CustomEvent<string[]>) {
-		// Updates skillslist after adding or removing a skill
 		skillsList = event.detail;
 		formskills = JSON.stringify(skillsList);
 	}
@@ -133,6 +134,7 @@
 		onboarding = false;
 		skillsList = [];
 		allskills = [];
+		persistedEmails = [];
 		skillsModalFormAction = '?/submitorder';
 		editing_row = false;
 		currentStep = 1;
@@ -208,6 +210,29 @@
 						candidateEmails.every((email) => isValidEmail(email))
 					: true;
 
+	// Add this reactive statement
+	$: if (currentStep === 2) {
+		colorIndex = 0;
+		const ALLSKILLS: Skill[] = skillsList.map((skill) => {
+			const skillObject: Skill = {
+				text: skill,
+				color: colors[colorIndex]
+			};
+
+			// Increment colorIndex and wrap around if it exceeds colors array length
+			colorIndex = (colorIndex + 1) % colors.length;
+
+			return skillObject;
+		});
+		allskills = ALLSKILLS;
+	}
+
+	$: if (numberOfCandidates < candidateEmails.length) {
+		candidateEmails = candidateEmails.slice(0, numberOfCandidates);
+		persistedEmails = candidateEmails;
+		formemails = JSON.stringify(candidateEmails);
+	}
+
 	const steps = [
 		{ name: 'Role Details', number: 1 },
 		{ name: 'Skills', number: 2 },
@@ -234,8 +259,6 @@
 			// Remove the 'success' parameter from the URL
 			url.searchParams.delete('success');
 			replaceState(url, '');
-
-
 		}
 	});
 </script>
@@ -556,7 +579,11 @@
 									</div>
 								{/if}
 								{#if currentStep === 3}
-									<EmailInputs {numberOfCandidates} on:change={handleEmailsChange} />
+									<EmailInputs
+										{numberOfCandidates}
+										bind:emailInputs={candidateEmails}
+										on:change={handleEmailsChange}
+									/>
 								{/if}
 								{#if currentStep === 4}
 									<!-- Review Step -->

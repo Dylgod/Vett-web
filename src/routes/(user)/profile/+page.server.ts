@@ -116,37 +116,37 @@ export const actions = {
                 candidateEmails
             });
 
-            const session = await stripe.checkout.sessions.create({
-                line_items: [
-                    {
-                        price: PRICE_ID,
-                        quantity: candidates
-                    }
-                ],
-                mode: 'payment',
-                success_url: `${PUBLIC_HOSTNAME}/profile?success=${150000 * candidates}`,
-                cancel_url: `${PUBLIC_HOSTNAME}/profile`,
-                automatic_tax: { enabled: true },
-                customer_creation: 'if_required',
-                client_reference_id: client.id.toString(),
-                metadata: {
-                    created_for: created_for,
-                    created_by: created_by,
-                    candidates: candidates,
-                    role: role,
-                    onboarding: onboarding ? 1 : 0,
-                    skills: skillsFormData,
-                    status: "Pending",
-                    checkpoint: checkpoint,
-                    emails: candidateEmails
-                }
-            });
+            // const session = await stripe.checkout.sessions.create({
+            //     line_items: [
+            //         {
+            //             price: PRICE_ID,
+            //             quantity: candidates
+            //         }
+            //     ],
+            //     mode: 'payment',
+            //     success_url: `${PUBLIC_HOSTNAME}/profile?success=${150000 * candidates}`,
+            //     cancel_url: `${PUBLIC_HOSTNAME}/profile`,
+            //     automatic_tax: { enabled: true },
+            //     customer_creation: 'if_required',
+            //     client_reference_id: client.id.toString(),
+            //     metadata: {
+            //         created_for: created_for,
+            //         created_by: created_by,
+            //         candidates: candidates,
+            //         role: role,
+            //         onboarding: onboarding ? 1 : 0,
+            //         skills: skillsFormData,
+            //         status: "Pending",
+            //         checkpoint: checkpoint,
+            //         emails: candidateEmails
+            //     }
+            // });
 
-            if (session.url) {
-                redirect(303, session.url)
-            } else {
-                throw new Error('Failed to redirect you to Stripe')
-            }
+            // if (session.url) {
+            //     redirect(303, session.url)
+            // } else {
+            //     throw new Error('Failed to redirect you to Stripe')
+            // }
         }
     },
     editorder: async ({ locals, request, url }) => {

@@ -1,33 +1,36 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
 
-	export let numberOfCandidates: number;
+    export let numberOfCandidates: number;
+    export let emailInputs: string[] = Array(numberOfCandidates).fill('');  // Changed this line
 
-	// Initialize array of empty strings with length numberOfCandidates
-	let emailInputs: string[] = Array(numberOfCandidates).fill('');
-	let validationErrors: boolean[] = Array(numberOfCandidates).fill(false);
+    let validationErrors: boolean[] = Array(numberOfCandidates).fill(false);
 
-	const dispatch = createEventDispatcher<{
-		change: string[];
-	}>();
+    const dispatch = createEventDispatcher<{
+        change: string[];
+    }>();
 
-	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-	function validateEmail(email: string, index: number): void {
-		validationErrors[index] = !emailRegex.test(email);
-		validationErrors = [...validationErrors];
+    function validateEmail(email: string, index: number): void {
+        validationErrors[index] = !emailRegex.test(email);
+        validationErrors = [...validationErrors];
 
-		// Only dispatch if all emails are valid
-		if (!validationErrors.some((error) => error)) {
-			dispatch('change', emailInputs);
-		}
-	}
+        if (!validationErrors.some((error) => error)) {
+            dispatch('change', emailInputs);
+        }
+    }
 
-	function handleInput(index: number, value: string): void {
-		emailInputs[index] = value;
-		emailInputs = [...emailInputs]; // Trigger reactivity
-		validateEmail(value, index);
-	}
+    function handleInput(index: number, value: string): void {
+        emailInputs[index] = value;
+        emailInputs = [...emailInputs];
+        validateEmail(value, index);
+    }
+
+    $: if (numberOfCandidates !== emailInputs.length) {
+        emailInputs = Array(numberOfCandidates).fill('').map((_, i) => emailInputs[i] || '');
+    }
+
 </script>
 
 <div class="space-y-4">
