@@ -71,6 +71,7 @@ export type Database = {
           created_at: string
           created_by: string
           created_for: number
+          emails: string[]
           id: number
           onboarding: boolean
           role: string
@@ -83,6 +84,7 @@ export type Database = {
           created_at?: string
           created_by?: string
           created_for: number
+          emails?: string[]
           id?: number
           onboarding?: boolean
           role: string
@@ -95,6 +97,7 @@ export type Database = {
           created_at?: string
           created_by?: string
           created_for?: number
+          emails?: string[]
           id?: number
           onboarding?: boolean
           role?: string

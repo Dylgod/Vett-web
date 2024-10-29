@@ -20,6 +20,7 @@ export const POST = async ({ request }: RequestEvent) => {
                     const { data: client, error: clienterror } = await supa_client.from('clients').select('*').eq('id', `${event.data.object.client_reference_id}`).single()
 
                     let skills: string[] = JSON.parse(event.data.object.metadata?.skills!)
+                    let emails: string[] = JSON.parse(event.data.object.metadata?.emails!)
 
                     let order_id: string | null = event.data.object.metadata?.order_id ?? null
                     let is_update: boolean = event.data.object.metadata?.update == "1" ? true : false
@@ -34,7 +35,8 @@ export const POST = async ({ request }: RequestEvent) => {
                                         onboarding: event.data.object.metadata?.onboarding ? true : false,
                                         skills: skills,
                                         status: "Pending",
-                                        checkpoint: "update"
+                                        checkpoint: "update",
+                                        emails: emails
                                     }
                                 )
                                 .eq("id", parseInt(order_id))
@@ -62,7 +64,8 @@ export const POST = async ({ request }: RequestEvent) => {
                                     onboarding: event.data.object.metadata?.onboarding ? true : false,
                                     skills: skills,
                                     status: "Pending",
-                                    checkpoint: event.data.object.metadata?.checkpoint
+                                    checkpoint: event.data.object.metadata?.checkpoint,
+                                    emails: emails
                                 }
                             )
                             .select()

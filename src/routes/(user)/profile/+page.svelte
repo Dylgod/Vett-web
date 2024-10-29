@@ -3,10 +3,14 @@
 	import Dropdown from '$lib/components/dropdowns/candidates.svelte';
 	import Skills from '$lib/components/skills/skills.svelte';
 	import ImageCropper from '$lib/components/images/image_cropper.svelte';
+	import EmailInputs from '$lib/components/inputs/candidate_emails.svelte';
 	import type { PageData } from './$types';
 	import ProfileRow from '$lib/components/orders/profile_row.svelte';
+	import { ChevronLeft, ChevronRight, X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { replaceState } from '$app/navigation';
+
 	export let data: PageData;
 
 	interface Skill {
@@ -18,6 +22,7 @@
 	let allskills: Skill[] = [];
 	let colorIndex = 0;
 
+	let currentStep = 1;
 	let skillsList: string[] = [];
 	let formskills: string = '';
 
@@ -25,8 +30,13 @@
 	$: ({ orders } = data);
 	$: ({ profileImage } = data);
 
-	let default_profile_img = "screenshots/vett-default.webp";
-	let current_image = data.profileImage;
+	let isFormValid = false;
+	let showNotification = false;
+
+	let candidateEmails: string[] = [];
+	let formemails: string = '';
+
+	let default_profile_img = 'screenshots/vett-default.webp';
 
 	let role = '';
 	let numberOfCandidates: number = 1;
@@ -57,24 +67,62 @@
 		editProfile = true;
 	}
 
-	// order matching done by using uuid and id of row in orders table
+	// JSON for form and non for edit functionality
+	function handleEmailsChange(event: CustomEvent<string[]>) {
+		candidateEmails = event.detail;
+		formemails = JSON.stringify(candidateEmails);
+	}
 
 	function handleSkillsList(event: CustomEvent<string[]>) {
 		// Updates skillslist after adding or removing a skill
 		skillsList = event.detail;
 		formskills = JSON.stringify(skillsList);
-		console.log('skillsList', skillsList);
-		console.log('formskills', formskills);
 	}
 
 	function handleColorIndexUpdate(event: CustomEvent<number>) {
 		colorIndex = event.detail;
-		console.log(colorIndex);
+	}
+
+	function handleNextStep() {
+		if (currentStep === 1 && !role.trim()) {
+			return;
+		}
+		if (currentStep === 2 && skillsList.length === 0) {
+			return;
+		}
+		if (currentStep === 3 && candidateEmails.length !== numberOfCandidates) {
+			return;
+		}
+		currentStep++;
 	}
 
 	function toggleSwitch() {
 		onboarding = !onboarding;
-		console.log(onboarding);
+	}
+
+	const bg_colors: string[] = [
+		'bg-red-200',
+		'bg-blue-200',
+		'bg-purple-300',
+		'bg-green-100',
+		'bg-pink-200',
+		'bg-yellow-100'
+	];
+
+	const ring_colors: string[] = [
+		'ring-red-300',
+		'ring-blue-300',
+		'ring-purple-300',
+		'ring-green-400',
+		'ring-pink-300',
+		'ring-yellow-400'
+	];
+
+	function getNextColor(): string[] {
+		const bg = bg_colors[colorIndex];
+		const ring = ring_colors[colorIndex];
+		colorIndex = (colorIndex + 1) % bg_colors.length;
+		return [bg, ring];
 	}
 
 	function resetSwitch() {
@@ -87,6 +135,8 @@
 		allskills = [];
 		skillsModalFormAction = '?/submitorder';
 		editing_row = false;
+		currentStep = 1;
+		candidateEmails = [];
 	}
 
 	function resetProfileModal() {
@@ -120,7 +170,6 @@
 
 				// Increment colorIndex and wrap around if it exceeds colors array length
 				colorIndex = (colorIndex + 1) % colors.length;
-				console.log(colorIndex);
 
 				return skillObject;
 			});
@@ -137,13 +186,34 @@
 
 		// Find or create a hidden input for the image
 		let imageInput = formElement.querySelector('input[name="image"]');
-		console.log("imageInput", imageInput)
+		console.log('imageInput', imageInput);
 
 		// Create a DataTransfer object to set the file
 		const dataTransfer = new DataTransfer();
 		dataTransfer.items.add(imageFile);
 		(imageInput as HTMLInputElement).files = dataTransfer.files;
 	}
+
+	function isValidEmail(email: string): boolean {
+		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+	}
+
+	$: isFormValid =
+		currentStep === 1
+			? role.trim().length > 0
+			: currentStep === 2
+				? skillsList.length > 0
+				: currentStep === 3
+					? candidateEmails.length === numberOfCandidates &&
+						candidateEmails.every((email) => isValidEmail(email))
+					: true;
+
+	const steps = [
+		{ name: 'Role Details', number: 1 },
+		{ name: 'Skills', number: 2 },
+		{ name: 'Candidates', number: 3 },
+		{ name: 'Review', number: 4 }
+	];
 
 	onMount(() => {
 		if (!profileImage) {
@@ -154,14 +224,27 @@
 		const stripe_success = $page.url.searchParams.get('success');
 
 		if (stripe_success) {
-			alert('Payment Successful!\nYour order will be displayed on your Profile.');
+			showNotification = true;
+
+			// Hide notification after 3 seconds
+			setTimeout(() => {
+				showNotification = false;
+			}, 3000);
 
 			// Remove the 'success' parameter from the URL
 			url.searchParams.delete('success');
-			window.history.replaceState({}, '', url);
+			replaceState(url, '');
+
+
 		}
 	});
 </script>
+
+{#if showNotification}
+	<div class="notification font-semibold">
+		Payment Successful!<br />Your order will be displayed on your Profile.
+	</div>
+{/if}
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 	<div class="overflow-hidden rounded-lg bg-white shadow-md">
@@ -170,7 +253,11 @@
 			<div class="sm:flex sm:items-center sm:justify-between">
 				<div class="sm:flex sm:space-x-5">
 					<div class="flex-shrink-0">
-						<img class="mx-auto h-20 w-20 rounded-full outline outline-1 outline-slate-300" src={profileImage} alt="" />
+						<img
+							class="mx-auto h-20 w-20 rounded-full outline outline-1 outline-slate-300"
+							src={profileImage}
+							alt=""
+						/>
 					</div>
 					<div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
 						<p class="text-sm font-medium text-gray-600">Welcome back,</p>
@@ -305,15 +392,12 @@
 	<div class="fixed z-50" class:invisible={!invisible}>
 		<div class="grid h-screen place-items-center">
 			<div
-				id="crud-modal"
-				tabindex="-1"
-				aria-hidden="true"
 				class="fixed grid h-screen place-items-center overflow-y-auto overflow-x-hidden m-auto md:inset-0 w-screen bg-slate-950/50"
 			>
-				<div class="relative p-4 w-full max-w-md max-h-full">
+				<div class="relative p-4 w-full max-w-2xl max-h-full">
 					{#if addRole}
 						<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-							<!-- Modal header -->
+							<!-- Modal Header -->
 							<div
 								class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
 							>
@@ -321,120 +405,146 @@
 								<button
 									type="button"
 									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-									data-modal-toggle="crud-modal"
-									on:click={() => {
-										resetSwitch();
-									}}
+									on:click={resetSwitch}
 								>
-									<svg
-										class="w-3 h-3"
-										aria-hidden="true"
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 14 14"
-									>
-										<path
-											stroke="currentColor"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-										/>
-									</svg>
+									<X class="w-4 h-4" />
 									<span class="sr-only">Close modal</span>
 								</button>
 							</div>
-							<!-- Modal body -->
+
+							<!-- Progress Steps -->
+							<div class="px-6 py-4 border-b border-gray-200">
+								<div class="flex justify-between">
+									{#each steps as step, i}
+										<div class="flex items-center">
+											<div
+												class="w-8 h-8 rounded-full flex items-center justify-center {currentStep >
+												step.number
+													? 'bg-blue-600 text-white'
+													: currentStep === step.number
+														? 'bg-blue-100 text-blue-600 border-2 border-blue-600'
+														: 'bg-gray-100 text-gray-600 font-semibold'}"
+											>
+												{step.number}
+											</div>
+											<span class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
+												>{step.name}</span
+											>
+											{#if i < steps.length - 1}
+												<div class="w-12 h-0.5 mx-2 bg-gray-200" />
+											{/if}
+										</div>
+									{/each}
+								</div>
+							</div>
+
+							<!-- Form Content -->
 							<form
-								class="p-4 md:p-5 flex flex-col"
+								class="p-5 px-10"
 								method="POST"
 								action={skillsModalFormAction}
 								use:enhance
 								on:submit={resetSwitch}
 							>
-								<div class="gap-4 mb-4">
-									<div class="">
-										<label
-											for="role"
-											class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-											>Role</label
-										>
-										<input
-											type="text"
-											name="role"
-											id="role"
-											required
-											bind:value={role}
-											class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-											placeholder="Position at the Company"
-										/>
-									</div>
-								</div>
-								<div class="gap-4 mb-4">
-									<div class="grid grid-cols-3">
-										<div>
+								<!-- Add these hidden inputs at the top of your form -->
+								<input type="hidden" name="candidates" value={numberOfCandidates} />
+								<input type="hidden" name="role" value={role} />
+								<input type="hidden" name="skills" value={formskills} />
+								<input type="hidden" name="candidate_emails" value={formemails} />
+								<input type="hidden" name="onboarding" value={onboarding.toString()} />
+								{#if currentStep === 1}
+									<!-- Role Details Step -->
+									<div class="gap-4 mb-4">
+										<div class="mb-4 mt-2">
 											<label
-												for="candidates"
+												for="role"
 												class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-												>Candidates</label
 											>
-											{#if editing_row}
-												<Dropdown bind:value={numberOfCandidates} start={candidates_before_edit} />
-											{:else}
-												<Dropdown bind:value={numberOfCandidates} />
-											{/if}
+												Role
+											</label>
+											<input
+												type="text"
+												name="role"
+												id="role"
+												required
+												bind:value={role}
+												class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+												placeholder="Position at the Company"
+												on:input={(e) => (role = e.currentTarget.value.trim())}
+											/>
 										</div>
-										<fieldset class="col-span-2">
-											<legend class="sr-only">Preliminary Meeting</legend>
-											<div class="">
-												<div class="relative flex items-start">
-													<div class="flex items-center">
-														<button
-															type="button"
-															class="mt-5 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
-															class:bg-blue-700={onboarding}
-															class:dark:bg-gray-600={!onboarding}
-															class:bg-gray-50={!onboarding}
-															role="switch"
-															aria-checked={onboarding}
-															aria-labelledby="Preliminary Meeting?"
-															on:click={toggleSwitch}
-														>
-															<span
-																aria-hidden="true"
-																class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-																class:translate-x-5={onboarding}
-																class:translate-x-0={!onboarding}
-															></span>
-														</button>
-														<input
-															class="invisible hidden"
-															type="checkbox"
-															name="onboarding"
-															id="onboarding"
-															bind:checked={onboarding}
-														/>
-														<div class="flex flex-col" id="annual-billing-label">
-															<span class="ml-3 text-sm font-semibold text-gray-900 dark:text-white"
-																>Preliminary Meeting</span
+										<div class="grid grid-cols-3 pt-3">
+											<div>
+												<label
+													for="candidates"
+													class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+												>
+													Candidates
+												</label>
+												{#if editing_row}
+													<Dropdown
+														bind:value={numberOfCandidates}
+														start={candidates_before_edit}
+													/>
+												{:else}
+													<Dropdown bind:value={numberOfCandidates} />
+												{/if}
+											</div>
+											<fieldset class="col-span-2">
+												<legend class="sr-only">Preliminary Meeting</legend>
+												<div class="">
+													<div class="relative flex items-start">
+														<div class="flex items-center">
+															<button
+																type="button"
+																class="mt-5 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+																class:bg-blue-700={onboarding}
+																class:dark:bg-gray-600={!onboarding}
+																class:bg-gray-50={!onboarding}
+																role="switch"
+																aria-checked={onboarding}
+																aria-labelledby="Preliminary Meeting?"
+																on:click={toggleSwitch}
 															>
-															<span class="mt-1 ml-3 text-sm text-gray-900 dark:text-gray-400"
-																>Optional meeting to discuss requirements.</span
-															>
+																<span
+																	aria-hidden="true"
+																	class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+																	class:translate-x-5={onboarding}
+																	class:translate-x-0={!onboarding}
+																></span>
+															</button>
+															<input
+																class="invisible hidden"
+																type="checkbox"
+																name="onboarding"
+																id="onboarding"
+																bind:checked={onboarding}
+															/>
+															<div class="flex flex-col" id="annual-billing-label">
+																<span
+																	class="ml-3 text-sm font-semibold text-gray-900 dark:text-white"
+																	>Preliminary Meeting</span
+																>
+																<span class="mt-1 ml-3 text-sm text-gray-900 dark:text-gray-400"
+																	>Optional meeting to discuss requirements.</span
+																>
+															</div>
 														</div>
 													</div>
 												</div>
-											</div>
-										</fieldset>
+											</fieldset>
+										</div>
 									</div>
-									<div class="mt-5">
+								{/if}
+								{#if currentStep === 2}
+									<!-- Skills Step -->
+									<div class="gap-4 mb-4">
 										<Skills
 											on:skillslist={handleSkillsList}
 											{allskills}
 											initialColorIndex={colorIndex}
 											on:colorIndexUpdate={handleColorIndexUpdate}
 										/>
-										<!-- required might not be doing anything. if break, remove -->
 										<input
 											class="invisible hidden"
 											required
@@ -444,40 +554,96 @@
 											bind:value={formskills}
 										/>
 									</div>
-								</div>
+								{/if}
+								{#if currentStep === 3}
+									<EmailInputs {numberOfCandidates} on:change={handleEmailsChange} />
+								{/if}
+								{#if currentStep === 4}
+									<!-- Review Step -->
+									<div class="space-y-4">
+										<div class="border-b border-gray-200 pb-4">
+											<h4 class="text-md font-medium text-white dark:text-white">Role Details</h4>
+											<p class="mt-1 text-sm text-gray-200 dark:text-gray-200">{role}</p>
+											<p class="mt-1 text-sm text-gray-200">Candidates: {numberOfCandidates}</p>
+											<p class="mt-1 text-sm text-gray-200">
+												Preliminary Meeting: {onboarding ? 'Yes' : 'No'}
+											</p>
+										</div>
+										<div class="border-b border-gray-200 pb-4">
+											<h4 class="text-md font-medium text-white">Skills</h4>
+											<div class="mt-1 flex flex-wrap gap-2">
+												{#each skillsList as skill}
+													{@const [bg, ring] = getNextColor()}
+													<span
+														class="inline-flex items-center px-2 py-1 rounded-md {bg} {ring} text-gruvbox-fg0 text-sm font-semibold"
+													>
+														{skill}
+													</span>
+												{/each}
+											</div>
+										</div>
+										<div>
+											<h4 class="text-md font-medium text-white">Candidates</h4>
+											<div class="mt-1 space-y-2">
+												{#each candidateEmails as candidate}
+													<div class="text-sm text-gray-200 dark:text-gray-200">
+														{candidate}
+													</div>
+												{/each}
+											</div>
+										</div>
+									</div>
+								{/if}
+
+								<!-- Hidden inputs for editing -->
 								{#if editing_row}
+									<input type="hidden" name="order_id" bind:value={order_id} />
 									<input
-										class="invisible hidden"
-										type="text"
-										id="order_id"
-										name="order_id"
-										bind:value={order_id}
-									/>
-									<input
-										class="invisible hidden"
-										type="text"
-										id="candidates_before_edit"
+										type="hidden"
 										name="candidates_before_edit"
 										bind:value={candidates_before_edit}
 									/>
 								{/if}
-								<button
-									type="submit"
-									class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end disabled:bg-gray-600 disabled:hover:bg-gray-600"
-									disabled={skillsList.length < 1}
-								>
-									{#if editing_row}
-										{candidates_before_edit != numberOfCandidates
-											? 'Continue to Payment'
-											: 'Finish Editing'}
+
+								<!-- Navigation Footer -->
+								<div class="mt-6 flex justify-between">
+									<button
+										type="button"
+										class="flex items-center px-4 py-2 text-sm font-medium text-white hover:text-gray-500 disabled:opacity-0 dark:text-white"
+										on:click={() => currentStep--}
+										disabled={currentStep === 1}
+									>
+										<ChevronLeft class="w-5 h-5 mr-1" />
+										Back
+									</button>
+
+									{#if currentStep < 4}
+										<button
+											type="button"
+											class="flex items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+											on:click={handleNextStep}
+											disabled={!isFormValid}
+										>
+											Next
+											<ChevronRight class="w-5 h-5 ml-1" />
+										</button>
 									{:else}
-										Continue to Payment
+										<button
+											type="submit"
+											class="flex items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800"
+											disabled={!isFormValid}
+										>
+											{editing_row && candidates_before_edit !== numberOfCandidates
+												? 'Continue to Payment'
+												: editing_row
+													? 'Finish Editing'
+													: 'Submit Order'}
+										</button>
 									{/if}
-								</button>
+								</div>
 							</form>
 						</div>
 					{/if}
-					<!-- Modal content -->
 				</div>
 			</div>
 		</div>
@@ -601,3 +767,32 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.notification {
+		position: fixed;
+		top: 8%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #4caf50;
+		color: white;
+		padding: 1rem 2rem;
+		border-radius: 4px;
+		text-align: center;
+		z-index: 9999;
+		animation: fadeIn 0.3s ease-in;
+		min-width: 200px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translate(-50%, -60%);
+		}
+		to {
+			opacity: 1;
+			transform: translate(-50%, -50%);
+		}
+	}
+</style>

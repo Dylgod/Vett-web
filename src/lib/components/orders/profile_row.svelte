@@ -33,6 +33,7 @@
 	export let skills: string[];
 	export let status: string;
 	export let command;
+	// export let add_email_command;
 
 	function getNextColor(): string[] {
 		const bg = bg_colors[colorIndex];

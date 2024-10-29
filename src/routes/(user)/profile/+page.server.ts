@@ -1,7 +1,7 @@
 import { SERVICE_ROLE, PRODUCT_PRICE_IN_PENNIES, PRICE_ID } from '$env/static/private';
 import { PUBLIC_HOSTNAME, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { stripe } from '$lib/stripe';
-import type { Database, Tables } from '$lib/types/supabase.js';
+import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { error, fail, redirect } from '@sveltejs/kit';
 
@@ -73,28 +73,27 @@ export async function load({ locals }) {
 
 export const actions = {
     submitorder: async ({ locals, request, url }) => {
-        // get formdata -> create payload -> query stripe -> response 200 = create row and send email to created_by with magic links for calendly
         const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
         const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
 
         if (authError || !user) {
             console.log("authError || !user")
-            throw redirect(303, "/profile"); // if not logged in profile redirects to login. If they are and they get redirected then problem occurs
+            throw redirect(303, "/profile");
         }
-        const formData = await request.formData()
 
-        const candidates = parseInt(formData.get("candidates")?.toString() || "")
-        const role = (formData.get("role")?.toString() || "").trim()
-        const onboarding = formData.has("onboarding");
-        const skillsFormData = (formData.get("skills")?.toString() || "")
+        const formData = await request.formData();
 
-        let checkpoint: string = "onboarding";
+        // Safely get and parse form data with defaults
+        const candidates = Number(formData.get("candidates")) || 0;
+        const role = formData.get("role")?.toString().trim() || "";
+        const onboarding = formData.get("onboarding") === "true";
+        const skillsFormData = formData.get("skills")?.toString() || "";
+        const candidateEmails = formData.get("candidate_emails")?.toString() || "";
 
-        if (onboarding) {
-            checkpoint = "onboarding"
-        } else {
-            checkpoint = "create_takehome"
-        }
+        let checkpoint: string = onboarding ? "onboarding" : "create_takehome";
+
+        // THIS IS PROBABLY WRONG
+        
 
         const { data: client, error: clientError } = await supa_client
             .from('clients')
@@ -103,8 +102,19 @@ export const actions = {
             .single();
 
         if (client) {
-            let created_for = client.id
-            let created_by = user.id
+            let created_for = client.id;
+            let created_by = user.id;
+
+            console.log({
+                created_for,
+                created_by,
+                candidates,
+                role,
+                onboarding,
+                skillsFormData,
+                checkpoint,
+                candidateEmails
+            });
 
             const session = await stripe.checkout.sessions.create({
                 line_items: [
@@ -127,7 +137,8 @@ export const actions = {
                     onboarding: onboarding ? 1 : 0,
                     skills: skillsFormData,
                     status: "Pending",
-                    checkpoint: checkpoint
+                    checkpoint: checkpoint,
+                    emails: candidateEmails
                 }
             });
 
