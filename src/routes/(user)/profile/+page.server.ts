@@ -116,37 +116,37 @@ export const actions = {
                 candidateEmails
             });
 
-            // const session = await stripe.checkout.sessions.create({
-            //     line_items: [
-            //         {
-            //             price: PRICE_ID,
-            //             quantity: candidates
-            //         }
-            //     ],
-            //     mode: 'payment',
-            //     success_url: `${PUBLIC_HOSTNAME}/profile?success=${150000 * candidates}`,
-            //     cancel_url: `${PUBLIC_HOSTNAME}/profile`,
-            //     automatic_tax: { enabled: true },
-            //     customer_creation: 'if_required',
-            //     client_reference_id: client.id.toString(),
-            //     metadata: {
-            //         created_for: created_for,
-            //         created_by: created_by,
-            //         candidates: candidates,
-            //         role: role,
-            //         onboarding: onboarding ? 1 : 0,
-            //         skills: skillsFormData,
-            //         status: "Pending",
-            //         checkpoint: checkpoint,
-            //         emails: candidateEmails
-            //     }
-            // });
+            const session = await stripe.checkout.sessions.create({
+                line_items: [
+                    {
+                        price: PRICE_ID,
+                        quantity: candidates
+                    }
+                ],
+                mode: 'payment',
+                success_url: `${PUBLIC_HOSTNAME}/profile?success=${150000 * candidates}`,
+                cancel_url: `${PUBLIC_HOSTNAME}/profile`,
+                automatic_tax: { enabled: true },
+                customer_creation: 'if_required',
+                client_reference_id: client.id.toString(),
+                metadata: {
+                    created_for: created_for,
+                    created_by: created_by,
+                    candidates: candidates,
+                    role: role,
+                    onboarding: onboarding ? 1 : 0,
+                    skills: skillsFormData,
+                    status: "Pending",
+                    checkpoint: checkpoint,
+                    emails: candidateEmails
+                }
+            });
 
-            // if (session.url) {
-            //     redirect(303, session.url)
-            // } else {
-            //     throw new Error('Failed to redirect you to Stripe')
-            // }
+            if (session.url) {
+                redirect(303, session.url)
+            } else {
+                throw new Error('Failed to redirect you to Stripe')
+            }
         }
     },
     editorder: async ({ locals, request, url }) => {
@@ -164,9 +164,11 @@ export const actions = {
         const role = (formData.get("role")?.toString() || "").trim()
         const onboarding = formData.has("onboarding");
         const skillsFormData = (formData.get("skills")?.toString() || "")
+        const emailsFormData = (formData.get("candidate_emails")?.toString() || "")
         const order_id = parseInt(formData.get("order_id")?.toString() || "")
 
         const skills: string[] = JSON.parse(skillsFormData);
+        const emails: string[] = JSON.parse(emailsFormData)
         // check if num candidates has increased and if so, redirect to stripe
 
         if (candidates - candidates_before_edit > 0) {
@@ -205,7 +207,8 @@ export const actions = {
                         status: "Pending",
                         checkpoint: "update",
                         update: true ? 1 : 0,
-                        order_id: order_id
+                        order_id: order_id,
+                        emails: emailsFormData
                     }
                 });
 
@@ -217,6 +220,7 @@ export const actions = {
             }
 
         } else {
+
             const { data, error } = await supa_client
                 .from('orders')
                 .update(
@@ -225,7 +229,8 @@ export const actions = {
                         role: role,
                         onboarding: onboarding,
                         skills: skills,
-                        checkpoint: "update"
+                        checkpoint: "update",
+                        emails: emails
                     }
                 )
                 .eq("id", order_id)

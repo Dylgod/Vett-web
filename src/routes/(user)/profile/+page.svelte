@@ -35,7 +35,6 @@
 
 	let candidateEmails: string[] = [];
 	let formemails: string = '';
-	let persistedEmails: string[] = [];
 
 	let default_profile_img = 'screenshots/vett-default.webp';
 
@@ -72,7 +71,6 @@
 	function handleEmailsChange(event: CustomEvent<string[]>) {
 		candidateEmails = event.detail;
 		formemails = JSON.stringify(candidateEmails);
-		persistedEmails = candidateEmails;
 	}
 
 	function handleSkillsList(event: CustomEvent<string[]>) {
@@ -134,7 +132,6 @@
 		onboarding = false;
 		skillsList = [];
 		allskills = [];
-		persistedEmails = [];
 		skillsModalFormAction = '?/submitorder';
 		editing_row = false;
 		currentStep = 1;
@@ -163,6 +160,8 @@
 			onboarding = order.onboarding;
 			skillsList = order.skills;
 			formskills = JSON.stringify(skillsList);
+			candidateEmails = order.emails
+			formemails = JSON.stringify(candidateEmails);
 
 			const ALLSKILLS: Skill[] = skillsList.map((skill) => {
 				const skillObject: Skill = {
@@ -229,7 +228,6 @@
 
 	$: if (numberOfCandidates < candidateEmails.length) {
 		candidateEmails = candidateEmails.slice(0, numberOfCandidates);
-		persistedEmails = candidateEmails;
 		formemails = JSON.stringify(candidateEmails);
 	}
 
@@ -424,7 +422,7 @@
 							<div
 								class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
 							>
-								<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Add New Role</h3>
+								<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{editing_row? 'Edit Role' : 'Add New Role'}</h3>
 								<button
 									type="button"
 									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
