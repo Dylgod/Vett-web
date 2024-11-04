@@ -5,8 +5,82 @@
 	export let data: PageData;
 	let tasks = data.tasks as Task[];
 
-	// import order -> get company info -> create type Task object
+	let activeTab = 0;
+	let adminorder_modal_invisible = false;
+	let showNotification = false;
+
+	let role = '';
+	let skills: string[] = [];
+	let emailTemplate = '';
+
+	let colorIndex = 0;
+	const bg_colors: string[] = [
+		'bg-red-50',
+		'bg-blue-50',
+		'bg-purple-50',
+		'bg-green-50',
+		'bg-pink-50',
+		'bg-yellow-50'
+	];
+	const text_colors: string[] = [
+		'text-red-700',
+		'text-blue-700',
+		'text-purple-700',
+		'text-green-700',
+		'text-pink-700',
+		'text-yellow-700'
+	];
+	const ring_colors: string[] = [
+		'ring-red-300',
+		'ring-blue-300',
+		'ring-purple-300',
+		'ring-green-400',
+		'ring-pink-300',
+		'ring-yellow-400'
+	];
+
+	function getNextColor(): string[] {
+		const bg = bg_colors[colorIndex];
+		const text = text_colors[colorIndex];
+		const ring = ring_colors[colorIndex];
+		colorIndex = (colorIndex + 1) % bg_colors.length;
+		return [bg, text, ring];
+	}
+
+	function showNotificationTEST() {
+		showNotification = true;
+
+		// Hide notification after 3 seconds
+		setTimeout(() => {
+			showNotification = false;
+		}, 3000);
+	}
+
+	function saveTemplate() {
+		console.log(emailTemplate);
+		showNotificationTEST();
+	}
+
+	function resetOrderModal() {
+		adminorder_modal_invisible = !adminorder_modal_invisible;
+		role = '';
+		skills = [];
+	}
+
+	function showTaskModal(task: Task) {
+		role = task.Role;
+		skills = task.Skills;
+
+		adminorder_modal_invisible = !adminorder_modal_invisible;
+	}
+
 </script>
+
+{#if showNotification}
+	<div class="notification font-semibold">
+		Email Template Saved!
+	</div>
+{/if}
 
 <div class="bg-gruvboxDark-bgH">
 	<div class="pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -61,7 +135,7 @@
 							<div class="overflow-y-auto">
 								<ul role="list" class="pl-3 pr-3">
 									{#each tasks as task}
-										<AdminRow {task} />
+										<AdminRow {task} command={showTaskModal(task)} />
 									{/each}
 								</ul>
 							</div>
@@ -123,3 +197,137 @@
 		</div>
 	</div>
 </div>
+
+<div class="fixed z-50" class:invisible={!adminorder_modal_invisible}>
+	<div class="grid h-screen place-items-center">
+		<div
+			class="fixed grid h-screen place-items-center overflow-y-auto overflow-x-hidden m-auto md:inset-0 w-screen bg-slate-950/50"
+		>
+			<div class="relative p-4 w-full max-w-2xl max-h-full">
+				<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+					<!-- Modal Header -->
+					<div
+						class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+					>
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+							Take Home Assignment
+						</h3>
+						<button
+							type="button"
+							class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+							on:click={resetOrderModal}
+						>
+							✕
+							<span class="sr-only">Close modal</span>
+						</button>
+					</div>
+
+					<!-- Tabs -->
+					<div class="px-6 py-4 border-b border-gray-200">
+						<div class="flex justify-between">
+							<button
+								class="text-sm font-medium {activeTab === 0 ? 'text-blue-500' : 'text-gray-300'}"
+								on:click={() => (activeTab = 0)}
+							>
+								Create Takehome
+							</button>
+							<button
+								class="text-sm font-medium {activeTab === 1 ? 'text-blue-600' : 'text-gray-300'}"
+								on:click={() => (activeTab = 1)}
+							>
+								Send Take Home
+							</button>
+							<button
+								class="text-sm font-medium {activeTab === 2 ? 'text-blue-600' : 'text-gray-300'}"
+								on:click={() => (activeTab = 2)}
+							>
+								Review and Report
+							</button>
+						</div>
+					</div>
+
+					<!-- Content -->
+					<div class="p-5 px-10">
+						{#if activeTab === 0}
+							<div class="space-y-6">
+								<p class="text-md font-medium text-gray-900 dark:text-white">Role Name: {role}</p>
+								<div class="flex flex-wrap gap-1">
+									<p class="pr-2 text-md font-medium text-gray-900 dark:text-white">Skills:</p>
+									{#each skills as skill}
+										{@const [bg, text, ring] = getNextColor()}
+										<span
+											class="inline-flex items-center rounded-md {bg} px-2 py-1 text-xs font-medium {text} ring-1 ring-inset {ring}"
+											>{skill}</span
+										>
+									{/each}
+								</div>
+								<textarea
+									bind:value={emailTemplate}
+									class="border border-gray-300 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 h-64 resize-none font-mono whitespace-pre-wrap"
+									placeholder="Enter email template here..."
+									spellcheck="false"
+									wrap="soft"
+								></textarea>
+								<div class="flex justify-end">
+									<button
+										on:click={saveTemplate}
+										class="flex items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+									>
+										Save Template
+									</button>
+								</div>
+							</div>
+						{:else if activeTab === 1}
+							<div class="p-4">
+								<button
+									on:click={saveTemplate}
+									class="flex items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+								>
+									Show Template
+								</button>
+							</div>
+						{:else}
+							<div class="p-4">
+								<p class="text-sm font-medium text-gray-900 dark:text-white">CONTENT HERE</p>
+							</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.notification {
+		position: fixed;
+		top: 8%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #3c8f3e;
+		color: white;
+		padding: 1rem 2rem;
+		border-radius: 4px;
+		text-align: center;
+		z-index: 9999;
+		animation: fadeInOut 3s linear 1 forwards;
+		min-width: 200px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+	/*  */
+
+	@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style>

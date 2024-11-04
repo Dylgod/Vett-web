@@ -50,6 +50,22 @@ export async function load({ locals }) {
                 return null;
             }
 
+            const { data: files } = await supa_client
+            .storage
+            .from('logos')
+            .list('clients/', {
+                search: `${companyData.id}.webp`
+            });
+    
+    
+        const clientImage = files && files.length > 0
+            ? (await (supa_client.storage
+                .from('logos')
+                .createSignedUrl(`clients/${companyData.id}.webp`, 604800)) // 3600 seconds = 1 hour
+            ) // 3600 seconds = 1 hour
+                .data?.signedUrl
+            : null;
+
             const task: Task = {
                 Company_id: companyData.id,
                 Company_name: companyData.company_name || '',  // Provide a default value if it can be null
@@ -59,10 +75,12 @@ export async function load({ locals }) {
                 Order_id: order.id.toString(),
                 Role: order.role,
                 Candidates: order.candidates,
+                Emails: order.emails,
                 Onboarding: order.onboarding,
                 Skills: order.skills,  // Provide a default value if it can be null
                 Status: (order.status as "In-Progress" | "Pending" | "Completed") || "Pending",  // Provide a default value
-                Type: (order.checkpoint as "onboarding" | "review" | "create_takehome" | "tech_interview" | "update") || "review"  // Provide a default value
+                Type: (order.checkpoint as "onboarding" | "review" | "create_takehome" | "tech_interview" | "update") || "review",  // Provide a default value
+                Logo: clientImage
             };
 
             return task;

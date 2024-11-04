@@ -8,6 +8,7 @@
 	} as const;
 
 	export let task: Task;
+	export let command;
 
 	$: taskType = task.Type;
 	$: colorClasses = taskColors[taskType] || 'border-gray-500 text-gray-500'; // Default color if type is not found
@@ -15,11 +16,12 @@
 	$: manager = task.Manager;
 	$: order_id = task.Order_id;
 	$: date = task.Date;
+	$: logo = task.Logo
 </script>
 
 <li class="w-full bg-neutral-800 border rounded-md mt-2 {colorClasses}">
 	<button
-		on:click={() => alert('clicked')}
+		on:click={command}
 		class="min-w-0 overflow-hidden w-full hover:bg-gruvboxDark-bgS"
 	>
 		<div class="flex gap-3 py-2 px-4 w-full justify-between">
@@ -27,7 +29,7 @@
 				<img
 					class="h-16 w-16 flex-shrink-0 rounded-full bg-gray-50"
 					alt=""
-					src="screenshots/eric.jpg"
+					src={logo}
 				/>
 				<div class="min-w-0 flex flex-col place-items-start col-span-2">
 					<p class="font-semibold truncate text-lg {colorClasses}">{taskType.toLocaleUpperCase()}</p>

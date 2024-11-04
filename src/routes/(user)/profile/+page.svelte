@@ -467,7 +467,6 @@
 								use:enhance
 								on:submit={resetSwitch}
 							>
-								<!-- Add these hidden inputs at the top of your form -->
 								<input type="hidden" name="candidates" value={numberOfCandidates} />
 								<input type="hidden" name="role" value={role} />
 								<input type="hidden" name="skills" value={formskills} />
@@ -805,19 +804,24 @@
 		border-radius: 4px;
 		text-align: center;
 		z-index: 9999;
-		animation: fadeIn 0.3s ease-in;
+		animation: fadeInOut 3s linear 1 forwards;
 		min-width: 200px;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
+	/*  */
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translate(-50%, -60%);
-		}
-		to {
-			opacity: 1;
-			transform: translate(-50%, -50%);
-		}
-	}
+	@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 </style>
