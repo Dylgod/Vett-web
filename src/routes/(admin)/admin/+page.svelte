@@ -49,6 +49,7 @@
 
 	function showNotificationTEST() {
 		showNotification = true;
+		console.log(emailTemplate)
 
 		// Hide notification after 3 seconds
 		setTimeout(() => {
@@ -57,7 +58,6 @@
 	}
 
 	function saveTemplate() {
-		console.log(emailTemplate);
 		showNotificationTEST();
 	}
 
@@ -65,6 +65,7 @@
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 		role = '';
 		skills = [];
+		colorIndex = 0
 	}
 
 	function showTaskModal(task: Task) {
@@ -73,13 +74,10 @@
 
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 	}
-
 </script>
 
 {#if showNotification}
-	<div class="notification font-semibold">
-		Email Template Saved!
-	</div>
+	<div class="notification font-semibold">Email Template Saved!</div>
 {/if}
 
 <div class="bg-gruvboxDark-bgH">
@@ -135,7 +133,7 @@
 							<div class="overflow-y-auto">
 								<ul role="list" class="pl-3 pr-3">
 									{#each tasks as task}
-										<AdminRow {task} command={showTaskModal(task)} />
+										<AdminRow {task} command={() => showTaskModal(task)} />
 									{/each}
 								</ul>
 							</div>
@@ -233,14 +231,16 @@
 							</button>
 							<button
 								class="text-sm font-medium {activeTab === 1 ? 'text-blue-600' : 'text-gray-300'}"
-								on:click={() => (activeTab = 1)}
+								on:click={() => {(activeTab = 1)
+								colorIndex = 0}}
 							>
 								Send Take Home
 							</button>
 							<button
-								class="text-sm font-medium {activeTab === 2 ? 'text-blue-600' : 'text-gray-300'}"
-								on:click={() => (activeTab = 2)}
-							>
+							class="text-sm font-medium {activeTab === 2 ? 'text-blue-600' : 'text-gray-300'}"
+							on:click={() => {(activeTab = 2)
+							colorIndex = 0}}
+						>
 								Review and Report
 							</button>
 						</div>
@@ -288,7 +288,7 @@
 							</div>
 						{:else}
 							<div class="p-4">
-								<p class="text-sm font-medium text-gray-900 dark:text-white">CONTENT HERE</p>
+								<p class="text-sm font-medium text-gray-900 dark:text-white">{emailTemplate}</p>
 							</div>
 						{/if}
 					</div>
@@ -314,20 +314,19 @@
 		min-width: 200px;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
-	/*  */
 
 	@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
+		0% {
+			opacity: 0;
+		}
+		5% {
+			opacity: 1;
+		}
+		95% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
 </style>

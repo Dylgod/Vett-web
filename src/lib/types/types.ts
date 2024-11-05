@@ -1,3 +1,8 @@
+type Email_Recipient = {
+    name: string;
+    email: string;
+}
+
 type Task = {
     Candidates: number;
     Company_id: number;
