@@ -11,6 +11,11 @@
 
 	let role = '';
 	let skills: string[] = [];
+	let emails: [string, boolean][] = [
+		['crtkdt3@yahoo.com', false],
+		['dylanjtaylor3@gmail.com', false]
+	];
+
 	let emailTemplate = '';
 
 	let colorIndex = 0;
@@ -47,9 +52,8 @@
 		return [bg, text, ring];
 	}
 
-	function showNotificationTEST() {
+	function showNotification_alert() {
 		showNotification = true;
-		console.log(emailTemplate)
 
 		// Hide notification after 3 seconds
 		setTimeout(() => {
@@ -58,19 +62,21 @@
 	}
 
 	function saveTemplate() {
-		showNotificationTEST();
+		showNotification_alert();
 	}
 
 	function resetOrderModal() {
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 		role = '';
 		skills = [];
-		colorIndex = 0
+		colorIndex = 0;
 	}
 
 	function showTaskModal(task: Task) {
 		role = task.Role;
 		skills = task.Skills;
+		emails = Array.isArray(task.Emails) ? task.Emails : JSON.parse(task.Emails);
+		console.log('emails after setting:', emails);
 
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 	}
@@ -231,16 +237,20 @@
 							</button>
 							<button
 								class="text-sm font-medium {activeTab === 1 ? 'text-blue-600' : 'text-gray-300'}"
-								on:click={() => {(activeTab = 1)
-								colorIndex = 0}}
+								on:click={() => {
+									activeTab = 1;
+									colorIndex = 0;
+								}}
 							>
 								Send Take Home
 							</button>
 							<button
-							class="text-sm font-medium {activeTab === 2 ? 'text-blue-600' : 'text-gray-300'}"
-							on:click={() => {(activeTab = 2)
-							colorIndex = 0}}
-						>
+								class="text-sm font-medium {activeTab === 2 ? 'text-blue-600' : 'text-gray-300'}"
+								on:click={() => {
+									activeTab = 2;
+									colorIndex = 0;
+								}}
+							>
 								Review and Report
 							</button>
 						</div>
@@ -288,7 +298,10 @@
 							</div>
 						{:else}
 							<div class="p-4">
-								<p class="text-sm font-medium text-gray-900 dark:text-white">{emailTemplate}</p>
+								{#each emails as [email, status]}
+									<p class="text-sm font-medium text-gray-900 dark:text-white">EMAIL: {email}</p>
+									<p class="text-sm font-medium text-gray-900 dark:text-white">STATUS: {status}</p>
+								{/each}
 							</div>
 						{/if}
 					</div>

@@ -1,14 +1,9 @@
-type Email_Recipient = {
-    name: string;
-    email: string;
-}
-
 type Task = {
     Candidates: number;
     Company_id: number;
     Company_name: string;
     Date: string;
-    Emails: string[];
+    Emails: [string, boolean][];
     Logo: string | null | undefined;
     Manager_id: string;
     Manager: string;

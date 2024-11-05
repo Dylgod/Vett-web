@@ -51,33 +51,37 @@ export async function load({ locals }) {
             }
 
             const { data: files } = await supa_client
-            .storage
-            .from('logos')
-            .list('clients/', {
-                search: `${companyData.id}.webp`
-            });
-    
-    
-        const clientImage = files && files.length > 0
-            ? (await (supa_client.storage
+                .storage
                 .from('logos')
-                .createSignedUrl(`clients/${companyData.id}.webp`, 604800)) // 3600 seconds = 1 hour
-            ) // 3600 seconds = 1 hour
-                .data?.signedUrl
-            : null;
+                .list('clients/', {
+                    search: `${companyData.id}.webp`
+                });
+
+
+            const clientImage = files && files.length > 0
+                ? (await (supa_client.storage
+                    .from('logos')
+                    .createSignedUrl(`clients/${companyData.id}.webp`, 604800)) // 3600 seconds = 1 hour
+                )
+                    .data?.signedUrl
+                : null;
+
+            let emails = JSON.stringify(order.emails)
+            let parsed_emails: [string, boolean][] = JSON.parse(emails)
+            console.log(parsed_emails)
 
             const task: Task = {
                 Company_id: companyData.id,
-                Company_name: companyData.company_name || '',  // Provide a default value if it can be null
+                Company_name: companyData.company_name || '',
                 Date: formatDate(order.created_at),
                 Manager_id: order.created_by,
-                Manager: userData.user.email as string,  // Provide a default value if it can be null
+                Manager: userData.user.email as string,
                 Order_id: order.id.toString(),
                 Role: order.role,
                 Candidates: order.candidates,
-                Emails: order.emails,
+                Emails: parsed_emails,
                 Onboarding: order.onboarding,
-                Skills: order.skills,  // Provide a default value if it can be null
+                Skills: order.skills,
                 Status: (order.status as "In-Progress" | "Pending" | "Completed") || "Pending",  // Provide a default value
                 Type: (order.checkpoint as "onboarding" | "review" | "create_takehome" | "tech_interview" | "update") || "review",  // Provide a default value
                 Logo: clientImage

@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
 
     export let numberOfCandidates: number;
-    export let emailInputs: string[] = Array(numberOfCandidates).fill('');  // Changed this line
+    export let emailInputs: string[] = Array(numberOfCandidates).fill('');
 
     let validationErrors: boolean[] = Array(numberOfCandidates).fill(false);
 

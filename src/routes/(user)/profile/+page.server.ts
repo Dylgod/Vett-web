@@ -91,10 +91,7 @@ export const actions = {
         const candidateEmails = formData.get("candidate_emails")?.toString() || "";
 
         let checkpoint: string = onboarding ? "onboarding" : "create_takehome";
-
-        // THIS IS PROBABLY WRONG
         
-
         const { data: client, error: clientError } = await supa_client
             .from('clients')
             .select("*")
@@ -168,7 +165,7 @@ export const actions = {
         const order_id = parseInt(formData.get("order_id")?.toString() || "")
 
         const skills: string[] = JSON.parse(skillsFormData);
-        const emails: string[] = JSON.parse(emailsFormData)
+        
         // check if num candidates has increased and if so, redirect to stripe
 
         if (candidates - candidates_before_edit > 0) {
@@ -230,7 +227,7 @@ export const actions = {
                         onboarding: onboarding,
                         skills: skills,
                         checkpoint: "update",
-                        emails: emails
+                        emails: emailsFormData
                     }
                 )
                 .eq("id", order_id)

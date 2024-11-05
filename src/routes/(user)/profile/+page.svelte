@@ -67,10 +67,11 @@
 		editProfile = true;
 	}
 
-	// JSON for form and non for edit functionality
 	function handleEmailsChange(event: CustomEvent<string[]>) {
 		candidateEmails = event.detail;
-		formemails = JSON.stringify(candidateEmails);
+		// Transform each email into a tuple with false
+		const emailTuples = candidateEmails.map((email) => [email, false]);
+		formemails = JSON.stringify(emailTuples);
 	}
 
 	function handleSkillsList(event: CustomEvent<string[]>) {
@@ -160,7 +161,7 @@
 			onboarding = order.onboarding;
 			skillsList = order.skills;
 			formskills = JSON.stringify(skillsList);
-			candidateEmails = order.emails
+			candidateEmails = order.emails ? JSON.parse(order.emails as string).map(([email]: [string, boolean]) => email) : [];
 			formemails = JSON.stringify(candidateEmails);
 
 			const ALLSKILLS: Skill[] = skillsList.map((skill) => {
@@ -422,7 +423,9 @@
 							<div
 								class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
 							>
-								<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{editing_row? 'Edit Role' : 'Add New Role'}</h3>
+								<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+									{editing_row ? 'Edit Role' : 'Add New Role'}
+								</h3>
 								<button
 									type="button"
 									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -811,17 +814,17 @@
 	/*  */
 
 	@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
+		0% {
+			opacity: 0;
+		}
+		5% {
+			opacity: 1;
+		}
+		95% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
 </style>
