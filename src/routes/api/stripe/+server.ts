@@ -17,10 +17,9 @@ export const POST = async ({ request }: RequestEvent) => {
                 case 'checkout.session.completed':
                     // We pass a 'client reference id' which is actually the user id from supabase, or null if they skipped the free trial
                     const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
-                    const { data: client, error: clienterror } = await supa_client.from('clients').select('*').eq('id', `${event.data.object.client_reference_id}`).single()
 
                     let skills: string[] = JSON.parse(event.data.object.metadata?.skills!)
-                    let emails: string[] = JSON.parse(event.data.object.metadata?.emails!)
+                    let emails: string = event.data.object.metadata?.emails!
 
                     let order_id: string | null = event.data.object.metadata?.order_id ?? null
                     let is_update: boolean = event.data.object.metadata?.update == "1" ? true : false

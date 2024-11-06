@@ -68,7 +68,6 @@ export async function load({ locals }) {
 
             let emails = JSON.stringify(order.emails)
             let parsed_emails: [string, boolean][] = JSON.parse(emails)
-            console.log(parsed_emails)
 
             const task: Task = {
                 Company_id: companyData.id,

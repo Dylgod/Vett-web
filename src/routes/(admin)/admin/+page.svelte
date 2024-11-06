@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AdminRow from '$lib/components/orders/admin_row.svelte';
+	import AdminSendEmails from '$lib/components/admin_send_emails/admin_send_emails.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -11,10 +12,8 @@
 
 	let role = '';
 	let skills: string[] = [];
-	let emails: [string, boolean][] = [
-		['crtkdt3@yahoo.com', false],
-		['dylanjtaylor3@gmail.com', false]
-	];
+	let emails: [string, boolean][];
+	let targeted_emails_for_mailing: string[];
 
 	let emailTemplate = '';
 
@@ -70,13 +69,14 @@
 		role = '';
 		skills = [];
 		colorIndex = 0;
+		activeTab = 0
+		targeted_emails_for_mailing = []
 	}
 
 	function showTaskModal(task: Task) {
 		role = task.Role;
 		skills = task.Skills;
 		emails = Array.isArray(task.Emails) ? task.Emails : JSON.parse(task.Emails);
-		console.log('emails after setting:', emails);
 
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 	}
@@ -297,12 +297,10 @@
 								</button>
 							</div>
 						{:else}
-							<div class="p-4">
-								{#each emails as [email, status]}
-									<p class="text-sm font-medium text-gray-900 dark:text-white">EMAIL: {email}</p>
-									<p class="text-sm font-medium text-gray-900 dark:text-white">STATUS: {status}</p>
-								{/each}
-							</div>
+						<AdminSendEmails 
+						myemails={emails}
+						bind:selected={targeted_emails_for_mailing}
+						/>
 						{/if}
 					</div>
 				</div>
