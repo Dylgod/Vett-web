@@ -161,7 +161,7 @@
 			onboarding = order.onboarding;
 			skillsList = order.skills;
 			formskills = JSON.stringify(skillsList);
-			candidateEmails = order.emails ? JSON.parse(order.emails as string).map(([email]: [string, boolean]) => email) : [];
+			candidateEmails = order.emails ? JSON.parse(order.emails as string).map(([email]: [string, boolean | 'fail']) => email) : [];
 			formemails = JSON.stringify(candidateEmails);
 
 			const ALLSKILLS: Skill[] = skillsList.map((skill) => {
@@ -210,7 +210,6 @@
 						candidateEmails.every((email) => isValidEmail(email))
 					: true;
 
-	// Add this reactive statement
 	$: if (currentStep === 2) {
 		colorIndex = 0;
 		const ALLSKILLS: Skill[] = skillsList.map((skill) => {

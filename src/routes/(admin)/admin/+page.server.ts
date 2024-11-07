@@ -70,7 +70,7 @@ export async function load({ locals }) {
                 : null;
 
             let emails = JSON.stringify(order.emails)
-            let parsed_emails: [string, boolean][] = JSON.parse(emails)
+            let parsed_emails: [string, boolean | "fail"][] = JSON.parse(emails)
 
             const task: Task = {
                 Company_id: companyData.id,
@@ -105,13 +105,16 @@ export const actions = {
             const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
             const page_formData = await request.formData()
 
+            const supabase_emails_column = page_formData.get('supabase_emails_column')?.toString() || '[]';
             const emailsAsString = page_formData.get('emails_as_string')?.toString() || '[]';
             const emailBody = page_formData.get('email_body')?.toString() || '';
             const company_name = page_formData.get('company_name')?.toString() || '';
             const order_id = page_formData.get('order_id')?.toString() || '';
             const DOMAIN = MAILGUN_DOMAIN || '';
             const FROM_EMAIL = 'Vett <noreply@vett.dev>';
-            let supabase_update_emails: Array<[string, boolean | "fail"]> = [];
+
+            // Parse existing emails from Supabase
+            const existingEmails: Array<[string, boolean | "fail"]> = JSON.parse(JSON.parse(supabase_emails_column || '[]'));
 
             // Mailgun Client
             const mailgun = new Mailgun(formData);
@@ -131,7 +134,6 @@ export const actions = {
 
             // Send emails to each recipient and track results
             const emailPromises = targetedEmails.map(async (email) => {
-
                 const messageData = {
                     from: FROM_EMAIL,
                     to: email,
@@ -142,11 +144,23 @@ export const actions = {
 
                 try {
                     await mg.messages.create(DOMAIN, messageData);
-                    supabase_update_emails.push([email, true]);
+                    // Find and update matching email in array
+                    for (let i = 0; i < existingEmails.length; i++) {
+                        if (existingEmails[i][0] === email) {
+                            existingEmails[i][1] = false;
+                            break;
+                        }
+                    }
                     return { email, success: true };
                 } catch (error) {
                     console.error(`Failed to send email to ${email}:`, error);
-                    supabase_update_emails.push([email, "fail"]);
+                    // Find and update matching email in array
+                    for (let i = 0; i < existingEmails.length; i++) {
+                        if (existingEmails[i][0] === email) {
+                            existingEmails[i][1] = "fail";
+                            break;
+                        }
+                    }
                     return { email, success: false, error };
                 }
             });
@@ -154,17 +168,13 @@ export const actions = {
             // Wait for all emails to be sent
             await Promise.all(emailPromises);
 
-            // Convert the array to stringified JSON for Supabase
-            const stringified_emails = JSON.stringify(supabase_update_emails);
-            console.log(stringified_emails)
-
-            // Update Supabase
+            // Update Supabase with modified existing emails array
             const { data, error } = await supa_client
                 .from('orders')
                 .update({
                     status: "In-Progress",
                     checkpoint: "tech_interview",
-                    emails: stringified_emails
+                    emails: JSON.stringify(existingEmails)
                 })
                 .eq("id", order_id)
                 .select();

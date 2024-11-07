@@ -13,7 +13,8 @@
 
 	let role = '';
 	let skills: string[] = [];
-	let emails: [string, boolean][];
+	let emails: [string, boolean | 'fail'][];
+	let supabase_emails_column: [string, boolean | 'fail'][];
 	let targeted_emails_for_mailing: string[];
 	let company_name: string = '';
 	let order_id: string;
@@ -77,7 +78,7 @@
 		targeted_emails_for_mailing = [];
 		company_name = '';
 		order_id = '';
-		emailTemplate = ''
+		emailTemplate = '';
 	}
 
 	function showTaskModal(task: Task) {
@@ -86,6 +87,7 @@
 		emails = Array.isArray(task.Emails) ? task.Emails : JSON.parse(task.Emails);
 		company_name = task.Company_name;
 		order_id = task.Order_id;
+		supabase_emails_column = task.Emails;
 
 		emailTemplate = `Greetings,
 
@@ -323,6 +325,11 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								<input type="hidden" name="email_body" value={emailTemplate} />
 								<input type="hidden" name="order_id" value={order_id} />
 								<input type="hidden" name="company_name" value={company_name} />
+								<input
+									type="hidden"
+									name="supabase_emails_column"
+									value={JSON.stringify(supabase_emails_column)}
+								/>
 								<AdminSendEmails myemails={emails} bind:selected={targeted_emails_for_mailing} />
 							</form>
 						{:else}

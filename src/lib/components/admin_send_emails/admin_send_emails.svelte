@@ -1,6 +1,6 @@
 <script lang="ts">
 	// Props
-	export let myemails: [string, boolean][];
+	export let myemails: [string, boolean | 'fail'][];
 	export let selected: string[] = [];
 
 	// Status badge configurations
@@ -31,7 +31,6 @@
 		}
 		console.log(selected);
 	}
-	console.log('myemails', myemails);
 
 	function handleSelectAll() {
 		if (selected.length === myemails.length) {
@@ -76,7 +75,7 @@
 
 				<!-- Status Badge -->
 				<div class="col-span-3">
-					{#if status}
+					{#if status === true}
 						<span
 							class="inline-flex items-center gap-x-1.5 rounded-md {statusConfigs.Sent
 								.bgColor} px-2 py-1 text-xs font-medium {statusConfigs.Sent.textColor}"
@@ -90,7 +89,21 @@
 							</svg>
 							Sent
 						</span>
-					{:else}
+					{:else if status === 'fail'}
+						<span
+							class="inline-flex items-center gap-x-1.5 rounded-md {statusConfigs.Failed
+								.bgColor} px-2 py-1 text-xs font-medium {statusConfigs.Failed.textColor}"
+						>
+							<svg
+								class="h-1.5 w-1.5 {statusConfigs.Failed.fillColor}"
+								viewBox="0 0 6 6"
+								aria-hidden="true"
+							>
+								<circle cx="3" cy="3" r="3" />
+							</svg>
+							Failed
+						</span>
+					{:else if status === false}
 						<span
 							class="inline-flex items-center gap-x-1.5 rounded-md {statusConfigs['Not Sent']
 								.bgColor} px-2 py-1 text-xs font-medium {statusConfigs['Not Sent'].textColor}"
@@ -103,6 +116,20 @@
 								<circle cx="3" cy="3" r="3" />
 							</svg>
 							Not Sent
+						</span>
+					{:else}
+						<span
+							class="inline-flex items-center gap-x-1.5 rounded-md {statusConfigs.Failed
+								.bgColor} px-2 py-1 text-xs font-medium {statusConfigs.Failed.textColor}"
+						>
+							<svg
+								class="h-1.5 w-1.5 {statusConfigs.Failed.fillColor}"
+								viewBox="0 0 6 6"
+								aria-hidden="true"
+							>
+								<circle cx="3" cy="3" r="3" />
+							</svg>
+							BACKEND ERROR
 						</span>
 					{/if}
 				</div>

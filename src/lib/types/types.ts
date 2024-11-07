@@ -3,7 +3,7 @@ type Task = {
     Company_id: number;
     Company_name: string;
     Date: string;
-    Emails: [string, boolean][];
+    Emails: [string, boolean | 'fail'][];
     Logo: string | null | undefined;
     Manager_id: string;
     Manager: string;
