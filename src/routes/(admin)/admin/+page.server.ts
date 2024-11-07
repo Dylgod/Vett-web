@@ -143,7 +143,7 @@ export const actions = {
                 };
 
                 try {
-                    // await mg.messages.create(DOMAIN, messageData);
+                    await mg.messages.create(DOMAIN, messageData);
                     // Find and update matching email in array
                     for (let i = 0; i < existingEmails.length; i++) {
                         if (existingEmails[i][0] === email) {
