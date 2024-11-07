@@ -3,6 +3,9 @@ import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit';
+import { MAILGUN_API_KEY, MAILGUN_DOMAIN } from '$env/static/private';
+import Mailgun from 'mailgun.js';
+import formData from 'form-data';
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -93,5 +96,98 @@ export async function load({ locals }) {
             user: response.data.user,
             tasks
         };
+    }
+}
+
+export const actions = {
+    sendCandidateEmails: async ({ request }) => {
+        try {
+            const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
+            const page_formData = await request.formData()
+
+            const emailsAsString = page_formData.get('emails_as_string')?.toString() || '[]';
+            const emailBody = page_formData.get('email_body')?.toString() || '';
+            const company_name = page_formData.get('company_name')?.toString() || '';
+            const order_id = page_formData.get('order_id')?.toString() || '';
+            const DOMAIN = MAILGUN_DOMAIN || '';
+            const FROM_EMAIL = 'Vett <noreply@vett.dev>';
+            let supabase_update_emails: Array<[string, boolean | "fail"]> = [];
+
+            // Mailgun Client
+            const mailgun = new Mailgun(formData);
+            const mg = mailgun.client({
+                username: 'api',
+                key: MAILGUN_API_KEY || ''
+            });
+
+            const targetedEmails: string[] = JSON.parse(emailsAsString);
+
+            if (!targetedEmails.length) {
+                return {
+                    success: false,
+                    error: 'No email addresses provided'
+                };
+            }
+
+            // Send emails to each recipient and track results
+            const emailPromises = targetedEmails.map(async (email) => {
+
+                const messageData = {
+                    from: FROM_EMAIL,
+                    to: email,
+                    subject: `Schedule your technical interview - ${company_name}`,
+                    html: emailBody.replace(/\n/g, '<br>'),
+                    text: emailBody
+                };
+
+                try {
+                    await mg.messages.create(DOMAIN, messageData);
+                    supabase_update_emails.push([email, true]);
+                    return { email, success: true };
+                } catch (error) {
+                    console.error(`Failed to send email to ${email}:`, error);
+                    supabase_update_emails.push([email, "fail"]);
+                    return { email, success: false, error };
+                }
+            });
+
+            // Wait for all emails to be sent
+            await Promise.all(emailPromises);
+
+            // Convert the array to stringified JSON for Supabase
+            const stringified_emails = JSON.stringify(supabase_update_emails);
+            console.log(stringified_emails)
+
+            // Update Supabase
+            const { data, error } = await supa_client
+                .from('orders')
+                .update({
+                    status: "In-Progress",
+                    checkpoint: "tech_interview",
+                    emails: stringified_emails
+                })
+                .eq("id", order_id)
+                .select();
+
+            if (error) {
+                console.error('Error updating data:', error);
+                return {
+                    success: false,
+                    error: 'Failed to update database'
+                };
+            }
+
+            return {
+                success: true,
+                updatedData: data
+            };
+
+        } catch (error) {
+            console.error('Email sending failed:', error);
+            return {
+                success: false,
+                error: 'Failed to send emails'
+            };
+        }
     }
 }

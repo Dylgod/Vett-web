@@ -113,15 +113,16 @@
 
 <div class="flex gap-10 mt-6 justify-between">
 	<button
+		type="button"
 		on:click={handleSelectAll}
 		class="items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
 	>
 		{selectAllButtonText}
 	</button>
 	<button
-		on:click={()=> alert("COOL!")}
+		type="submit"
 		class=" px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
 	>
-		{selectAllButtonText}
+		Send Emails
 	</button>
 </div>

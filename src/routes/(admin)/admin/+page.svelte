@@ -2,6 +2,7 @@
 	import AdminRow from '$lib/components/orders/admin_row.svelte';
 	import AdminSendEmails from '$lib/components/admin_send_emails/admin_send_emails.svelte';
 	import type { PageData } from './$types';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
 	let tasks = data.tasks as Task[];
@@ -14,8 +15,10 @@
 	let skills: string[] = [];
 	let emails: [string, boolean][];
 	let targeted_emails_for_mailing: string[];
+	let company_name: string = '';
+	let order_id: string;
 
-	let emailTemplate = '';
+	let emailTemplate: string;
 
 	let colorIndex = 0;
 	const bg_colors: string[] = [
@@ -62,6 +65,7 @@
 
 	function saveTemplate() {
 		showNotification_alert();
+		console.log(emailTemplate);
 	}
 
 	function resetOrderModal() {
@@ -69,14 +73,36 @@
 		role = '';
 		skills = [];
 		colorIndex = 0;
-		activeTab = 0
-		targeted_emails_for_mailing = []
+		activeTab = 0;
+		targeted_emails_for_mailing = [];
+		company_name = '';
+		order_id = '';
+		emailTemplate = ''
 	}
 
 	function showTaskModal(task: Task) {
 		role = task.Role;
 		skills = task.Skills;
 		emails = Array.isArray(task.Emails) ? task.Emails : JSON.parse(task.Emails);
+		company_name = task.Company_name;
+		order_id = task.Order_id;
+
+		emailTemplate = `Greetings,
+
+${company_name} has requested that you participate in a technical evaluation as part of the interview process.
+
+Our technical evaluation process is two steps:
+
+1. A small project to demonstrate your skills. The project is not timed, and you may complete it at whatever pace is most convenient for you. We evaluate projects based on their functionality and readability.
+
+2. After you have submitted your project we will have a video call to discuss the project and your experience. We never do trivia or leetcode style questions.
+
+Projects normally take between 2-4 hours to complete. The technical interview takes approximately one hour.
+
+The outline for the project is:
+<...steps go here...>
+
+You can schedule your technical interview with ${company_name} by clicking the calendar link below.`;
 
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 	}
@@ -288,6 +314,18 @@
 								</div>
 							</div>
 						{:else if activeTab === 1}
+							<form method="POST" action="?/sendCandidateEmails" use:enhance>
+								<input
+									type="hidden"
+									name="emails_as_string"
+									value={JSON.stringify(targeted_emails_for_mailing)}
+								/>
+								<input type="hidden" name="email_body" value={emailTemplate} />
+								<input type="hidden" name="order_id" value={order_id} />
+								<input type="hidden" name="company_name" value={company_name} />
+								<AdminSendEmails myemails={emails} bind:selected={targeted_emails_for_mailing} />
+							</form>
+						{:else}
 							<div class="p-4">
 								<button
 									on:click={saveTemplate}
@@ -296,11 +334,6 @@
 									Show Template
 								</button>
 							</div>
-						{:else}
-						<AdminSendEmails 
-						myemails={emails}
-						bind:selected={targeted_emails_for_mailing}
-						/>
 						{/if}
 					</div>
 				</div>
