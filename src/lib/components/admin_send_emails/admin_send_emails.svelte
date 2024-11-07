@@ -1,9 +1,16 @@
 <script lang="ts">
-	// Props
+	import { emailStore } from '$lib/stores';
+
 	export let myemails: [string, boolean | 'fail'][];
 	export let selected: string[] = [];
 
-	// Status badge configurations
+	$: {
+		emailStore.set({
+			emails: myemails,
+			loading: false
+		});
+	}
+
 	const statusConfigs = {
 		Sent: {
 			bgColor: 'bg-green-100',
@@ -22,58 +29,56 @@
 		}
 	};
 
-	// Handle checkbox changes
 	function handleCheckboxChange(email: string, isChecked: boolean) {
 		if (isChecked) {
 			selected = [...selected, email];
 		} else {
 			selected = selected.filter((e) => e !== email);
 		}
-		console.log(selected);
 	}
 
 	function handleSelectAll() {
-		if (selected.length === myemails.length) {
-			// If all are selected, deselect all
+		if (selected.length === $emailStore.emails.length) {
 			selected = [];
 		} else {
-			// Otherwise, select all
-			selected = myemails.map(([email]) => email);
+			selected = $emailStore.emails.map(([email]) => email);
 		}
 	}
 
-	// Compute button text based on selection state
-	$: selectAllButtonText = selected.length === myemails.length ? 'Deselect All' : 'Select All';
+	$: selectAllButtonText =
+		selected.length === $emailStore.emails.length ? 'Deselect All' : 'Select All';
 </script>
 
 <div class="w-full border rounded-lg">
-	<!-- Header -->
+	{#if $emailStore.error}
+		<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+			{$emailStore.error}
+		</div>
+	{/if}
+
 	<div class="grid grid-cols-12 gap-4 p-4 font-medium border-b bg-gray-300">
 		<div class="col-span-1"></div>
 		<div class="col-span-8">Candidate</div>
 		<div class="col-span-3">Status</div>
 	</div>
 
-	<!-- Scrollable content -->
 	<div class="h-64 overflow-y-auto">
-		{#each myemails as [email, status]}
+		{#each $emailStore.emails as [email, status]}
 			<div class="grid grid-cols-12 gap-4 p-4 border-b last:border-b-0">
-				<!-- Checkbox -->
 				<div class="col-span-1 flex items-center">
 					<input
 						type="checkbox"
 						checked={selected.includes(email)}
 						on:change={(e) => handleCheckboxChange(email, e.currentTarget.checked)}
 						class="h-4 w-4 rounded border-gray-300"
+						disabled={$emailStore.loading || status === true}
 					/>
 				</div>
 
-				<!-- Email -->
 				<div class="col-span-8 flex items-center text-white">
 					{email}
 				</div>
 
-				<!-- Status Badge -->
 				<div class="col-span-3">
 					{#if status === true}
 						<span
@@ -103,7 +108,7 @@
 							</svg>
 							Failed
 						</span>
-					{:else if status === false}
+					{:else}
 						<span
 							class="inline-flex items-center gap-x-1.5 rounded-md {statusConfigs['Not Sent']
 								.bgColor} px-2 py-1 text-xs font-medium {statusConfigs['Not Sent'].textColor}"
@@ -117,20 +122,6 @@
 							</svg>
 							Not Sent
 						</span>
-					{:else}
-						<span
-							class="inline-flex items-center gap-x-1.5 rounded-md {statusConfigs.Failed
-								.bgColor} px-2 py-1 text-xs font-medium {statusConfigs.Failed.textColor}"
-						>
-							<svg
-								class="h-1.5 w-1.5 {statusConfigs.Failed.fillColor}"
-								viewBox="0 0 6 6"
-								aria-hidden="true"
-							>
-								<circle cx="3" cy="3" r="3" />
-							</svg>
-							BACKEND ERROR
-						</span>
 					{/if}
 				</div>
 			</div>
@@ -143,13 +134,15 @@
 		type="button"
 		on:click={handleSelectAll}
 		class="items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+		disabled={$emailStore.loading}
 	>
 		{selectAllButtonText}
 	</button>
 	<button
 		type="submit"
-		class=" px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+		class="px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+		disabled={$emailStore.loading || selected.length === 0}
 	>
-		Send Emails
+		{$emailStore.loading ? 'Sending...' : 'Send Emails'}
 	</button>
 </div>

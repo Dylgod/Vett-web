@@ -3,9 +3,21 @@
 	import AdminSendEmails from '$lib/components/admin_send_emails/admin_send_emails.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
+	import type { ActionResult } from '@sveltejs/kit';
+	import { emailStore } from '$lib/stores';
 
 	export let data: PageData;
 	let tasks = data.tasks as Task[];
+
+	interface SendEmailsActionResult {
+		success: boolean;
+		error?: string;
+		updatedData?: {
+			status: string;
+			checkpoint: string;
+			emails: [string, boolean | 'fail'][];
+		}[];
+	}
 
 	let activeTab = 0;
 	let adminorder_modal_invisible = false;
@@ -15,12 +27,13 @@
 	let skills: string[] = [];
 	let emails: [string, boolean | 'fail'][];
 	let supabase_emails_column: [string, boolean | 'fail'][];
-	let targeted_emails_for_mailing: string[];
+	let targeted_emails_for_mailing: string[] = [];
 	let company_name: string = '';
 	let order_id: string;
 
 	let emailTemplate: string;
 
+	// Your existing color management code
 	let colorIndex = 0;
 	const bg_colors: string[] = [
 		'bg-red-50',
@@ -47,6 +60,7 @@
 		'ring-yellow-400'
 	];
 
+	// Your existing functions
 	function getNextColor(): string[] {
 		const bg = bg_colors[colorIndex];
 		const text = text_colors[colorIndex];
@@ -57,8 +71,6 @@
 
 	function showNotification_alert() {
 		showNotification = true;
-
-		// Hide notification after 3 seconds
 		setTimeout(() => {
 			showNotification = false;
 		}, 3000);
@@ -79,6 +91,7 @@
 		company_name = '';
 		order_id = '';
 		emailTemplate = '';
+		emailStore.set({ emails: [], loading: false });
 	}
 
 	function showTaskModal(task: Task) {
@@ -108,6 +121,41 @@ You can schedule your technical interview with ${company_name} by clicking the c
 
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 	}
+
+	const handleSubmit = () => {
+		return async ({ result }: { result: ActionResult }) => {
+			emailStore.update((store) => ({ ...store, loading: true, error: undefined }));
+
+			const actionResult = result as ActionResult & {
+				data?: SendEmailsActionResult;
+			};
+
+			if (actionResult.type === 'success' && actionResult.data?.success) {
+				const updatedOrder = actionResult.data.updatedData?.[0];
+				if (updatedOrder) {
+					const updatedEmails = Array.isArray(updatedOrder.emails)
+						? updatedOrder.emails
+						: JSON.parse(updatedOrder.emails);
+
+					emailStore.update((store) => ({
+						...store,
+						emails: updatedEmails,
+						loading: false
+					}));
+
+					emails = updatedEmails;
+					supabase_emails_column = updatedEmails;
+					targeted_emails_for_mailing = [];
+				}
+			} else {
+				emailStore.update((store) => ({
+					...store,
+					loading: false,
+					error: actionResult.data?.error || 'Failed to send emails'
+				}));
+			}
+		};
+	};
 </script>
 
 {#if showNotification}
@@ -316,7 +364,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								</div>
 							</div>
 						{:else if activeTab === 1}
-							<form method="POST" action="?/sendCandidateEmails" use:enhance>
+							<form method="POST" action="?/sendCandidateEmails" use:enhance={handleSubmit}>
 								<input
 									type="hidden"
 									name="emails_as_string"
