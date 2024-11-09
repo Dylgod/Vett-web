@@ -212,6 +212,7 @@ export const actions = {
             const DOMAIN = MAILGUN_DOMAIN || '';
             const FROM_EMAIL = 'Vett <noreply@vett.dev>';
             let emailExists: boolean = false
+            
             // Parse existing emails from Supabase
             const existingEmails: Array<[string, boolean | "fail"]> = JSON.parse(JSON.parse(supabase_emails_column || '[]'));
 
@@ -229,22 +230,22 @@ export const actions = {
                 };
             }
 
-            // const mailgun = new Mailgun(formData);
-            // const mg = mailgun.client({
-            //     username: 'api',
-            //     key: MAILGUN_API_KEY || ''
-            // });
+            const mailgun = new Mailgun(formData);
+            const mg = mailgun.client({
+                username: 'api',
+                key: MAILGUN_API_KEY || ''
+            });
 
-            // const messageData = {
-            //     from: FROM_EMAIL,
-            //     to: email_address,
-            //     subject: `Schedule your technical interview - ${company_name}`,
-            //     html: emailBody.replace(/\n/g, '<br>'),
-            //     text: emailBody
-            // };
+            const messageData = {
+                from: FROM_EMAIL,
+                to: email_address,
+                subject: `Schedule your technical interview - ${company_name}`,
+                html: emailBody.replace(/\n/g, '<br>'),
+                text: emailBody
+            };
 
             try {
-                // await mg.messages.create(DOMAIN, messageData);
+                await mg.messages.create(DOMAIN, messageData);
 
                 // Update the status in existingEmails array
                 for (let i = 0; i < existingEmails.length; i++) {
