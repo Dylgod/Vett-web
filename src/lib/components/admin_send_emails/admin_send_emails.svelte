@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { emailStore } from '$lib/stores';
 
 	export let myemails: [string, boolean | 'fail'][];
 	export let selected: string[] = [];
+
+	export let resend_email_body: string
+	export let resend_email_company_name: string
+	export let resend_supabase_emails_column: string
+	export let resend_order_id: string
+	let resend_email_address: string;
 
 	$: {
 		emailStore.set({
@@ -129,7 +136,31 @@
 	</div>
 </div>
 
-<div class="flex gap-10 mt-6 justify-between">
+<div class="flex mb-10 mt-4 gap-4 relative">
+	<form method="POST" action="?/resendEmail" class="flex" use:enhance>
+		<input type="hidden" name="resend_order_id" value={resend_order_id} />
+		<input type="hidden" name="resend_email_body" value={resend_email_body} />
+		<input type="hidden" name="resend_email_company_name" value={resend_email_company_name} />
+		<input type="hidden" name="resend_supabase_emails_column" value={resend_supabase_emails_column} />
+		<input
+			type="text"
+			bind:value={resend_email_address}
+			name="resend_email_address"
+			id="resend_email_address"
+			placeholder="Enter Email to resend.."
+			class="border rounded-l-lg bg-gray-50 border-gray-300 text-gray-900 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm focus:ring-primary-600 focus:border-primary-600 block dark:focus:ring-primary-500 dark:focus:border-primary-500 w-60"
+			spellcheck="true"
+		/>
+		<button
+			type="submit"
+			class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
+		>
+			Resend
+		</button>
+	</form>
+</div>
+
+<div class="flex gap-10 mt-6 mb-2 justify-between">
 	<button
 		type="button"
 		on:click={handleSelectAll}

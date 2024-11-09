@@ -199,5 +199,116 @@ export const actions = {
                 error: 'Failed to send emails'
             };
         }
+    },
+    resendEmail: async ({ request }) => {
+        try {
+            const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
+            const page_formData = await request.formData()
+            const supabase_emails_column = page_formData.get('resend_supabase_emails_column')?.toString() || '[]';
+            const email_address = page_formData.get('resend_email_address')?.toString() || '';
+            const emailBody = page_formData.get('resend_email_body')?.toString() || '';
+            const company_name = page_formData.get('resend_email_company_name')?.toString() || '';
+            const order_id = page_formData.get('resend_order_id')?.toString() || '';
+            const DOMAIN = MAILGUN_DOMAIN || '';
+            const FROM_EMAIL = 'Vett <noreply@vett.dev>';
+            let emailExists: boolean = false
+            // Parse existing emails from Supabase
+            const existingEmails: Array<[string, boolean | "fail"]> = JSON.parse(JSON.parse(supabase_emails_column || '[]'));
+
+            // Check if email exists in the column
+            if (Array.isArray(existingEmails)) {
+                emailExists = existingEmails.some(([email]) => email === email_address);
+            }
+            
+
+            if (!emailExists) {
+                console.log("Email not present in column");
+                return {
+                    success: false,
+                    error: 'Email address not found in database'
+                };
+            }
+
+            // const mailgun = new Mailgun(formData);
+            // const mg = mailgun.client({
+            //     username: 'api',
+            //     key: MAILGUN_API_KEY || ''
+            // });
+
+            // const messageData = {
+            //     from: FROM_EMAIL,
+            //     to: email_address,
+            //     subject: `Schedule your technical interview - ${company_name}`,
+            //     html: emailBody.replace(/\n/g, '<br>'),
+            //     text: emailBody
+            // };
+
+            try {
+                // await mg.messages.create(DOMAIN, messageData);
+
+                // Update the status in existingEmails array
+                for (let i = 0; i < existingEmails.length; i++) {
+                    if (existingEmails[i][0] === email_address) {
+                        existingEmails[i][1] = true;
+                        break;
+                    }
+                }
+
+
+                // Update Supabase with modified existing emails array
+                const { data, error } = await supa_client
+                    .from('orders')
+                    .update({
+                        emails: JSON.stringify(existingEmails)
+                    })
+                    .eq("id", order_id)
+                    .select();
+
+                if (error) {
+                    console.error('Error updating data:', error);
+                    return {
+                        success: false,
+                        error: 'Failed to update database'
+                    };
+                }
+
+                return {
+                    success: true,
+                    updatedData: data
+                };
+
+            } catch (error) {
+                console.error(`Failed to send email to ${email_address}:`, error);
+
+                // Update the status to "fail" in existingEmails array
+                for (let i = 0; i < existingEmails.length; i++) {
+                    if (existingEmails[i][0] === email_address) {
+                        existingEmails[i][1] = "fail";
+                        break;
+                    }
+                }
+
+                // Update Supabase with failed status
+                const { error: supaError } = await supa_client
+                    .from('orders')
+                    .update({
+                        emails: JSON.stringify(existingEmails)
+                    })
+                    .eq("id", order_id)
+                    .select();
+
+                return {
+                    success: false,
+                    error: 'Failed to send email'
+                };
+            }
+
+        } catch (error) {
+            console.error('Email sending failed:', error);
+            return {
+                success: false,
+                error: 'Failed to resend email'
+            };
+        }
     }
 }

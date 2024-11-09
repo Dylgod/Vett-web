@@ -378,7 +378,14 @@ You can schedule your technical interview with ${company_name} by clicking the c
 									name="supabase_emails_column"
 									value={JSON.stringify(supabase_emails_column)}
 								/>
-								<AdminSendEmails myemails={emails} bind:selected={targeted_emails_for_mailing} />
+								<AdminSendEmails
+									myemails={emails}
+									bind:selected={targeted_emails_for_mailing}
+									resend_email_body={emailTemplate}
+									resend_email_company_name={company_name}
+									resend_supabase_emails_column={JSON.stringify(supabase_emails_column)}
+									resend_order_id={order_id}
+								/>
 							</form>
 						{:else}
 							<div class="p-4">
