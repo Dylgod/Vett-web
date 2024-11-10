@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AdminRow from '$lib/components/orders/admin_row.svelte';
 	import AdminSendEmails from '$lib/components/admin_send_emails/admin_send_emails.svelte';
+	import AdminSendResults from '$lib/components/admin_send_results/admin_send_results.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -26,6 +27,7 @@
 	let role = '';
 	let skills: string[] = [];
 	let emails: [string, boolean | 'fail'][];
+	let result_page_emails: string[]
 	let supabase_emails_column: [string, boolean | 'fail'][];
 	let targeted_emails_for_mailing: string[] = [];
 	let company_name: string = '';
@@ -98,6 +100,7 @@
 		role = task.Role;
 		skills = task.Skills;
 		emails = Array.isArray(task.Emails) ? task.Emails : JSON.parse(task.Emails);
+		result_page_emails = emails.map((email) => email[0])
 		company_name = task.Company_name;
 		order_id = task.Order_id;
 		supabase_emails_column = task.Emails;
@@ -388,14 +391,9 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								/>
 							</form>
 						{:else}
-							<div class="p-4">
-								<button
-									on:click={saveTemplate}
-									class="flex items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
-								>
-									Show Template
-								</button>
-							</div>
+						<AdminSendResults 
+						emails={result_page_emails}
+						/>
 						{/if}
 					</div>
 				</div>
