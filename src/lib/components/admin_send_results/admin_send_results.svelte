@@ -17,7 +17,11 @@
 	let noteText: string = '';
 	let showNoteModal: boolean = false;
 
-	const resultOptions = [['Pass', 'bg-green-500'], ['Fail', 'bg-red-500'], ['No-show', 'bg-gruvboxDark-yellow2']];
+	const resultOptions = [
+		['Pass', 'text-green-500'],
+		['Fail', 'text-red-600'],
+		['No-show', 'text-gruvboxDark-yellow2']
+	];
 
 	function handleResultChange(email: string, newResult: string) {
 		evaluations = evaluations.map((evaluation) =>
@@ -73,12 +77,19 @@
 							<select
 								bind:value={evaluation.result}
 								on:change={(e) => handleResultChange(evaluation.email, e.currentTarget.value)}
-								class="w-full rounded-md border-gray-300 text-white dark:bg-gray-700 py-1.5 pl-3 pr-8 text-sm focus:border-blue-500 focus:ring-blue-500"
+								class="w-full rounded-md border-gray-300 text-white dark:bg-gray-700 py-1.5 pl-3 pr-8 text-sm focus:border-blue-500 focus:ring-blue-500 {evaluation.result ===
+								'Pass'
+									? 'text-green-500'
+									: evaluation.result === 'Fail'
+										? 'text-red-600'
+										: evaluation.result === 'No-show'
+											? 'text-gruvboxDark-yellow2'
+											: ''}"
 							>
-								<option value="">Select result...</option>
+								<option value="" class="text-white">Select result...</option>
 								{#each resultOptions as option}
-									<option value={option}>
-										{option}
+									<option value={option[0]} class={option[1]}>
+										{option[0]}
 									</option>
 								{/each}
 							</select>
@@ -90,11 +101,23 @@
 	</div>
 
 	{#if showNoteModal}
-		<div class="absolute top-0 left-[calc(100%+1rem)] w-64 bg-white rounded-lg shadow-lg border">
-			<div class="p-4">
+		<div
+			class="absolute top-0 left-[calc(100%+1rem)] w-64 dark:bg-gray-700 rounded-lg shadow-lg border"
+		>
+			<div class="flex justify-end">
+				<button
+					type="button"
+					class="mr-2 mt-1 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+					on:click={() => (showNoteModal = !showNoteModal)}
+				>
+					✕
+					<span class="sr-only">Close modal</span>
+				</button>
+			</div>
+			<div class="pt-1 pl-4 pr-4 pb-4">
 				<textarea
 					bind:value={noteText}
-					class="w-full h-48 p-2 border rounded resize-none"
+					class="w-full h-48 p-2 border rounded resize-none bg-gray-50 border-gray-300 text-gray-900 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500"
 					placeholder="Enter note..."
 				/>
 				<div class="flex justify-end mt-4">
