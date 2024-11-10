@@ -27,7 +27,7 @@
 	let role = '';
 	let skills: string[] = [];
 	let emails: [string, boolean | 'fail'][];
-	let result_page_emails: string[]
+	let result_page_emails: string[];
 	let supabase_emails_column: [string, boolean | 'fail'][];
 	let targeted_emails_for_mailing: string[] = [];
 	let company_name: string = '';
@@ -100,7 +100,7 @@
 		role = task.Role;
 		skills = task.Skills;
 		emails = Array.isArray(task.Emails) ? task.Emails : JSON.parse(task.Emails);
-		result_page_emails = emails.map((email) => email[0])
+		result_page_emails = emails.map((email) => email[0]);
 		company_name = task.Company_name;
 		order_id = task.Order_id;
 		supabase_emails_column = task.Emails;
@@ -309,13 +309,13 @@ You can schedule your technical interview with ${company_name} by clicking the c
 					<div class="px-6 py-4 border-b border-gray-200">
 						<div class="flex justify-between">
 							<button
-								class="text-sm font-medium {activeTab === 0 ? 'text-blue-500' : 'text-gray-300'}"
+								class="text-sm font-medium {activeTab === 0 ? 'text-blue-500' : 'text-gray-300 hover:text-blue-300'}"
 								on:click={() => (activeTab = 0)}
 							>
 								Create Takehome
 							</button>
 							<button
-								class="text-sm font-medium {activeTab === 1 ? 'text-blue-600' : 'text-gray-300'}"
+								class="text-sm font-medium {activeTab === 1 ? 'text-blue-500' : 'text-gray-300 hover:text-blue-300'}"
 								on:click={() => {
 									activeTab = 1;
 									colorIndex = 0;
@@ -324,7 +324,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								Send Take Home
 							</button>
 							<button
-								class="text-sm font-medium {activeTab === 2 ? 'text-blue-600' : 'text-gray-300'}"
+								class="text-sm font-medium {activeTab === 2 ? 'text-blue-500' : 'text-gray-300 hover:text-blue-300'}"
 								on:click={() => {
 									activeTab = 2;
 									colorIndex = 0;
@@ -391,9 +391,10 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								/>
 							</form>
 						{:else}
-						<AdminSendResults 
-						emails={result_page_emails}
-						/>
+						<form method="POST" action="?/finalizeResults" use:enhance>
+							<input type="hidden" name="result_order_id" value={order_id} />
+							<AdminSendResults emails={result_page_emails} />
+						</form>
 						{/if}
 					</div>
 				</div>

@@ -36,12 +36,6 @@
 		noteText = '';
 		showNoteModal = !showNoteModal;
 	}
-
-	function sendResults() {
-		for (let i = 0; i < evaluations.length; i++) {
-			console.log(evaluations[i]);
-		}
-	}
 </script>
 
 <div class="relative">
@@ -57,6 +51,7 @@
 				<div class="grid grid-cols-12 gap-4 p-4 border-b last:border-b-0">
 					<div class="col-span-1 flex items-center">
 						<button
+							type="button"
 							on:click={() => {
 								activeNoteIndex = index;
 								noteText = evaluation.note || '';
@@ -122,6 +117,7 @@
 				/>
 				<div class="flex justify-end mt-4">
 					<button
+						type="button"
 						on:click={() => handleSaveNote(evaluations[activeNoteIndex].email)}
 						class="px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800"
 					>
@@ -133,10 +129,10 @@
 	{/if}
 
 	<div class="flex justify-end mt-6">
+		<input type="hidden" name="evaluations" id="evaluations" value={JSON.stringify(evaluations)} />
 		<button
-			type="button"
+			type="submit"
 			disabled={evaluations.some((evaluation) => evaluation.result === '')}
-			on:click={() => sendResults()}
 			class="px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
 		>
 			Finalize Results

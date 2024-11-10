@@ -212,7 +212,7 @@ export const actions = {
             const DOMAIN = MAILGUN_DOMAIN || '';
             const FROM_EMAIL = 'Vett <noreply@vett.dev>';
             let emailExists: boolean = false
-            
+
             // Parse existing emails from Supabase
             const existingEmails: Array<[string, boolean | "fail"]> = JSON.parse(JSON.parse(supabase_emails_column || '[]'));
 
@@ -220,7 +220,7 @@ export const actions = {
             if (Array.isArray(existingEmails)) {
                 emailExists = existingEmails.some(([email]) => email === email_address);
             }
-            
+
 
             if (!emailExists) {
                 console.log("Email not present in column");
@@ -310,6 +310,27 @@ export const actions = {
                 success: false,
                 error: 'Failed to resend email'
             };
+        }
+    },
+    finalizeResults: async ({ request }) => {
+        try {
+            const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
+            const page_formData = await request.formData()
+            const order_id = page_formData.get('result_order_id')?.toString() || '';
+            const evaluations = page_formData.get('evaluations')?.toString() || '';
+            const DOMAIN = MAILGUN_DOMAIN || '';
+            const FROM_EMAIL = 'Vett <noreply@vett.dev>';
+            let emailExists: boolean = false
+
+            if (!evaluations || typeof evaluations !== 'string') {
+                return { success: false, error: 'No evaluations data received' };
+            }
+
+            const evals: Evaluation[] = JSON.parse(evaluations);
+
+
+        } catch (error) {
+            console.log('Failed to Finalize Results', error)
         }
     }
 }

@@ -14,3 +14,9 @@ type Task = {
     Status: "In-Progress" | "Pending" | "Completed"
     Type: "onboarding" | "review" | "create_takehome" | "tech_interview" | "update";
 }
+
+interface Evaluation {
+    email: string;
+    result: string;
+    note: string | null | undefined;
+}
