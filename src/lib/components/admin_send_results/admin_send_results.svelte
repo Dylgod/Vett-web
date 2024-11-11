@@ -19,8 +19,8 @@
 
 	const resultOptions = [
 		['Pass', 'text-green-500'],
-		['Fail', 'text-red-600'],
-		['No-show', 'text-gruvboxDark-yellow2']
+		['Fail', 'text-red-600']
+		// ['No-show', 'text-gruvboxDark-yellow2']
 	];
 
 	function handleResultChange(email: string, newResult: string) {
@@ -72,14 +72,14 @@
 							<select
 								bind:value={evaluation.result}
 								on:change={(e) => handleResultChange(evaluation.email, e.currentTarget.value)}
-								class="w-full rounded-md border-gray-300 text-white dark:bg-gray-700 py-1.5 pl-3 pr-8 text-sm focus:border-blue-500 focus:ring-blue-500 {evaluation.result ===
+								class="w-full rounded-md border-gray-300 dark:bg-gray-700 py-1.5 pl-3 pr-8 text-sm focus:border-blue-500 focus:ring-blue-500 {evaluation.result ===
 								'Pass'
 									? 'text-green-500'
 									: evaluation.result === 'Fail'
 										? 'text-red-600'
-										: evaluation.result === 'No-show'
-											? 'text-gruvboxDark-yellow2'
-											: ''}"
+										: // : evaluation.result === 'No-show'
+											// 	? 'text-gruvboxDark-yellow2'
+											'text-white'}"
 							>
 								<option value="" class="text-white">Select result...</option>
 								{#each resultOptions as option}

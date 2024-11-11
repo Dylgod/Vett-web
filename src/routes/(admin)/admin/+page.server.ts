@@ -14,48 +14,94 @@ const getMJMLTemplate = (manager_name_or_email: string, evals: Evaluation[]) => 
     <mj-title>Technical Evaluation Results</mj-title>
     <mj-attributes>
       <mj-all font-family="Arial, sans-serif" />
-      <mj-text font-size="14px" color="#000000" line-height="1.5" />
+      <mj-text font-size="14px" line-height="1.5" />
     </mj-attributes>
     <mj-style>
-      .passed { color: #28a745; }
-      .failed { color: #dc3545; }
-      .noshow { color: #6c757d; }
+      .pass { color: #4ade80; font-weight: bold; }
+      .fail { color: #f87171; font-weight: bold; }
+      .no-show { color: #9ca3af; font-weight: bold; }
+      .candidate-row { background-color: #1e293b; }
+      .notes-row { 
+        background-color: #1e293b; 
+        border-bottom: 1px solid #334155;
+        margin-bottom: 20px;
+      }
+      .notes-cell { 
+        padding: 10px 15px 20px 15px; 
+        color: #e2e8f0; 
+        font-style: italic;
+      }
+      .candidate-section {
+        margin-bottom: 8px;
+        border-bottom: 1px solid #334155;
+      }
     </mj-style>
   </mj-head>
-  <mj-body background-color="#f4f4f4">
-    <mj-section background-color="#ffffff" padding="20px">
+  <mj-body background-color="#0f172a">
+    <mj-section background-color="#1e293b" padding-bottom="0px">
       <mj-column>
-        <mj-text font-size="16px" padding-bottom="20px">
-          Greetings ${manager_name_or_email},
+        <mj-text font-size="20px" color="#e2e8f0" font-weight="bold">
+          Technical Evaluation Results
         </mj-text>
-        
-        <mj-text padding-bottom="20px">
-          We have finished the technical evaluations of the candidates you submitted. The results are below.
-        </mj-text>
+      </mj-column>
+    </mj-section>
 
-        <mj-table cellpadding="10px">
-          <tr style="background-color: #f8f9fa; font-weight: bold;">
-            <td style="border-bottom: 2px solid #dee2e6;">Candidate Name</td>
-            <td style="border-bottom: 2px solid #dee2e6;">Status</td>
-            <td style="border-bottom: 2px solid #dee2e6;">Notes</td>
+    <mj-section background-color="#1e293b" padding-top="0px">
+      <mj-column>
+        <mj-text color="#e2e8f0" line-height="1.6">
+          Hello ${manager_name_or_email},
+          <br/><br/>
+          We have completed the technical evaluations for your submitted candidates. Please find the detailed results below:
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#1e293b" padding="20px">
+      <mj-column>
+        <mj-table color="#e2e8f0">
+          <tr style="border-bottom: 2px solid #334155; text-align: left; background-color: #334155;">
+            <th style="padding: 15px; color: #e2e8f0;">Candidate</th>
+            <th style="padding: 15px; color: #e2e8f0;">Status</th>
           </tr>
+          
           ${evals.map(evaluation => `
-          <tr style="border-bottom: 1px solid #dee2e6;">
-            <td style="padding: 10px 0;">${evaluation.email}</td>
-            <td style="padding: 10px 0;" class="${evaluation.result.toLowerCase()}">${evaluation.result}</td>
-            <td style="padding: 10px 0;">${evaluation.note || ''}</td>
+          <tr class="candidate-row">
+            <td style="padding: 15px;">${evaluation.email}</td>
+            <td style="padding: 15px;"><span class="${evaluation.result.toLowerCase()}">${evaluation.result}</span></td>
+          </tr>
+          <tr class="notes-row" ${evaluation === evals[evals.length-1] ? 'style="border-bottom: none;"' : ''}>
+            <td colspan="2" class="notes-cell">
+              ${evaluation.note || ''}
+              ${evaluation !== evals[evals.length-1] ? '<div style="margin-bottom: 20px;"></div>' : ''}
+            </td>
           </tr>
           `).join('')}
         </mj-table>
+      </mj-column>
+    </mj-section>
 
-        <mj-spacer height="20px" />
-
-        <mj-text>
-          Vett appreciates your business and looks forward to working with you again in the future.
+    <mj-section background-color="#1e293b">
+      <mj-column>
+        <mj-text color="#e2e8f0" line-height="1.6">
+          Our team appreciates your continued partnership and is available to discuss these results in more detail if needed.
         </mj-text>
+      </mj-column>
+    </mj-section>
 
-        <mj-text padding-top="20px">
+    <mj-section background-color="#1e293b">
+      <mj-column>
+        <mj-text color="#e2e8f0" line-height="1.6">
+          Vett appreciates your business and looks forward to working with you again in the future.
+          <br/><br/>
           Thank you!
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#1e293b">
+      <mj-column>
+        <mj-text color="#94a3b8" font-size="12px" align="center">
+          This is a confidential hiring communication. Please do not forward or share this information.
         </mj-text>
       </mj-column>
     </mj-section>
