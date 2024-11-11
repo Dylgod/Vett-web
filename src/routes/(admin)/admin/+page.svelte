@@ -23,6 +23,7 @@
 	let activeTab = 0;
 	let adminorder_modal_invisible = false;
 	let showNotification = false;
+	let notificationText: string = 'Email Template Saved!';
 
 	let role = '';
 	let skills: string[] = [];
@@ -32,6 +33,7 @@
 	let targeted_emails_for_mailing: string[] = [];
 	let company_name: string = '';
 	let order_id: string;
+	let manager_uuid: string;
 
 	let emailTemplate: string;
 
@@ -71,7 +73,8 @@
 		return [bg, text, ring];
 	}
 
-	function showNotification_alert() {
+	function showNotification_alert(text: string) {
+		notificationText = text;
 		showNotification = true;
 		setTimeout(() => {
 			showNotification = false;
@@ -79,7 +82,7 @@
 	}
 
 	function saveTemplate() {
-		showNotification_alert();
+		showNotification_alert('Email Template Saved!');
 		console.log(emailTemplate);
 	}
 
@@ -92,6 +95,7 @@
 		targeted_emails_for_mailing = [];
 		company_name = '';
 		order_id = '';
+		manager_uuid = '';
 		emailTemplate = '';
 		emailStore.set({ emails: [], loading: false });
 	}
@@ -104,6 +108,8 @@
 		company_name = task.Company_name;
 		order_id = task.Order_id;
 		supabase_emails_column = task.Emails;
+		manager_uuid = task.Manager_id;
+		console.log(manager_uuid);
 
 		emailTemplate = `Greetings,
 
@@ -162,7 +168,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 </script>
 
 {#if showNotification}
-	<div class="notification font-semibold">Email Template Saved!</div>
+	<div class="notification font-semibold">{notificationText}</div>
 {/if}
 
 <div class="bg-gruvboxDark-bgH">
@@ -309,13 +315,17 @@ You can schedule your technical interview with ${company_name} by clicking the c
 					<div class="px-6 py-4 border-b border-gray-200">
 						<div class="flex justify-between">
 							<button
-								class="text-sm font-medium {activeTab === 0 ? 'text-blue-500' : 'text-gray-300 hover:text-blue-300'}"
+								class="text-sm font-medium {activeTab === 0
+									? 'text-blue-500'
+									: 'text-gray-300 hover:text-blue-300'}"
 								on:click={() => (activeTab = 0)}
 							>
 								Create Takehome
 							</button>
 							<button
-								class="text-sm font-medium {activeTab === 1 ? 'text-blue-500' : 'text-gray-300 hover:text-blue-300'}"
+								class="text-sm font-medium {activeTab === 1
+									? 'text-blue-500'
+									: 'text-gray-300 hover:text-blue-300'}"
 								on:click={() => {
 									activeTab = 1;
 									colorIndex = 0;
@@ -324,7 +334,9 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								Send Take Home
 							</button>
 							<button
-								class="text-sm font-medium {activeTab === 2 ? 'text-blue-500' : 'text-gray-300 hover:text-blue-300'}"
+								class="text-sm font-medium {activeTab === 2
+									? 'text-blue-500'
+									: 'text-gray-300 hover:text-blue-300'}"
 								on:click={() => {
 									activeTab = 2;
 									colorIndex = 0;
@@ -376,6 +388,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								<input type="hidden" name="email_body" value={emailTemplate} />
 								<input type="hidden" name="order_id" value={order_id} />
 								<input type="hidden" name="company_name" value={company_name} />
+								<input type="hidden" name="manager_uuid" value={manager_uuid} />
 								<input
 									type="hidden"
 									name="supabase_emails_column"
@@ -391,10 +404,19 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								/>
 							</form>
 						{:else}
-						<form method="POST" action="?/finalizeResults" use:enhance>
-							<input type="hidden" name="result_order_id" value={order_id} />
-							<AdminSendResults emails={result_page_emails} />
-						</form>
+							<form
+								method="POST"
+								action="?/finalizeResults"
+								on:submit={() => {
+									showNotification_alert('Results Email Sent!');
+								}}
+								use:enhance
+							>
+								<input type="hidden" name="company_name" value={company_name} />
+								<input type="hidden" name="manager_uuid" value={manager_uuid} />
+								<input type="hidden" name="result_order_id" value={order_id} />
+								<AdminSendResults emails={result_page_emails} />
+							</form>
 						{/if}
 					</div>
 				</div>

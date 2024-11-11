@@ -6,6 +6,62 @@ import { redirect } from '@sveltejs/kit';
 import { MAILGUN_API_KEY, MAILGUN_DOMAIN } from '$env/static/private';
 import Mailgun from 'mailgun.js';
 import formData from 'form-data';
+import mjml2html from 'mjml';
+
+const getMJMLTemplate = (manager_name_or_email: string, evals: Evaluation[]) => `
+<mjml>
+  <mj-head>
+    <mj-title>Technical Evaluation Results</mj-title>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" />
+      <mj-text font-size="14px" color="#000000" line-height="1.5" />
+    </mj-attributes>
+    <mj-style>
+      .passed { color: #28a745; }
+      .failed { color: #dc3545; }
+      .noshow { color: #6c757d; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#f4f4f4">
+    <mj-section background-color="#ffffff" padding="20px">
+      <mj-column>
+        <mj-text font-size="16px" padding-bottom="20px">
+          Greetings ${manager_name_or_email},
+        </mj-text>
+        
+        <mj-text padding-bottom="20px">
+          We have finished the technical evaluations of the candidates you submitted. The results are below.
+        </mj-text>
+
+        <mj-table cellpadding="10px">
+          <tr style="background-color: #f8f9fa; font-weight: bold;">
+            <td style="border-bottom: 2px solid #dee2e6;">Candidate Name</td>
+            <td style="border-bottom: 2px solid #dee2e6;">Status</td>
+            <td style="border-bottom: 2px solid #dee2e6;">Notes</td>
+          </tr>
+          ${evals.map(evaluation => `
+          <tr style="border-bottom: 1px solid #dee2e6;">
+            <td style="padding: 10px 0;">${evaluation.email}</td>
+            <td style="padding: 10px 0;" class="${evaluation.result.toLowerCase()}">${evaluation.result}</td>
+            <td style="padding: 10px 0;">${evaluation.note || ''}</td>
+          </tr>
+          `).join('')}
+        </mj-table>
+
+        <mj-spacer height="20px" />
+
+        <mj-text>
+          Vett appreciates your business and looks forward to working with you again in the future.
+        </mj-text>
+
+        <mj-text padding-top="20px">
+          Thank you!
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
+`;
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -85,7 +141,7 @@ export async function load({ locals }) {
                 Onboarding: order.onboarding,
                 Skills: order.skills,
                 Status: (order.status as "In-Progress" | "Pending" | "Completed") || "Pending",  // Provide a default value
-                Type: (order.checkpoint as "onboarding" | "review" | "create_takehome" | "tech_interview" | "update") || "review",  // Provide a default value
+                Type: (order.checkpoint as "onboarding" | "completed" | "create_takehome" | "tech_interview" | "update") || "update",  // Provide a default value
                 Logo: clientImage
             };
 
@@ -314,13 +370,17 @@ export const actions = {
     },
     finalizeResults: async ({ request }) => {
         try {
-            const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
-            const page_formData = await request.formData()
+            const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+            const page_formData = await request.formData();
+
             const order_id = page_formData.get('result_order_id')?.toString() || '';
             const evaluations = page_formData.get('evaluations')?.toString() || '';
+            const manager_uuid = page_formData.get('manager_uuid')?.toString() || '';
+            const company_name = page_formData.get('company_name')?.toString() || '';
+            let manager_name_or_email: string = '';
+
             const DOMAIN = MAILGUN_DOMAIN || '';
             const FROM_EMAIL = 'Vett <noreply@vett.dev>';
-            let emailExists: boolean = false
 
             if (!evaluations || typeof evaluations !== 'string') {
                 return { success: false, error: 'No evaluations data received' };
@@ -328,9 +388,43 @@ export const actions = {
 
             const evals: Evaluation[] = JSON.parse(evaluations);
 
+            // Get manager name or use company name
+            const response = await supa_client.auth.admin.getUserById(manager_uuid);
+            manager_name_or_email = response.data.user
+                ? response.data.user.user_metadata.display_name
+                : company_name;
+
+            // Generate email HTML from MJML template
+            const mjmlTemplate = getMJMLTemplate(manager_name_or_email, evals);
+            const { html } = mjml2html(mjmlTemplate);
+
+            // Setup mailgun
+            const mailgun = new Mailgun(FormData);
+            const mg = mailgun.client({
+                username: 'api',
+                key: MAILGUN_API_KEY || ''
+            });
+
+            // // Send email
+            const emailResult = await mg.messages.create(DOMAIN, {
+                from: FROM_EMAIL,
+                to: response.data.user?.email,
+                subject: 'Vett Evaluation Results',
+                html: html
+            });
+
+            return {
+                success: true,
+                message: 'Results finalized and email sent successfully',
+                emailResult
+            };
 
         } catch (error) {
-            console.log('Failed to Finalize Results', error)
+            console.error('Failed to Finalize Results', error);
+            return {
+                success: false,
+                error: 'Failed to process results'
+            };
         }
     }
 }

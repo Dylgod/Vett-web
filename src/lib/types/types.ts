@@ -12,7 +12,7 @@ type Task = {
     Role: string;
     Skills: string[];
     Status: "In-Progress" | "Pending" | "Completed"
-    Type: "onboarding" | "review" | "create_takehome" | "tech_interview" | "update";
+    Type: "onboarding" | "completed" | "create_takehome" | "tech_interview" | "update";
 }
 
 interface Evaluation {
