@@ -410,7 +410,12 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								on:submit={() => {
 									showNotification_alert('Results Email Sent!');
 								}}
-								use:enhance
+								use:enhance={() => {
+									return async ({ update }) => {
+										// Prevent automatic form reset
+										await update({ reset: false });
+									};
+								}}
 							>
 								<input type="hidden" name="company_name" value={company_name} />
 								<input type="hidden" name="manager_uuid" value={manager_uuid} />
