@@ -14,15 +14,28 @@
 		success: boolean;
 		error?: string;
 		updatedData?: {
+			id: number;
 			status: string;
 			checkpoint: string;
-			emails: [string, boolean | 'fail'][];
+			emails: string;
+		}[];
+	}
+
+	interface TaskActionResponse {
+		success: boolean;
+		error?: string;
+		updatedData?: {
+			id: number;
+			status: string;
+			checkpoint: string;
+			emails: string;
 		}[];
 	}
 
 	let activeTab = 0;
 	let adminorder_modal_invisible = false;
 	let showNotification = false;
+	let showCompleted = false;
 	let notificationText: string = 'Email Template Saved!';
 
 	let role = '';
@@ -37,7 +50,6 @@
 
 	let emailTemplate: string;
 
-	// Your existing color management code
 	let colorIndex = 0;
 	const bg_colors: string[] = [
 		'bg-red-50',
@@ -64,7 +76,21 @@
 		'ring-yellow-400'
 	];
 
-	// Your existing functions
+	const getUpcomingTasks = (tasks: Task[]) => {
+		return tasks.filter((task) => task.Type === 'onboarding' || task.Type === 'create_takehome');
+	};
+
+	const getCurrentTasks = (tasks: Task[]) => {
+		return tasks.filter(
+			(task) =>
+				task.Type !== 'onboarding' && task.Type !== 'create_takehome' && task.Type !== 'completed'
+		);
+	};
+
+	const getCompletedTasks = (tasks: Task[]) => {
+		return tasks.filter((task) => task.Type === 'completed');
+	};
+
 	function getNextColor(): string[] {
 		const bg = bg_colors[colorIndex];
 		const text = text_colors[colorIndex];
@@ -109,7 +135,6 @@
 		order_id = task.Order_id;
 		supabase_emails_column = task.Emails;
 		manager_uuid = task.Manager_id;
-		console.log(manager_uuid);
 
 		emailTemplate = `Greetings,
 
@@ -131,7 +156,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 	}
 
-	const handleSubmit = () => {
+	const handleEmailSubmit = () => {
 		return async ({ result }: { result: ActionResult }) => {
 			emailStore.update((store) => ({ ...store, loading: true, error: undefined }));
 
@@ -141,6 +166,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 
 			if (actionResult.type === 'success' && actionResult.data?.success) {
 				const updatedOrder = actionResult.data.updatedData?.[0];
+
 				if (updatedOrder) {
 					const updatedEmails = Array.isArray(updatedOrder.emails)
 						? updatedOrder.emails
@@ -151,6 +177,18 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						emails: updatedEmails,
 						loading: false
 					}));
+
+					tasks = tasks.map((task) => {
+						if (task.Order_id === updatedOrder.id.toString()) {
+							return {
+								...task,
+								Type: updatedOrder.checkpoint as Task['Type'],
+								Status: updatedOrder.status as Task['Status'],
+								Emails: updatedEmails
+							};
+						}
+						return task;
+					});
 
 					emails = updatedEmails;
 					supabase_emails_column = updatedEmails;
@@ -165,6 +203,39 @@ You can schedule your technical interview with ${company_name} by clicking the c
 			}
 		};
 	};
+
+	const handleResultsSubmit = () => {
+		return async ({ result }: { result: ActionResult }) => {
+			const actionResult = result as ActionResult & {
+				data?: TaskActionResponse;
+			};
+
+			if (actionResult.type === 'success' && actionResult.data?.success) {
+				const updatedOrder = actionResult.data.updatedData?.[0];
+
+				if (updatedOrder) {
+					tasks = tasks.map((task) => {
+						if (task.Order_id === order_id) {
+							return {
+								...task,
+								Type: 'completed' as Task['Type']
+							};
+						}
+						return task;
+					});
+
+					showNotification_alert('Results Email Sent!');
+					resetOrderModal();
+				}
+			} else {
+				showNotification_alert('Failed to send results email');
+			}
+		};
+	};
+
+	$: upcomingTasks = getUpcomingTasks(tasks);
+	$: currentTasks = getCurrentTasks(tasks);
+	$: completedTasks = getCompletedTasks(tasks);
 </script>
 
 {#if showNotification}
@@ -195,6 +266,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 				<h1 class="mt-8 text-2xl font-semibold leading-6 text-white">Dashboard</h1>
 			</div>
 		</div>
+
 		<div class="mt-10 sm:mt-16">
 			<div class="gruvboxDark-bgH grid grid-cols-2 sm:mt-16 gap-10 lg:grid-rows-1">
 				<div class="-ml-4 -mt-4 flex items-center justify-start sm:flex-nowrap">
@@ -210,11 +282,24 @@ You can schedule your technical interview with ${company_name} by clicking the c
 							Current Tasks
 						</h3>
 					</div>
+					<div class="mt-5 flex justify-center items-center bg-gruvboxDark-bgH">
+						<input type="checkbox" id="toggle" class="hidden peer" />
+						<label
+							for="toggle"
+							class="w-14 h-7 bg-gray-600 rounded-full flex items-center p-1 cursor-pointer peer-checked:bg-gruvboxDark-red"
+						>
+							<div
+								class="bg-white w-5 h-5 rounded-full shadow-md peer-checked:translate-x-7 transition-transform"
+							></div>
+						</label>
+					</div>
 				</div>
 			</div>
 		</div>
+
 		<div class="mb-8 mx-auto max-w-2xl lg:max-w-7xl gruvboxDark-bgH">
-			<div class=" grid grid-cols-1 gap-10 sm:mt-6 lg:grid-cols-6 lg:grid-rows-1">
+			<div class="grid grid-cols-1 gap-10 sm:mt-6 lg:grid-cols-6 lg:grid-rows-1">
+				<!-- Upcoming Tasks Column -->
 				<div class="relative lg:col-span-3 h-[480px]">
 					<div
 						class="absolute inset-0 rounded-lg gruvboxDark-bgH shadow-md shadow-gruvboxDark-red2 outline outline-gruvboxDark-red"
@@ -223,7 +308,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						<div class="flex flex-col h-full">
 							<div class="overflow-y-auto">
 								<ul role="list" class="pl-3 pr-3">
-									{#each tasks as task}
+									{#each upcomingTasks as task}
 										<AdminRow {task} command={() => showTaskModal(task)} />
 									{/each}
 								</ul>
@@ -234,6 +319,8 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						class="pointer-events-none absolute inset-0 rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]"
 					></div>
 				</div>
+
+				<!-- Current Tasks Column -->
 				<div class="relative lg:col-span-3 h-[480px]">
 					<div
 						class="absolute inset-0 rounded-lg gruvboxDark-bgH shadow-md shadow-gruvboxDark-red2 outline outline-gruvboxDark-red"
@@ -242,37 +329,15 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						<div class="flex flex-col h-full">
 							<div class="overflow-y-auto">
 								<ul role="list" class="pl-3 pr-3">
-									<li class=" w-full bg-neutral-800 border border-gruvboxDark-blue rounded-md mt-2">
-										<button
-											on:click={() => alert('clicked')}
-											class=" min-w-0 overflow-hidden w-full hover:bg-gruvboxDark-bgS"
-										>
-											<div class="flex gap-3 py-2 px-4 w-full justify-between">
-												<div class="flex gap-3 w-full">
-													<img
-														class="h-16 w-16 flex-shrink-0 rounded-full bg-gray-50"
-														alt=""
-														src="screenshots/eric.jpg"
-													/>
-													<div class="min-w-0 flex flex-col place-items-start col-span-2">
-														<p class="font-semibold text-gruvboxDark-blue truncate text-lg">
-															TASK UPDATED
-														</p>
-														<p class="font-semibold text-gray-300 truncate text-sm">
-															Shy Apply LLC
-														</p>
-														<p class="font-semibold text-gray-300 truncate text-sm">
-															PB: Dylan Taylor
-														</p>
-													</div>
-												</div>
-												<div class="pr-2">
-													<p class="text-sm font-semibold text-gray-300 truncate">#113456</p>
-													<p class="text-sm font-semibold text-gray-300 truncate mt-7">10/30/24</p>
-												</div>
-											</div>
-										</button>
-									</li>
+									{#each currentTasks as task}
+										<AdminRow {task} command={() => showTaskModal(task)} />
+									{/each}
+
+									{#if showCompleted}
+										{#each completedTasks as task}
+											<AdminRow {task} command={() => showTaskModal(task)} />
+										{/each}
+									{/if}
 								</ul>
 							</div>
 						</div>
@@ -281,7 +346,6 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						class="pointer-events-none absolute inset-0 rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]"
 					></div>
 				</div>
-				<!-- Repeat the same structure for the second column -->
 			</div>
 		</div>
 	</div>
@@ -379,7 +443,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								</div>
 							</div>
 						{:else if activeTab === 1}
-							<form method="POST" action="?/sendCandidateEmails" use:enhance={handleSubmit}>
+							<form method="POST" action="?/sendCandidateEmails" use:enhance={handleEmailSubmit}>
 								<input
 									type="hidden"
 									name="emails_as_string"
@@ -404,19 +468,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								/>
 							</form>
 						{:else}
-							<form
-								method="POST"
-								action="?/finalizeResults"
-								on:submit={() => {
-									showNotification_alert('Results Email Sent!');
-								}}
-								use:enhance={() => {
-									return async ({ update }) => {
-										// Prevent automatic form reset
-										await update({ reset: false });
-									};
-								}}
-							>
+							<form method="POST" action="?/finalizeResults" use:enhance={handleResultsSubmit}>
 								<input type="hidden" name="company_name" value={company_name} />
 								<input type="hidden" name="manager_uuid" value={manager_uuid} />
 								<input type="hidden" name="result_order_id" value={order_id} />

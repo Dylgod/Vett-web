@@ -69,10 +69,10 @@ const getMJMLTemplate = (manager_name_or_email: string, evals: Evaluation[]) => 
             <td style="padding: 15px;">${evaluation.email}</td>
             <td style="padding: 15px;"><span class="${evaluation.result.toLowerCase()}">${evaluation.result}</span></td>
           </tr>
-          <tr class="notes-row" ${evaluation === evals[evals.length-1] ? 'style="border-bottom: none;"' : ''}>
+          <tr class="notes-row" ${evaluation === evals[evals.length - 1] ? 'style="border-bottom: none;"' : ''}>
             <td colspan="2" class="notes-cell">
               ${evaluation.note || ''}
-              ${evaluation !== evals[evals.length-1] ? '<div style="margin-bottom: 20px;"></div>' : ''}
+              ${evaluation !== evals[evals.length - 1] ? '<div style="margin-bottom: 20px;"></div>' : ''}
             </td>
           </tr>
           `).join('')}
@@ -215,7 +215,6 @@ export const actions = {
             const DOMAIN = MAILGUN_DOMAIN || '';
             const FROM_EMAIL = 'Vett <noreply@vett.dev>';
 
-            // Parse existing emails from Supabase
             const existingEmails: Array<[string, boolean | "fail"]> = JSON.parse(JSON.parse(supabase_emails_column || '[]'));
 
             // Mailgun Client
@@ -293,7 +292,6 @@ export const actions = {
                 success: true,
                 updatedData: data
             };
-
         } catch (error) {
             console.error('Email sending failed:', error);
             return {
@@ -362,7 +360,7 @@ export const actions = {
                 const { data, error } = await supa_client
                     .from('orders')
                     .update({
-                        emails: JSON.stringify(existingEmails)
+                        emails: JSON.stringify(existingEmails),
                     })
                     .eq("id", order_id)
                     .select();
@@ -459,18 +457,31 @@ export const actions = {
                 html: html
             });
 
+            const { data, error: supaError } = await supa_client
+                .from('orders')
+                .update({
+                    checkpoint: "completed",
+                    status: "Completed"
+                })
+                .eq("id", order_id)
+                .select();
+
+            if (supaError) {
+                throw supaError;
+            }
+
             return {
                 success: true,
                 message: 'Results finalized and email sent successfully',
+                updatedData: data,
                 emailResult
             };
-
         } catch (error) {
-            console.error('Failed to Finalize Results', error);
+            console.error('Failed to Finalize Results:', error);
             return {
                 success: false,
                 error: 'Failed to process results'
             };
         }
     }
-}
+};
