@@ -276,21 +276,25 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						</h3>
 					</div>
 				</div>
-				<div class="-ml-4 -mt-4 flex items-center sm:flex-nowrap gruvboxDark-bgH">
+				<div class="-ml-4 -mt-4 flex items-center justify-between sm:flex-nowrap gruvboxDark-bgH">
 					<div class="ml-4 mt-4 gruvboxDark-bgH">
 						<h3 class="text-2xl font-semibold leading-6 text-gruvboxDark-red gruvboxDark-bgH">
 							Current Tasks
 						</h3>
 					</div>
-					<div class="mt-5 flex justify-center items-center bg-gruvboxDark-bgH">
-						<input type="checkbox" id="toggle" class="hidden peer" />
+					<div class="flex items-center gap-2 mr-4 mt-4">
+						<span class="text-sm text-gray-300">Show Completed</span>
+						<input
+							type="checkbox"
+							class="peer sr-only opacity-0"
+							id="toggle"
+							bind:checked={showCompleted}
+						/>
 						<label
 							for="toggle"
-							class="w-14 h-7 bg-gray-600 rounded-full flex items-center p-1 cursor-pointer peer-checked:bg-gruvboxDark-red"
+							class="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-600 px-0.5 outline-gray-600 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-150 peer-checked:bg-gruvboxDark-red peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-600 peer-checked:peer-focus-visible:outline-gruvboxDark-red"
 						>
-							<div
-								class="bg-white w-5 h-5 rounded-full shadow-md peer-checked:translate-x-7 transition-transform"
-							></div>
+							<span class="sr-only">Enable</span>
 						</label>
 					</div>
 				</div>

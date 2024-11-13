@@ -4,7 +4,7 @@
 		create_takehome: 'border-gruvboxDark-purple text-gruvboxDark-purple',
 		tech_interview: 'border-gruvboxDark-yellow text-gruvboxDark-yellow',
 		update: 'border-gruvboxDark-blue text-gruvboxDark-blue',
-		review: 'border-gruvboxDark-red text-gruvboxDark-red'
+		completed: 'border-gruvboxDark-aqua2 text-gruvboxDark-aqua2'
 	} as const;
 
 	export let task: Task;

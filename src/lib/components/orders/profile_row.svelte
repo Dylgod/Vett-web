@@ -73,6 +73,7 @@
 				id={id.toString()}
 				type="button"
 				class="text-indigo-600 hover:text-indigo-900"
+				disabled={status === "Completed"}
 				>Edit<span class="sr-only">, {index}</span></button
 			>
 		{/if}

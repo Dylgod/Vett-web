@@ -30,6 +30,7 @@ export const actions = {
     magicLogin: async ({ locals, request, url }) => {
         const formData = await request.formData()
         const email = (formData.get("email")?.toString() || "").trim()
+
         if (!email) return fail(400, { ok: false, message: "A valid email is needed" })
 
         try {

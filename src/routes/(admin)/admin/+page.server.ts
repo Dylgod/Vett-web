@@ -128,7 +128,6 @@ export async function load({ locals }) {
     let { data: orders, error: orderError } = await supa_client
         .from('orders')
         .select("*")
-        .neq('status', "Completed");
 
     if (orderError) {
         console.error('Error fetching orders:', orderError);
