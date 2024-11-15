@@ -9,7 +9,7 @@
 	import { ChevronLeft, ChevronRight, X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { replaceState } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
 
 	export let data: PageData;
 
@@ -32,6 +32,8 @@
 
 	let isFormValid = false;
 	let showNotification = false;
+	let notificationText: string = `Payment Successful!<br />Your order will be displayed on your Profile.`
+	console.log(notificationText)
 
 	let candidateEmails: string[] = [];
 	let formemails: string = '';
@@ -164,6 +166,9 @@
 			candidateEmails = order.emails ? JSON.parse(order.emails as string).map(([email]: [string, boolean | 'fail']) => email) : [];
 			formemails = JSON.stringify(candidateEmails);
 
+			console.log('candidateEmails',candidateEmails)
+			console.log('formemails',formemails)
+
 			const ALLSKILLS: Skill[] = skillsList.map((skill) => {
 				const skillObject: Skill = {
 					text: skill,
@@ -243,7 +248,6 @@
 			profileImage = default_profile_img;
 		}
 
-		const url = new URL($page.url);
 		const stripe_success = $page.url.searchParams.get('success');
 
 		if (stripe_success) {
@@ -255,15 +259,15 @@
 			}, 3000);
 
 			// Remove the 'success' parameter from the URL
-			url.searchParams.delete('success');
-			replaceState(url, '');
+			const newUrl = $page.url.pathname; // Gets current path without query params
+			goto(newUrl, { replaceState: true }); // Replace current URL without params
 		}
 	});
 </script>
 
 {#if showNotification}
 	<div class="notification font-semibold">
-		Payment Successful!<br />Your order will be displayed on your Profile.
+		{@html notificationText}
 	</div>
 {/if}
 

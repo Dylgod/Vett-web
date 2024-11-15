@@ -13,7 +13,7 @@ export async function load({ locals, url, cookies }) {
     // cookies.set(SENDTO_COOKIE, sendTo)
 
     // checking for expired token or other error
-    const expired = url.searchParams.get('error') as string
+    const expired = url.searchParams.has('error')
     const message = url.searchParams.get('message') as string
 
     return {
@@ -33,20 +33,11 @@ export const actions = {
 
         if (!email) return fail(400, { ok: false, message: "A valid email is needed" })
 
-        try {
-            const result = await locals.supabase.auth.signInWithOtp({
-                email: email,
-            })
-            if (result.error) {
-                throw redirect(303, `/login?error&message=${result.error.message}`)
-            }
-
-        } catch (error) {
-            console.warn("failed to send magic link: ", error)
-            return fail(500, {
-                ok: false,
-                message: "Something went wrong. Please try again",
-            })
+        const result = await locals.supabase.auth.signInWithOtp({
+            email: email,
+        })
+        if (result.error) {
+            throw redirect(303, `/login?error&message=${result.error.message}`)
         }
 
         throw redirect(303, `/auth/confirm?email=${email}`)

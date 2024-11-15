@@ -102,17 +102,6 @@ export const actions = {
             let created_for = client.id;
             let created_by = user.id;
 
-            console.log({
-                created_for,
-                created_by,
-                candidates,
-                role,
-                onboarding,
-                skillsFormData,
-                checkpoint,
-                candidateEmails
-            });
-
             const session = await stripe.checkout.sessions.create({
                 line_items: [
                     {

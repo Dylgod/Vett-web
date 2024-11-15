@@ -1,14 +1,28 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
 	export let data;
 
+	let showNotification = false;
+	let notificationText: string = '';
+
+	function showNotification_alert(text: string) {
+		notificationText = text;
+		showNotification = true;
+		setTimeout(() => {
+			showNotification = false;
+		}, 3000);
+	}
+
 	onMount( async () => {
 		if (data.expired) {
-			alert(data.message);
+			showNotification_alert(data.message)
 		}
 	});
 </script>
+
+{#if showNotification}
+	<div class="notification font-semibold">{notificationText}</div>
+{/if}
 
 <div class="flex pt-20 flex-col justify-center sm:px-6 lg:px-8">
 	<div class="sm:mx-auto sm:w-full sm:max-w-md">
@@ -22,7 +36,7 @@
 
 	<div class="sm:mx-auto sm:w-full sm:max-w-[480px]">
 		<div class="bg-white px-6 py-6 sm:rounded-lg sm:px-12">
-			<form class="space-y-4" method="POST" action="?/magicLogin" use:enhance>
+			<form class="space-y-4" method="POST" action="?/magicLogin">
 				<div>
 					<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
 					<div class="mt-1">
@@ -165,3 +179,36 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.notification {
+		position: fixed;
+		top: 8%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #8f3c3c;
+		color: white;
+		padding: 1rem 2rem;
+		border-radius: 4px;
+		text-align: center;
+		z-index: 9999;
+		animation: fadeInOut 3s linear 1 forwards;
+		min-width: 200px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	@keyframes fadeInOut {
+		0% {
+			opacity: 0;
+		}
+		5% {
+			opacity: 1;
+		}
+		95% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+</style>
