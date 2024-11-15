@@ -8,79 +8,157 @@ import type { Database } from '$lib/types/supabase';
 export const POST = async ({ request }: RequestEvent) => {
     const req = await request.text();
 
-    if (STRIPE_WEBHOOK_SECRET) {
-        const signature = request.headers.get('stripe-signature');
-        if (req && signature && STRIPE_WEBHOOK_SECRET) {
-            const event = stripe.webhooks.constructEvent(req, signature, STRIPE_WEBHOOK_SECRET);
-
-            switch (event.type) {
-                case 'checkout.session.completed':
-                    // We pass a 'client reference id' which is actually the user id from supabase, or null if they skipped the free trial
-                    const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE)
-
-                    let skills: string[] = JSON.parse(event.data.object.metadata?.skills!)
-                    let emails: string = event.data.object.metadata?.emails!
-
-                    let order_id: string | null = event.data.object.metadata?.order_id ?? null
-                    let is_update: boolean = event.data.object.metadata?.update == "1" ? true : false
-                    if (is_update) {
-                        if (order_id) {
-                            const { data, error } = await supa_client
-                                .from('orders')
-                                .update(
-                                    {
-                                        candidates: parseInt(event.data.object.metadata?.candidates!),
-                                        role: event.data.object.metadata?.role!,
-                                        onboarding: event.data.object.metadata?.onboarding ? true : false,
-                                        skills: skills,
-                                        status: "Pending",
-                                        checkpoint: "update",
-                                        emails: emails
-                                    }
-                                )
-                                .eq("id", parseInt(order_id))
-                                .select()
-
-                            if (error) {
-                                return new Response(`FAILED TO EDIT SUPABASE ROW`, {
-                                    status: 500
-                                })
-                            }
-                        } else {
-                            return new Response(`Failed to edit supabase row - order_id is null`, {
-                                status: 500
-                            })
-                        }
-                    } else {
-                        const { data, error } = await supa_client
-                            .from('orders')
-                            .insert(
-                                {
-                                    created_for: parseInt(event.data.object.metadata?.created_for!),
-                                    created_by: event.data.object.metadata?.created_by,
-                                    candidates: parseInt(event.data.object.metadata?.candidates!),
-                                    role: event.data.object.metadata?.role!,
-                                    onboarding: event.data.object.metadata?.onboarding ? true : false,
-                                    skills: skills,
-                                    status: "Pending",
-                                    checkpoint: event.data.object.metadata?.checkpoint,
-                                    emails: emails
-                                }
-                            )
-                            .select()
-
-                        if (error) {
-                            return new Response(`FAILED TO CREATE SUPABASE ROW`, {
-                                status: 500
-                            })
-                        }
-                    }
-            }
-        }
-        return new Response()
-    } else {
+    if (!STRIPE_WEBHOOK_SECRET) {
         return new Response(`NO STRIPE_WEBHOOK_SECRET`, {
             status: 500
-        })
+        });
+    }
+
+    const signature = request.headers.get('stripe-signature');
+    if (!req || !signature) {
+        return new Response(`Missing required webhook data`, {
+            status: 400
+        });
+    }
+
+    try {
+        const event = stripe.webhooks.constructEvent(req, signature, STRIPE_WEBHOOK_SECRET);
+
+        switch (event.type) {
+            case 'checkout.session.completed':
+                const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+
+                // Parse skills
+                const skills: string[] = JSON.parse(event.data.object.metadata?.skills || '[]');
+
+                // Parse and normalize emails
+                const emailsData = event.data.object.metadata?.emails || '[]';
+                let normalizedEmails: string;
+
+                try {
+                    const parsedEmails = JSON.parse(emailsData);
+                    if (!Array.isArray(parsedEmails)) {
+                        throw new Error('Emails data is not an array');
+                    }
+
+                    if (parsedEmails.length === 0) {
+                        normalizedEmails = '[]';
+                    } else if (Array.isArray(parsedEmails[0])) {
+                        // Already in [email, boolean] format
+                        normalizedEmails = emailsData;
+                    } else {
+                        // Convert simple string array to [email, boolean] format
+                        const emailTuples = parsedEmails.map((email: string) => [email, false]);
+                        normalizedEmails = JSON.stringify(emailTuples);
+                    }
+                } catch (e) {
+                    console.error('Error normalizing emails:', e);
+                    normalizedEmails = '[]';
+                }
+
+                const order_id = event.data.object.metadata?.order_id;
+                const is_update = event.data.object.metadata?.update === "1";
+
+                if (is_update && order_id) {
+                    // Handle order update
+                    try {
+                        // Get existing order to preserve email statuses
+                        const { data: existingOrder, error: fetchError } = await supa_client
+                            .from('orders')
+                            .select('emails')
+                            .eq('id', parseInt(order_id))
+                            .single();
+
+                        if (fetchError) throw fetchError;
+
+                        let finalEmails = normalizedEmails;
+
+                        if (existingOrder?.emails) {
+                            try {
+                                const existingEmailData = JSON.parse(existingOrder.emails as string);
+                                const newEmailData = JSON.parse(normalizedEmails);
+
+                                // Create map of existing email statuses
+                                const emailMap = new Map(
+                                    Array.isArray(existingEmailData[0])
+                                        ? existingEmailData
+                                        : existingEmailData.map((email: string) => [email, false])
+                                );
+
+                                // Create new array preserving existing statuses
+                                const mergedEmails = newEmailData.map((entry: string | [string, boolean]) => {
+                                    const email = Array.isArray(entry) ? entry[0] : entry;
+                                    return [email, emailMap.has(email) ? emailMap.get(email) : false];
+                                });
+
+                                finalEmails = JSON.stringify(mergedEmails);
+                            } catch (e) {
+                                console.error('Error merging emails:', e);
+                                // Fallback to normalized emails if merge fails
+                                finalEmails = normalizedEmails;
+                            }
+                        }
+
+                        const { error: updateError } = await supa_client
+                            .from('orders')
+                            .update({
+                                candidates: parseInt(event.data.object.metadata?.candidates || '0'),
+                                role: event.data.object.metadata?.role || '',
+                                onboarding: event.data.object.metadata?.onboarding === '1',
+                                skills: skills,
+                                status: "Pending",
+                                checkpoint: "update",
+                                emails: finalEmails
+                            })
+                            .eq("id", parseInt(order_id))
+                            .select();
+
+                        if (updateError) throw updateError;
+
+                    } catch (error) {
+                        console.error('Error updating order:', error);
+                        return new Response(`Failed to update order`, {
+                            status: 500
+                        });
+                    }
+                } else {
+                    // Handle new order creation
+                    try {
+                        const { error: insertError } = await supa_client
+                            .from('orders')
+                            .insert({
+                                created_for: parseInt(event.data.object.metadata?.created_for || '0'),
+                                created_by: event.data.object.metadata?.created_by || '',
+                                candidates: parseInt(event.data.object.metadata?.candidates || '0'),
+                                role: event.data.object.metadata?.role || '',
+                                onboarding: event.data.object.metadata?.onboarding === '1',
+                                skills: skills,
+                                status: "Pending",
+                                checkpoint: event.data.object.metadata?.checkpoint || '',
+                                emails: normalizedEmails
+                            })
+                            .select();
+
+                        if (insertError) throw insertError;
+
+                    } catch (error) {
+                        console.error('Error creating order:', error);
+                        return new Response(`Failed to create order`, {
+                            status: 500
+                        });
+                    }
+                }
+
+                break;
+        }
+
+        return new Response(null, { status: 200 });
+
+    } catch (err) {
+        console.error('Webhook error:', err);
+        return new Response(
+            `Webhook Error: ${err instanceof Error ? err.message : 'Unknown Error'}`,
+            { status: 400 }
+        );
     }
 }

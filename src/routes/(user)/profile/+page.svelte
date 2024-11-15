@@ -32,8 +32,7 @@
 
 	let isFormValid = false;
 	let showNotification = false;
-	let notificationText: string = `Payment Successful!<br />Your order will be displayed on your Profile.`
-	console.log(notificationText)
+	let notificationText: string = `Payment Successful!<br />Your order will be displayed on your Profile.`;
 
 	let candidateEmails: string[] = [];
 	let formemails: string = '';
@@ -71,9 +70,38 @@
 
 	function handleEmailsChange(event: CustomEvent<string[]>) {
 		candidateEmails = event.detail;
-		// Transform each email into a tuple with false
-		const emailTuples = candidateEmails.map((email) => [email, false]);
-		formemails = JSON.stringify(emailTuples);
+
+		if (editing_row && order_id) {
+			const currentOrder = orders?.find((o) => o.id === order_id);
+			if (currentOrder?.emails) {
+				try {
+					const existingEmailData = JSON.parse(currentOrder.emails as string);
+					const emailMap = new Map(
+						Array.isArray(existingEmailData[0])
+							? existingEmailData
+							: existingEmailData.map((email: string) => [email, false])
+					);
+
+					// Create new array maintaining existing statuses and setting false for new emails
+					const emailTuples = candidateEmails.map((email) => [
+						email,
+						emailMap.has(email) ? emailMap.get(email) : false
+					]);
+
+					formemails = JSON.stringify(emailTuples);
+				} catch (e) {
+					console.error('Error processing emails:', e);
+					// Fallback to all false if there's an error
+					formemails = JSON.stringify(candidateEmails.map((email) => [email, false]));
+				}
+			} else {
+				// No existing emails, set all to false
+				formemails = JSON.stringify(candidateEmails.map((email) => [email, false]));
+			}
+		} else {
+			// New order, set all to false
+			formemails = JSON.stringify(candidateEmails.map((email) => [email, false]));
+		}
 	}
 
 	function handleSkillsList(event: CustomEvent<string[]>) {
@@ -163,11 +191,10 @@
 			onboarding = order.onboarding;
 			skillsList = order.skills;
 			formskills = JSON.stringify(skillsList);
-			candidateEmails = order.emails ? JSON.parse(order.emails as string).map(([email]: [string, boolean | 'fail']) => email) : [];
-			formemails = JSON.stringify(candidateEmails);
-
-			console.log('candidateEmails',candidateEmails)
-			console.log('formemails',formemails)
+			// candidateEmails = order.emails
+			// 	? JSON.parse(order.emails as string).map(([email]: [string, boolean | 'fail']) => email)
+			// 	: [];
+			// formemails = JSON.stringify(candidateEmails);
 
 			const ALLSKILLS: Skill[] = skillsList.map((skill) => {
 				const skillObject: Skill = {
@@ -175,12 +202,33 @@
 					color: colors[colorIndex]
 				};
 
-				// Increment colorIndex and wrap around if it exceeds colors array length
 				colorIndex = (colorIndex + 1) % colors.length;
 
 				return skillObject;
 			});
 			allskills = ALLSKILLS;
+
+			try {
+				const existingEmails = order.emails ? JSON.parse(order.emails as string) : [];
+				// If emails are already in tuple format, use them directly
+				if (
+					Array.isArray(existingEmails) &&
+					existingEmails.length > 0 &&
+					Array.isArray(existingEmails[0])
+				) {
+					candidateEmails = existingEmails.map(([email]) => email);
+					formemails = JSON.stringify(existingEmails);
+				} else {
+					// If emails are in string format, convert to tuples with false
+					candidateEmails = existingEmails;
+					formemails = JSON.stringify(existingEmails.map((email: any) => [email, false]));
+				}
+			} catch (e) {
+				console.error('Error parsing emails:', e);
+				candidateEmails = [];
+				formemails = '[]';
+			}
+
 			editing_row = true;
 		};
 	}
