@@ -304,7 +304,7 @@
 									</tr>
 								</thead>
 								<tbody class="divide-y divide-gray-200">
-									{#each orders as order, index (order.id)}
+									{#each orders.sort((a, b) => b.id - a.id) as order, index (order.id)}
 										<ProfileRow
 											{index}
 											id={order.id}

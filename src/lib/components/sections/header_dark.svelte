@@ -7,7 +7,16 @@
 		<div class="flex items-center gap-x-12">
 			<a href="/" class="-m-1.5 p-1.5">
 				<span class="sr-only">Vett</span>
-				<svg class="w-8 h-8 fill-current text-white " id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57.09 45.74"><title>v-systems-vsys-logo</title><path d="M0.51,0H16.83a0.51,0.51,0,0,1,.25.06,0.5,0.5,0,0,1,.18.17h0L37.13,32a0.49,0.49,0,0,1,0,.54h0L29,45.51h0a0.5,0.5,0,0,1-.18.17,0.51,0.51,0,0,1-.49,0,0.5,0.5,0,0,1-.18-0.17h0L0.08,0.77A0.5,0.5,0,0,1,0,.52H0A0.5,0.5,0,0,1,.06.26,0.5,0.5,0,0,1,.25.07h0A0.5,0.5,0,0,1,.51,0h0ZM34.72,0H56.58a0.5,0.5,0,0,1,.26.07h0A0.5,0.5,0,0,1,57,.26a0.51,0.51,0,0,1,.06.26h0A0.5,0.5,0,0,1,57,.77L46.08,18.21h0a0.5,0.5,0,0,1-.18.17,0.51,0.51,0,0,1-.49,0,0.5,0.5,0,0,1-.18-0.17h0L34.3,0.77A0.5,0.5,0,0,1,34.22.52h0A0.5,0.5,0,0,1,34.28.26,0.5,0.5,0,0,1,34.47.07h0A0.5,0.5,0,0,1,34.72,0h0Z"/></svg>
+				<svg
+					class="w-8 h-8 fill-current text-white"
+					id="Layer_1"
+					data-name="Layer 1"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 57.09 45.74"
+					><title>Vett Home</title><path
+						d="M0.51,0H16.83a0.51,0.51,0,0,1,.25.06,0.5,0.5,0,0,1,.18.17h0L37.13,32a0.49,0.49,0,0,1,0,.54h0L29,45.51h0a0.5,0.5,0,0,1-.18.17,0.51,0.51,0,0,1-.49,0,0.5,0.5,0,0,1-.18-0.17h0L0.08,0.77A0.5,0.5,0,0,1,0,.52H0A0.5,0.5,0,0,1,.06.26,0.5,0.5,0,0,1,.25.07h0A0.5,0.5,0,0,1,.51,0h0ZM34.72,0H56.58a0.5,0.5,0,0,1,.26.07h0A0.5,0.5,0,0,1,57,.26a0.51,0.51,0,0,1,.06.26h0A0.5,0.5,0,0,1,57,.77L46.08,18.21h0a0.5,0.5,0,0,1-.18.17,0.51,0.51,0,0,1-.49,0,0.5,0.5,0,0,1-.18-0.17h0L34.3,0.77A0.5,0.5,0,0,1,34.22.52h0A0.5,0.5,0,0,1,34.28.26,0.5,0.5,0,0,1,34.47.07h0A0.5,0.5,0,0,1,34.72,0h0Z"
+					/></svg
+				>
 			</a>
 			<div class="hidden lg:flex lg:gap-x-12">
 				<a href="/" class="text-sm font-semibold leading-6 text-white">Home</a>
@@ -65,7 +74,11 @@
 						alt=""
 					/>
 				</a>
-				<button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" on:click={()=>header_invisible=!header_invisible}>
+				<button
+					type="button"
+					class="-m-2.5 rounded-md p-2.5 text-gray-700"
+					on:click={() => (header_invisible = !header_invisible)}
+				>
 					<span class="sr-only">Close menu</span>
 					<svg
 						class="h-6 w-6"

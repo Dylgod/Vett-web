@@ -9,7 +9,7 @@
 	import { ChevronLeft, ChevronRight, X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { goto, replaceState } from '$app/navigation';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 
@@ -416,7 +416,7 @@
 						</thead>
 						<tbody class="divide-y divide-gray-200">
 							{#if orders}
-								{#each orders as order, index (order.id)}
+								{#each orders.sort((a, b) => b.id - a.id) as order, index (order.id)}
 									<ProfileRow
 										{index}
 										id={order.id}

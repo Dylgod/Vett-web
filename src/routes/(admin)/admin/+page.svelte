@@ -312,7 +312,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						<div class="flex flex-col h-full">
 							<div class="overflow-y-auto">
 								<ul role="list" class="pl-3 pr-3">
-									{#each upcomingTasks as task}
+									{#each upcomingTasks.sort((a, b) => parseInt(b.Order_id) - parseInt(a.Order_id)) as task}
 										<AdminRow {task} command={() => showTaskModal(task)} />
 									{/each}
 								</ul>
@@ -333,12 +333,12 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						<div class="flex flex-col h-full">
 							<div class="overflow-y-auto">
 								<ul role="list" class="pl-3 pr-3">
-									{#each currentTasks as task}
+									{#each currentTasks.sort((a, b) => parseInt(b.Order_id) - parseInt(a.Order_id)) as task}
 										<AdminRow {task} command={() => showTaskModal(task)} />
 									{/each}
 
 									{#if showCompleted}
-										{#each completedTasks as task}
+										{#each completedTasks.sort((a, b) => parseInt(b.Order_id) - parseInt(a.Order_id)) as task}
 											<AdminRow {task} command={() => showTaskModal(task)} />
 										{/each}
 									{/if}
