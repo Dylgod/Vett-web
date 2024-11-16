@@ -5,21 +5,27 @@
 	import { PUBLIC_HOSTNAME } from '$env/static/public';
 
 	export let data: PageData;
+	import Header from '$lib/components/sections/header.svelte';
+	import LogoutHeader from '$lib/components/sections/logout_header.svelte';
+	$: ({ session } = data);
 </script>
+
+{#if session}
+	<LogoutHeader />
+{:else}
+	<Header />
+{/if}
 
 <svelte:head>
 	<title>{data.title}</title>
-	<meta
-		name="description"
-		content={data.description} />
+	<meta name="description" content={data.description} />
 	<!-- // TODO:  -->
 	<!-- iscanonical from analytics goes here -->
 	<meta
 		name="robots"
-		content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-	<link
-		rel="canonical"
-		href={data.canonicalUrl ?? `${PUBLIC_HOSTNAME}${$page.url.pathname}`} />
+		content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+	/>
+	<link rel="canonical" href={data.canonicalUrl ?? `${PUBLIC_HOSTNAME}${$page.url.pathname}`} />
 </svelte:head>
 
 <article>
