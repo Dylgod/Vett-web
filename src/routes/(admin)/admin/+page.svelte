@@ -2,6 +2,7 @@
 	import AdminRow from '$lib/components/orders/admin_row.svelte';
 	import AdminSendEmails from '$lib/components/admin_send_emails/admin_send_emails.svelte';
 	import AdminSendResults from '$lib/components/admin_send_results/admin_send_results.svelte';
+	import CalcomEmbed from '$lib/components/calcom/calcom_embed.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -352,6 +353,10 @@ You can schedule your technical interview with ${company_name} by clicking the c
 				</div>
 			</div>
 		</div>
+		<div class="mt-20 bg-gruvboxDark-bgH">
+			<CalcomEmbed />
+		</div>
+		
 	</div>
 </div>
 

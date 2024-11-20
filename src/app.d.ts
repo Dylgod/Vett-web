@@ -18,4 +18,12 @@ declare global {
   }
 }
 
+declare global {
+  interface Window {
+    Cal?: {
+      (method: string, options: any): void;
+    };
+  }
+}
+
 export {}
