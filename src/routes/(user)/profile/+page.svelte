@@ -47,6 +47,7 @@
 
 	let onboarding = false;
 	let order_id: number | null = null;
+	let order_status: string;
 
 	let editing_row = false;
 	let skillsModalFormAction = '?/submitorder';
@@ -127,7 +128,9 @@
 	}
 
 	function toggleSwitch() {
-		onboarding = !onboarding;
+		if (order_status !== 'In-Progress') {
+			onboarding = !onboarding;
+		}
 	}
 
 	const bg_colors: string[] = [
@@ -167,6 +170,7 @@
 		editing_row = false;
 		currentStep = 1;
 		candidateEmails = [];
+		order_status = '';
 	}
 
 	function resetProfileModal() {
@@ -179,6 +183,7 @@
 			// Populate modal with row values. Change submit formaction to update
 			let order = orders![index];
 			order_id = order.id;
+			order_status = order.status;
 			colorIndex = 0;
 			skillsModalFormAction = '?/editorder';
 			// shows modal
@@ -542,6 +547,7 @@
 												id="role"
 												required
 												bind:value={role}
+												disabled={order_status === 'In-Progress'}
 												class="border border-gray-300 text-gray-900 dark:text-white bg-gray-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
 												placeholder="Position at the Company"
 												on:input={(e) => (role = e.currentTarget.value.trim())}
@@ -571,13 +577,16 @@
 														<div class="flex items-center">
 															<button
 																type="button"
-																class="mt-5 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+																class="mt-5 relative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
 																class:bg-blue-700={onboarding}
 																class:dark:bg-gray-600={!onboarding}
 																class:bg-gray-50={!onboarding}
 																role="switch"
 																aria-checked={onboarding}
 																aria-labelledby="Preliminary Meeting?"
+																disabled={order_status === 'In-Progress'}
+																class:cursor-default={order_status === 'In-Progress'}
+																class:cursor-pointer={order_status !== 'In-Progress'}
 																on:click={toggleSwitch}
 															>
 																<span
