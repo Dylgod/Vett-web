@@ -14,6 +14,8 @@
 	let invisible = false;
 	let addAdmin = false;
 	let showNotification = false;
+	let notificationText: string = '';
+	let notificationSuccess = true;
 	let rank_of_user = data.rank;
 
 	$: ({ Company_logo } = data);
@@ -190,21 +192,36 @@
 		invisible = !invisible;
 		addAdmin = !addAdmin;
 		showNotification = true;
+		notificationSuccess = true;
+		notificationText = 'Invite Sent!';
 
 		// Hide notification after 3 seconds
 		setTimeout(() => {
 			showNotification = false;
-		}, 3000);
+		}, 5000);
 	}
 
 	function resetAddUser() {
 		invisible = !invisible;
 		showNotification = true;
+		notificationSuccess = true;
+		notificationText = 'Invite Sent!';
 
 		// Hide notification after 3 seconds
 		setTimeout(() => {
 			showNotification = false;
-		}, 3000);
+		}, 5000);
+	}
+
+	function showNotificationText(message: any, success: boolean) {
+		showNotification = true;
+		notificationSuccess = success;
+		notificationText = message;
+
+		// Hide notification after 3 seconds
+		setTimeout(() => {
+			showNotification = false;
+		}, 5000);
 	}
 
 	onMount(() => {
@@ -215,7 +232,13 @@
 </script>
 
 {#if showNotification}
-	<div class="notification font-semibold">Invite Sent!</div>
+	<div
+		class="notification font-semibold"
+		class:success={notificationSuccess}
+		class:error={!notificationSuccess}
+	>
+		{notificationText}
+	</div>
 {/if}
 
 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -541,8 +564,16 @@
 							class="p-4 md:p-5 flex flex-col"
 							method="POST"
 							action="?/addAdmin"
-							use:enhance
-							on:submit={resetAddAdmin}
+							use:enhance={() => {
+								return async ({ result }) => {
+									if (result.type === 'failure') {
+										const errorMessage = result.data?.message || 'An error occurred';
+										showNotificationText(errorMessage, false);
+									} else {
+										resetAddAdmin();
+									}
+								};
+							}}
 						>
 							<div class="gap-4 mb-4">
 								<div class="">
@@ -627,8 +658,16 @@
 							class="p-4 md:p-5 flex flex-col"
 							method="POST"
 							action="?/addUser"
-							use:enhance
-							on:submit={resetAddUser}
+							use:enhance={({}) => {
+								return async ({ result }) => {
+									if (result.type === 'failure') {
+										const errorMessage = result.data?.message || 'An error occurred';
+										showNotificationText(errorMessage, false);
+									} else {
+										resetAddUser();
+									}
+								};
+							}}
 						>
 							<div class="gap-4 mb-4">
 								<div class="">
@@ -817,25 +856,37 @@
 		top: 8%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background: #4caf50;
-		color: white;
 		padding: 1rem 2rem;
 		border-radius: 4px;
 		text-align: center;
 		z-index: 9999;
-		animation: fadeIn 0.3s ease-in;
+		animation: fadeInOut 5s linear 1 forwards;
 		min-width: 200px;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
 
-	@keyframes fadeIn {
-		from {
+	.notification.success {
+		background: #4caf50;
+		color: white;
+	}
+
+	.notification.error {
+		background: #ef4444;
+		color: white;
+	}
+
+	@keyframes fadeInOut {
+		0% {
 			opacity: 0;
-			transform: translate(-50%, -60%);
 		}
-		to {
+		5% {
 			opacity: 1;
-			transform: translate(-50%, -50%);
+		}
+		95% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
 		}
 	}
 </style>

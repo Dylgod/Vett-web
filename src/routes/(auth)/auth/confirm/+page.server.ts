@@ -47,7 +47,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
                     {
                         data: { display_name: newName }
                     })
-
+                // Company scrn addAdmin
                 if (newRank === "admin") {
                     const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
                     const { data: clientdata, error: clientfetchError } = await supaClient
@@ -92,9 +92,9 @@ export const load: PageServerLoad = async ({ url, locals }) => {
                         }
                     }
                 }
-
+                // Company scrn addUser
                 if (newRank === "user") {
-                    console.log("newRank", newRank)
+
                     const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
                     const { data: clientdata, error: clientfetchError } = await supaClient
                         .from('clients')
@@ -119,6 +119,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
                             console.log("Failed to update user", updateError)
                         }
                     } else {
+                        // Normal Account Creation Flow
                         const user_uuid = data.user?.id
                         const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
                         const { data: insertData, error: inserterror2 } = await supaClient

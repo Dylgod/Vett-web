@@ -279,25 +279,105 @@ export const actions = {
         if (client.owner === user.id) {
             const new_admin_name = (formData.get("new_admin_name")?.toString() || "").trim()
             const new_admin_email = (formData.get("new_admin_email")?.toString() || "").trim()
+            const querying_client_id = client.id
 
-            const { error } = await supaClient.auth.signInWithOtp({
-                email: new_admin_email,
-                options: {
-                    data: {
-                        display_name: new_admin_name,
-                        rank: "admin",
-                        client_id: client.id
-                    },
-                },
-            })
-            if (error) {
-                console.warn("failed to send magic link: ", error)
+            if (!new_admin_name || new_admin_name.length < 2) {
                 return fail(500, {
-                    ok: false,
-                    message: error.message,
+                    success: false,
+                    message: "Name must be at least 2 characters long",
+                })
+            }
+            
+            if (!new_admin_email || !new_admin_email.includes('@')) {
+                return fail(500, {
+                    success: false,
+                    message: "Invalid email address",
                 })
             }
 
+            const { data: newUUID, error: userError } = await supaClient
+                .rpc('get_user_uuid_by_email', { user_email: new_admin_email })
+
+            if (userError) {
+                return fail(500, {
+                    success: false,
+                    message: "Internal error 500",
+                })
+            }
+
+            // Email not in auth table
+            if (!newUUID) {
+                const { error } = await supaClient.auth.signInWithOtp({
+                    email: new_admin_email,
+                    options: {
+                        data: {
+                            display_name: new_admin_name,
+                            rank: "admin",
+                            client_id: querying_client_id
+                        },
+                    },
+                })
+
+                if (error) {
+                    console.warn("failed to send magic link: ", error)
+                    return fail(500, {
+                        success: false,
+                        message: error.message,
+                    })
+                }
+            } else {
+
+                const { data: find_UUID_client, error: supaError } = await supaClient
+                    .from('clients')
+                    .select("*")
+                    .contains('users', [newUUID])
+                    .single();
+
+                if (supaError) {
+                    return fail(500, {
+                        success: false,
+                        message: "Internal Database Error",
+                    })
+                }
+
+                if (find_UUID_client && find_UUID_client.id !== querying_client_id) {
+                    return fail(500, {
+                        success: false,
+                        message: "This User is an Employee of another company",
+                    })
+                }
+
+                if (find_UUID_client && find_UUID_client.id === querying_client_id) {
+                    const { data: isAdmin, error: supaError } = await supaClient
+                        .from('clients')
+                        .select("*")
+                        .contains('admins', [user.id])
+                        .single();
+
+                    if (isAdmin) {
+                        return fail(500, {
+                            success: false,
+                            message: "This User is already an Admin",
+                        })
+                    } else {
+                        return fail(500, {
+                            success: false,
+                            message: "This Email is already a User.<br>Promote them to admin using the three dot menu<br>to the right of their name",
+                        }) 
+                    }
+                }
+
+            }
+
+            return {
+                success: true
+            }
+
+        } else {
+            return fail(500, {
+                success: false,
+                message: "Only the company Owner can add new Admins",
+            })
         }
     },
     addUser: async ({ locals, request, url }) => {
@@ -310,10 +390,11 @@ export const actions = {
             throw redirect(303, "/"); //profile
         }
 
+        // Check if an Admin or Owner called this function
         const { data: client, error: clientError } = await supaClient
             .from('clients')
             .select("*")
-            .or(`owner.eq.${user.id},admins.cs.{${user.id}}`)
+            .contains('admins', [user.id])
             .single();
 
         if (clientError) {
@@ -323,31 +404,112 @@ export const actions = {
 
         if (!client) {
             console.log('User is not an owner or admin of any client');
-            throw redirect(303, "/"); //profile
+            throw redirect(303, "/profile");
         }
 
-        if (client.owner === user.id) {
+        if (client) {
             const new_user_name = (formData.get("new_user_name")?.toString() || "").trim()
             const new_user_email = (formData.get("new_user_email")?.toString() || "").trim()
+            const querying_client_id = client.id
 
-            const { data, error } = await supaClient.auth.signInWithOtp({
-                email: new_user_email,
-                options: {
-                    data: {
-                        display_name: new_user_name,
-                        rank: "user",
-                        client_id: client.id
-                    },
-                },
-            })
-            console.log("data", data)
-            if (error) {
-                console.warn("failed to send magic link: ", error)
+            if (!new_user_name || new_user_name.length < 2) {
                 return fail(500, {
-                    ok: false,
-                    message: error.message,
+                    success: false,
+                    message: "Name must be at least 2 characters long",
                 })
             }
+            
+            if (!new_user_email || !new_user_email.includes('@')) {
+                return fail(500, {
+                    success: false,
+                    message: "Invalid email address",
+                })
+            }
+
+            const { data: newUUID, error: userError } = await supaClient
+                .rpc('get_user_uuid_by_email', { user_email: new_user_email })
+
+            if (userError) {
+                return fail(500, {
+                    success: false,
+                    message: "Internal error 500",
+                })
+            }
+
+            // Email not in auth table
+            if (!newUUID) {
+                const { data, error } = await supaClient.auth.signInWithOtp({
+                    email: new_user_email,
+                    options: {
+                        data: {
+                            display_name: new_user_name,
+                            rank: "user",
+                            client_id: querying_client_id
+                        },
+                    },
+                })
+
+                if (error) {
+                    console.warn("failed to send magic link: ", error)
+                    return fail(500, {
+                        success: false,
+                        message: "Internal Server Error",
+                    })
+                }
+            } else {
+                const { data: find_UUID_client, error: supaError } = await supaClient
+                    .from('clients')
+                    .select("*")
+                    .contains('users', [newUUID])
+                    .single();
+
+                if (supaError) {
+                    return fail(500, {
+                        success: false,
+                        message: "Internal Database Error",
+                    })
+                }
+
+                if (find_UUID_client && find_UUID_client.id === querying_client_id) {
+                    return fail(500, {
+                        success: false,
+                        message: "This Email is already a User at your company",
+                    })
+                }
+
+                if (find_UUID_client && find_UUID_client.id !== querying_client_id) {
+                    return fail(500, {
+                        success: false,
+                        message: "This User is an Employee of another company",
+                    })
+                }
+
+                if (!find_UUID_client) {
+                    const { data, error } = await supaClient.auth.signInWithOtp({
+                        email: new_user_email,
+                        options: {
+                            data: {
+                                display_name: new_user_name,
+                                rank: "user",
+                                client_id: querying_client_id
+                            },
+                        },
+                    })
+
+                    if (error) {
+                        console.warn("failed to send magic link: ", error)
+                        return fail(500, {
+                            success: false,
+                            message: error.message,
+                        })
+                    }
+                }
+            }
+
+            return {
+                success: true,
+                message: "Invite Sent!"
+            };
 
         }
     },
