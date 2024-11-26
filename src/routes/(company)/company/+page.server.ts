@@ -22,7 +22,7 @@ export async function load({ locals }) {
 
     if (clientError) {
         console.error('Error fetching client:', clientError);
-        throw error(500, 'Error fetching client data');
+        throw redirect(303, "/");
     }
 
     if (!client) {

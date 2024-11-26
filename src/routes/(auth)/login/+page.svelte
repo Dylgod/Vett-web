@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	export let data;
 
@@ -17,6 +19,10 @@
 		if (data.expired) {
 			showNotification_alert(data.message)
 		}
+
+		// Remove the parameters from url
+		const newUrl = $page.url.pathname; // Gets current path without query params
+		goto(newUrl, { replaceState: true }); // Replace current URL without params
 	});
 </script>
 
