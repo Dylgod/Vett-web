@@ -311,7 +311,7 @@
 				showNotification = false;
 			}, 3000);
 
-			// Remove the 'success' parameter from the URL
+			// Remove the parameters from url
 			const newUrl = $page.url.pathname; // Gets current path without query params
 			goto(newUrl, { replaceState: true }); // Replace current URL without params
 		}
