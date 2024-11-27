@@ -1,36 +1,79 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-    export let numberOfCandidates: number;
-    export let emailInputs: string[] = Array(numberOfCandidates).fill('');
+	export let numberOfCandidates: number;
+	export let emailInputs: string[] = Array(numberOfCandidates).fill('');
 
-    let validationErrors: boolean[] = Array(numberOfCandidates).fill(false);
+	let validationErrors: boolean[] = Array(numberOfCandidates).fill(false);
+	let errorMessages: string[] = Array(numberOfCandidates).fill('');
 
-    const dispatch = createEventDispatcher<{
-        change: string[];
-    }>();
+	const dispatch = createEventDispatcher<{
+		change: string[];
+	}>();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    function validateEmail(email: string, index: number): void {
-        validationErrors[index] = !emailRegex.test(email);
-        validationErrors = [...validationErrors];
+	function validateEmail(email: string, index: number): void {
+		// Check for duplicates in other fields
+		const isDuplicate = emailInputs.some((e, i) => e === email && i !== index);
 
-        if (!validationErrors.some((error) => error)) {
-            dispatch('change', emailInputs);
-        }
-    }
+		if (isDuplicate) {
+			validationErrors[index] = true;
+			errorMessages[index] = 'This email has already been entered';
+		} else {
+			validationErrors[index] = !emailRegex.test(email);
+			errorMessages[index] = validationErrors[index] ? 'Please enter a valid email address' : '';
+		}
 
-    function handleInput(index: number, value: string): void {
-        emailInputs[index] = value;
-        emailInputs = [...emailInputs];
-        validateEmail(value, index);
-    }
+		validationErrors = [...validationErrors];
+		errorMessages = [...errorMessages];
 
-    $: if (numberOfCandidates !== emailInputs.length) {
-        emailInputs = Array(numberOfCandidates).fill('').map((_, i) => emailInputs[i] || '');
-    }
+		if (!validationErrors.some((error) => error)) {
+			dispatch('change', emailInputs);
+		}
+	}
 
+	function handleInput(index: number, value: string): void {
+		emailInputs[index] = value;
+		emailInputs = [...emailInputs];
+		validateEmail(value, index);
+	}
+
+	function handlePaste(event: ClipboardEvent, index: number): void {
+		// Prevent default paste behavior
+		event.preventDefault();
+
+		// Get pasted content
+		const pastedText = event.clipboardData?.getData('text') || '';
+
+		// Split by common delimiters (newline, comma, semicolon)
+		const emails = pastedText
+			.split(/[\n,;]/)
+			.map((email) => email.trim())
+			.filter((email) => email !== '');
+
+		// Only take as many emails as we have fields available
+		const availableFields = numberOfCandidates - index;
+		const emailsToUse = emails.slice(0, availableFields);
+
+		// Populate the fields
+		emailsToUse.forEach((email, i) => {
+			if (index + i < numberOfCandidates) {
+				emailInputs[index + i] = email;
+				validateEmail(email, index + i);
+			}
+		});
+
+		emailInputs = [...emailInputs];
+	}
+
+	$: if (numberOfCandidates !== emailInputs.length) {
+		emailInputs = Array(numberOfCandidates)
+			.fill('')
+			.map((_, i) => emailInputs[i] || '');
+		validationErrors = Array(numberOfCandidates).fill(false);
+		errorMessages = Array(numberOfCandidates).fill('');
+	}
 </script>
 
 <div class="space-y-4">
@@ -43,12 +86,13 @@
 					type="email"
 					bind:value={emailInputs[index]}
 					on:input={() => handleInput(index, emailInputs[index])}
+					on:paste={(e) => handlePaste(e, index)}
 					class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-					class:error={validationErrors[index]}
+					class:border-red-500={validationErrors[index]}
 					placeholder={`Candidate ${index + 1} Email`}
 				/>
 				{#if validationErrors[index]}
-					<span class="error-message text-red-500">Please enter a valid email address</span>
+					<span class="text-sm text-red-500">{errorMessages[index]}</span>
 				{/if}
 			</div>
 		</div>
