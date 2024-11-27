@@ -14,7 +14,7 @@ export async function load({ locals }) {
         redirect(303, "/login")
     } else {
 
-        if (response.data.user.id === VETT_ADMIN_UUID1 || response.data.user.id === VETT_ADMIN_UUID2) {
+        if (response.data.user.id === VETT_ADMIN_UUID2) {
             redirect(303, "/admin")
         }
 

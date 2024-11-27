@@ -9,6 +9,7 @@
 	}
 
 	let skillInput = '';
+	let inputElement: HTMLInputElement; // Reference to skill text input
 	let skills: Writable<Skill[]> = writable([]);
 	const colors: string[] = ['bg-teal-500', 'bg-orange-500', 'bg-rose-500', 'bg-purple-500'];
 	let colorIndex = 0;
@@ -25,6 +26,8 @@
 				skillInput = '';
 				dispatch('skillslist', getSkillsList());
 				dispatch('colorIndexUpdate', colorIndex);
+				// Keep focus on input after adding
+				inputElement.focus();
 			} else {
 				showMaxAlert = true;
 				setTimeout(() => {
@@ -34,12 +37,18 @@
 		}
 	}
 
+	function handleKeyPress(event: KeyboardEvent): void {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			addSkill();
+		}
+	}
+
 	function removeSkill(index: number): void {
 		$skills = $skills.filter((_, i) => i !== index);
 		colorIndex = (colorIndex - 1 + colors.length) % colors.length;
 		dispatch('colorIndexUpdate', colorIndex);
 		dispatch('skillslist', getSkillsList());
-
 	}
 
 	function getSkillsList(): string[] {
@@ -61,6 +70,8 @@
 		<input
 			type="text"
 			bind:value={skillInput}
+			bind:this={inputElement}
+			on:keypress={handleKeyPress}
 			maxlength="30"
 			name="skills_input"
 			id="skills_input"
