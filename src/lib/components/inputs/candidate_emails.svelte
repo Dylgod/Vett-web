@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { X } from 'lucide-svelte';
 
 	export let numberOfCandidates: number;
 	export let emailInputs: string[] = Array(numberOfCandidates).fill('');
@@ -67,6 +68,13 @@
 		emailInputs = [...emailInputs];
 	}
 
+	function clearAllFields(): void {
+		emailInputs = Array(numberOfCandidates).fill('');
+		validationErrors = Array(numberOfCandidates).fill(false);
+		errorMessages = Array(numberOfCandidates).fill('');
+		dispatch('change', emailInputs);
+	}
+
 	$: if (numberOfCandidates !== emailInputs.length) {
 		emailInputs = Array(numberOfCandidates)
 			.fill('')
@@ -77,7 +85,17 @@
 </script>
 
 <div class="space-y-4">
-	<h3 class="text-lg font-medium text-gray-900 dark:text-white">Add Candidate Emails</h3>
+	<div class="flex justify-between items-center">
+		<h3 class="text-lg font-medium text-gray-900 dark:text-white">Add Candidate Emails<span class="ml-2 text-sm text-gray-400">- try pasting the emails in!</span></h3>
+		<button
+			type="button"
+			class="inline-flex items-center px-3 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-600 dark:text-white dark:border-gray-500 dark:hover:bg-gray-700"
+			on:click={clearAllFields}
+		>
+			<!-- <X class="w-4 h-4 mr-1" /> -->
+			Clear All
+		</button>
+	</div>
 
 	{#each emailInputs as email, index}
 		<div class="flex items-start space-x-4">
