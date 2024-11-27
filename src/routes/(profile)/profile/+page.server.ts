@@ -1,4 +1,4 @@
-import { SERVICE_ROLE, PRICE_ID } from '$env/static/private';
+import { SERVICE_ROLE, PRICE_ID, VETT_ADMIN_UUID1, VETT_ADMIN_UUID2 } from '$env/static/private';
 import { PUBLIC_HOSTNAME, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { stripe } from '$lib/stripe';
 import type { Database } from '$lib/types/supabase.js';
@@ -13,6 +13,11 @@ export async function load({ locals }) {
     if (!response.data.user) {
         redirect(303, "/login")
     } else {
+
+        if (response.data.user.id === VETT_ADMIN_UUID1 || response.data.user.id === VETT_ADMIN_UUID2) {
+            redirect(303, "/admin")
+        }
+
         let { data: client, error } = await supa_client
             .from('clients')
             .select("*")

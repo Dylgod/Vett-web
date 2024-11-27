@@ -12,16 +12,16 @@
 	<div class="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8 relative z-10">
 		<nav class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
 			<div class="pb-6">
-				<a href="/" class="text-sm leading-6 text-blue-100 hover:text-white">About</a>
+				<a href="/about" class="text-sm leading-6 text-blue-100 hover:text-white">About</a>
 			</div>
 			<div class="pb-6">
-				<a href="/" class="text-sm leading-6 text-blue-100 hover:text-white">Blog</a>
+				<a href="/blog" class="text-sm leading-6 text-blue-100 hover:text-white">Blog</a>
 			</div>
 			<div class="pb-6">
-				<a href="/" class="text-sm leading-6 text-blue-100 hover:text-white">Jobs</a>
+				<a href="/#pricing" class="text-sm leading-6 text-blue-100 hover:text-white">Pricing</a>
 			</div>
 			<div class="pb-6">
-				<a href="/" class="text-sm leading-6 text-blue-100 hover:text-white">Pricing</a>
+				<a href="/contact" class="text-sm leading-6 text-blue-100 hover:text-white">Contact</a>
 			</div>
 		</nav>
 		<div class="mt-10 flex justify-center space-x-10">

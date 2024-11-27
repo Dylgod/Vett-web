@@ -1,4 +1,4 @@
-import { SERVICE_ROLE } from '$env/static/private';
+import { SERVICE_ROLE, VETT_ADMIN_UUID1, VETT_ADMIN_UUID2 } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
@@ -123,6 +123,10 @@ export async function load({ locals }) {
 
     if (!response.data.user) {
         throw redirect(303, "/login");
+    } else {
+        if (response.data.user.id !== VETT_ADMIN_UUID1 && response.data.user.id !== VETT_ADMIN_UUID2) {
+            redirect(303, "/profile")
+        }
     }
 
     let { data: orders, error: orderError } = await supa_client
