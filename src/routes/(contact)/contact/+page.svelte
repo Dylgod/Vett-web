@@ -1,5 +1,33 @@
+<script lang="ts">
+	import { enhance } from '$app/forms';
 
-<div class="relative isolate bg-gray-900">
+	let showNotification = false;
+	let notificationText: string = '';
+	let notificationSuccess = true;
+
+	function showNotificationText(message: any, success: boolean) {
+		showNotification = true;
+		notificationSuccess = success;
+		notificationText = message;
+
+		// Hide notification after 3 seconds
+		setTimeout(() => {
+			showNotification = false;
+		}, 5000);
+	}
+</script>
+
+{#if showNotification}
+	<div
+		class="notification font-semibold"
+		class:success={notificationSuccess}
+		class:error={!notificationSuccess}
+	>
+		{notificationText}
+	</div>
+{/if}
+
+<div class="relative isolate bg-gray-900 pb-20">
 	<div class="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
 		<div class="relative px-6 pb-20 pt-24 sm:pt-32 lg:static lg:px-8 lg:py-48">
 			<div class="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
@@ -46,52 +74,11 @@
 					Let's work together
 				</h2>
 				<p class="mt-6 text-lg/8 text-gray-300">
-					Proin volutpat consequat porttitor cras nullam gravida at. Orci molestie a eu arcu. Sed ut
-					tincidunt integer elementum id sem. Arcu sed malesuada et magna.
+					Fake it until you make it doesnt work with us. Our evaluation process goes beyond the
+					resume to ensure compatibillity with your tech stack, helping you build teams you can
+					trust. Don't let impressive credentials mask a lack of practical knowledge.
 				</p>
 				<dl class="mt-10 space-y-4 text-base/7 text-gray-300">
-					<div class="flex gap-x-4">
-						<dt class="flex-none">
-							<span class="sr-only">Address</span>
-							<svg
-								class="h-7 w-6 text-gray-400"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								aria-hidden="true"
-								data-slot="icon"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z"
-								/>
-							</svg>
-						</dt>
-						<dd>545 Mavis Island<br />Chicago, IL 99191</dd>
-					</div>
-					<div class="flex gap-x-4">
-						<dt class="flex-none">
-							<span class="sr-only">Telephone</span>
-							<svg
-								class="h-7 w-6 text-gray-400"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								aria-hidden="true"
-								data-slot="icon"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"
-								/>
-							</svg>
-						</dt>
-						<dd><a class="hover:text-white" href="tel:+1 (555) 234-5678">+1 (555) 234-5678</a></dd>
-					</div>
 					<div class="flex gap-x-4">
 						<dt class="flex-none">
 							<span class="sr-only">Email</span>
@@ -112,13 +99,29 @@
 							</svg>
 						</dt>
 						<dd>
-							<a class="hover:text-white" href="mailto:hello@example.com">hello@example.com</a>
+							<a class="hover:text-white" href="mailto:support@vett.dev">support@vett.dev</a>
 						</dd>
 					</div>
 				</dl>
 			</div>
 		</div>
-		<form action="#" method="POST" class="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
+		<form
+			method="POST"
+			class="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48"
+			action="?/sendContactEmail"
+			use:enhance={({ formElement }) => {
+				return async ({ result }) => {
+					if (result.type === 'failure') {
+						const errorMessage = result.data?.message || 'An error occurred';
+						showNotificationText(errorMessage, false);
+					} else if (result.type === 'success') {
+						const successMessage = result.data?.message || 'Message sent!';
+						showNotificationText(successMessage, true);
+						formElement.reset(); // Clear the form only on success
+					}
+				};
+			}}
+		>
 			<div class="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
 				<div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 					<div>
@@ -131,6 +134,8 @@
 								name="first-name"
 								id="first-name"
 								autocomplete="given-name"
+								required
+								minlength="2"
 								class="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm/6"
 							/>
 						</div>
@@ -144,6 +149,8 @@
 								name="last-name"
 								id="last-name"
 								autocomplete="family-name"
+								required
+								minlength="2"
 								class="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm/6"
 							/>
 						</div>
@@ -156,6 +163,7 @@
 								name="email"
 								id="email"
 								autocomplete="email"
+								required
 								class="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm/6"
 							/>
 						</div>
@@ -166,6 +174,8 @@
 							<textarea
 								name="message"
 								id="message"
+								required
+								minlength="10"
 								rows="4"
 								class="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm/6"
 							></textarea>
@@ -183,3 +193,44 @@
 		</form>
 	</div>
 </div>
+
+<style>
+	.notification {
+		position: fixed;
+		top: 8%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		padding: 1rem 2rem;
+		border-radius: 4px;
+		text-align: center;
+		z-index: 9999;
+		animation: fadeInOut 5s linear 1 forwards;
+		min-width: 200px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.notification.success {
+		background: #4caf50;
+		color: white;
+	}
+
+	.notification.error {
+		background: #ef4444;
+		color: white;
+	}
+
+	@keyframes fadeInOut {
+		0% {
+			opacity: 0;
+		}
+		5% {
+			opacity: 1;
+		}
+		95% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+</style>

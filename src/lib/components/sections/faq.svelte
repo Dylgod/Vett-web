@@ -5,7 +5,7 @@
 		</h2>
 		<p class="mt-6 max-w-2xl text-base leading-7 text-gray-300">
 			Have a different question and can’t find the answer you’re looking for? Reach out to our
-			support team by <a href="#" class="font-semibold text-blue-600 hover:text-indigo-300"
+			support team by <a href="/contact" class="font-semibold text-blue-600 hover:text-indigo-300"
 				>sending us an email</a
 			> and we’ll get back to you as soon as we can.
 		</p>

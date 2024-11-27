@@ -18,11 +18,12 @@
 					/></svg
 				>
 			</a>
-			<div class="hidden lg:flex lg:gap-x-12">
+			<div class="hidden lg:flex lg:gap-x-10">
 				<a href="/" class="text-sm font-semibold leading-6 text-white">Home</a>
 				<a href="/about" class="text-sm font-semibold leading-6 text-white">About Us</a>
 				<a href="/blog" class="text-sm font-semibold leading-6 text-white">Blog</a>
 				<a href="/#pricing" class="text-sm font-semibold leading-6 text-white">Pricing</a>
+				<a href="/contact" class="text-sm font-semibold leading-6 text-white">Contact Us</a>
 			</div>
 		</div>
 		<div class="flex lg:hidden">
