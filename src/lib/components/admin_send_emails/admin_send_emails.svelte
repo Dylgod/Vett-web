@@ -5,10 +5,10 @@
 	export let myemails: [string, boolean | 'fail'][];
 	export let selected: string[] = [];
 
-	export let resend_email_body: string
-	export let resend_email_company_name: string
-	export let resend_supabase_emails_column: string
-	export let resend_order_id: string
+	export let resend_email_body: string;
+	export let resend_email_company_name: string;
+	export let resend_supabase_emails_column: string;
+	export let resend_order_id: string;
 	let resend_email_address: string;
 
 	$: {
@@ -36,11 +36,14 @@
 		}
 	};
 
-	function handleCheckboxChange(email: string, isChecked: boolean) {
-		if (isChecked) {
-			selected = [...selected, email];
-		} else {
-			selected = selected.filter((e) => e !== email);
+	function handleCheckboxChange(email: string, isChecked: boolean, status: boolean | 'fail') {
+		// Only allow changes if the email hasn't been sent
+		if (status !== true) {
+			if (isChecked) {
+				selected = [...selected, email];
+			} else {
+				selected = selected.filter((e) => e !== email);
+			}
 		}
 	}
 
@@ -50,6 +53,10 @@
 		} else {
 			selected = $emailStore.emails.map(([email]) => email);
 		}
+	}
+
+	function handleSelectNotSent() {
+		selected = $emailStore.emails.filter(([_, status]) => status !== true).map(([email]) => email);
 	}
 
 	$: selectAllButtonText =
@@ -76,9 +83,9 @@
 					<input
 						type="checkbox"
 						checked={selected.includes(email)}
-						on:change={(e) => handleCheckboxChange(email, e.currentTarget.checked)}
+						on:change={(e) => handleCheckboxChange(email, e.currentTarget.checked, status)}
 						class="h-4 w-4 rounded border-gray-300"
-						disabled={$emailStore.loading || status === true}
+						disabled={$emailStore.loading}
 					/>
 				</div>
 
@@ -141,7 +148,11 @@
 		<input type="hidden" name="resend_order_id" value={resend_order_id} />
 		<input type="hidden" name="resend_email_body" value={resend_email_body} />
 		<input type="hidden" name="resend_email_company_name" value={resend_email_company_name} />
-		<input type="hidden" name="resend_supabase_emails_column" value={resend_supabase_emails_column} />
+		<input
+			type="hidden"
+			name="resend_supabase_emails_column"
+			value={resend_supabase_emails_column}
+		/>
 		<input
 			type="text"
 			bind:value={resend_email_address}
@@ -153,22 +164,32 @@
 		/>
 		<button
 			type="submit"
-			class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
+			class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end"
 		>
 			Resend
 		</button>
 	</form>
 </div>
 
-<div class="flex gap-10 mt-6 mb-2 justify-between">
-	<button
-		type="button"
-		on:click={handleSelectAll}
-		class="items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
-		disabled={$emailStore.loading}
-	>
-		{selectAllButtonText}
-	</button>
+<div class="flex gap-4 mt-6 mb-2 justify-between">
+	<div class="flex gap-4">
+		<button
+			type="button"
+			on:click={handleSelectAll}
+			class="items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+			disabled={$emailStore.loading}
+		>
+			{selectAllButtonText}
+		</button>
+		<button
+			type="button"
+			on:click={handleSelectNotSent}
+			class="items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+			disabled={$emailStore.loading}
+		>
+			Select Not Sent
+		</button>
+	</div>
 	<button
 		type="submit"
 		class="px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
