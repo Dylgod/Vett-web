@@ -38,6 +38,7 @@
 	let showNotification = false;
 	let showCompleted = false;
 	let notificationText: string = 'Email Template Saved!';
+	let notificationSuccess = true;
 
 	let role = '';
 	let skills: string[] = [];
@@ -100,16 +101,19 @@
 		return [bg, text, ring];
 	}
 
-	function showNotification_alert(text: string) {
-		notificationText = text;
+	function showNotification_alert(message: any, success: boolean) {
 		showNotification = true;
+		notificationSuccess = success;
+		notificationText = message;
+
+		// Hide notification after 3 seconds
 		setTimeout(() => {
 			showNotification = false;
-		}, 3000);
+		}, 5000);
 	}
 
 	function saveTemplate() {
-		showNotification_alert('Email Template Saved!');
+		showNotification_alert('Email Template Saved!', true);
 		console.log(emailTemplate);
 	}
 
@@ -225,11 +229,11 @@ You can schedule your technical interview with ${company_name} by clicking the c
 						return task;
 					});
 
-					showNotification_alert('Results Email Sent!');
+					showNotification_alert('Results Email Sent!', true);
 					resetOrderModal();
 				}
 			} else {
-				showNotification_alert('Failed to send results email');
+				showNotification_alert('Failed to send results email', false);
 			}
 		};
 	};
@@ -240,7 +244,13 @@ You can schedule your technical interview with ${company_name} by clicking the c
 </script>
 
 {#if showNotification}
-	<div class="notification font-semibold">{notificationText}</div>
+	<div
+		class="notification font-semibold"
+		class:success={notificationSuccess}
+		class:error={!notificationSuccess}
+	>
+		{notificationText}
+	</div>
 {/if}
 
 <div class="bg-gruvboxDark-bgH">
@@ -356,7 +366,6 @@ You can schedule your technical interview with ${company_name} by clicking the c
 		<div class="mt-20 bg-gruvboxDark-bgH">
 			<CalcomEmbed />
 		</div>
-		
 	</div>
 </div>
 
@@ -424,7 +433,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 					<div class="p-5 px-10">
 						{#if activeTab === 0}
 							<div class="space-y-6">
-								<p class="text-md font-medium text-gray-900 dark:text-white">Role Name: {role}</p>
+								<p class="text-md font-medium text-gray-900 dark:text-white">Role: <span class='ml-3 text-gruvboxDark-fg1'>{role}</span></p>
 								<div class="flex flex-wrap gap-1">
 									<p class="pr-2 text-md font-medium text-gray-900 dark:text-white">Skills:</p>
 									{#each skills as skill}
@@ -497,15 +506,23 @@ You can schedule your technical interview with ${company_name} by clicking the c
 		top: 8%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background: #3c8f3e;
-		color: white;
 		padding: 1rem 2rem;
 		border-radius: 4px;
 		text-align: center;
 		z-index: 9999;
-		animation: fadeInOut 3s linear 1 forwards;
+		animation: fadeInOut 5s linear 1 forwards;
 		min-width: 200px;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.notification.success {
+		background: #4caf50;
+		color: white;
+	}
+
+	.notification.error {
+		background: #ef4444;
+		color: white;
 	}
 
 	@keyframes fadeInOut {

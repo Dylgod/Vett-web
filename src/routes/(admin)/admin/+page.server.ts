@@ -348,7 +348,7 @@ export const actions = {
             };
 
             try {
-                await mg.messages.create(DOMAIN, messageData);
+                // await mg.messages.create(DOMAIN, messageData);
 
                 // Update the status in existingEmails array
                 for (let i = 0; i < existingEmails.length; i++) {
