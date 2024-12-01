@@ -344,7 +344,7 @@ export const POST = async ({ request }: RequestEvent) => {
                         if (updateError) throw updateError;
                         if (!orderData || orderData.length === 0) throw new Error('No order data returned');
 
-                        const mjmlTemplate = getEditOrderTemplate(order_id, "http://localhost:5174/vett-dev/strategy-meeting", emails_as_list, event.data.object.metadata?.onboarding === '1');
+                        const mjmlTemplate = getEditOrderTemplate(order_id, "cal.com/vett-dev/strategy-meeting", emails_as_list, event.data.object.metadata?.onboarding === '1');
                         const { html } = mjml2html(mjmlTemplate);
 
                         // Setup mailgun
@@ -390,7 +390,7 @@ export const POST = async ({ request }: RequestEvent) => {
                         if (!orderData || orderData.length === 0) throw new Error('No order data returned');
 
                         const the_order_id: string = orderData[0].id.toString();
-                        const mjmlTemplate = getOrderConfirmationTemplate(the_order_id, "http://localhost:5174/vett-dev/strategy-meeting", emails_as_list, event.data.object.metadata?.onboarding === "1");
+                        const mjmlTemplate = getOrderConfirmationTemplate(the_order_id, "cal.com/vett-dev/strategy-meeting", emails_as_list, event.data.object.metadata?.onboarding === "1");
                         const { html } = mjml2html(mjmlTemplate);
 
                         // Setup mailgun

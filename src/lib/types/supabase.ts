@@ -72,7 +72,9 @@ export type Database = {
           created_by: string
           created_for: number
           emails: Json
+          eval_steps: string | null
           id: number
+          notes: string | null
           onboarding: boolean
           role: string
           skills: string[]
@@ -85,7 +87,9 @@ export type Database = {
           created_by?: string
           created_for: number
           emails?: Json
+          eval_steps?: string | null
           id?: number
+          notes?: string | null
           onboarding?: boolean
           role: string
           skills: string[]
@@ -98,7 +102,9 @@ export type Database = {
           created_by?: string
           created_for?: number
           emails?: Json
+          eval_steps?: string | null
           id?: number
+          notes?: string | null
           onboarding?: boolean
           role?: string
           skills?: string[]

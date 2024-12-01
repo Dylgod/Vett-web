@@ -2,11 +2,17 @@ import { SERVICE_ROLE, VETT_ADMIN_UUID1, VETT_ADMIN_UUID2 } from '$env/static/pr
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
-import { redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { MAILGUN_API_KEY, MAILGUN_DOMAIN } from '$env/static/private';
 import Mailgun from 'mailgun.js';
 import formData from 'form-data';
 import mjml2html from 'mjml';
+
+interface Eval_Step {
+    step: string;
+    description: string;
+    order: number;
+}
 
 const getMJMLTemplate = (manager_name_or_email: string, evals: Evaluation[]) => `
 <mjml>
@@ -181,6 +187,7 @@ export async function load({ locals }) {
                 Company_id: companyData.id,
                 Company_name: companyData.company_name || '',
                 Date: formatDate(order.created_at),
+                Eval_steps: order.eval_steps,
                 Manager_id: order.created_by,
                 Manager: userData.user.email as string,
                 Order_id: order.id.toString(),
@@ -309,7 +316,7 @@ export const actions = {
             const page_formData = await request.formData()
             const supabase_emails_column = page_formData.get('resend_supabase_emails_column')?.toString() || '[]';
             const email_address = page_formData.get('resend_email_address')?.toString().trim() || '';
-            const emailBody = page_formData.get('resend_email_body')?.toString() || '';
+            const magic_link = page_formData.get('resend_magic_link')?.toString() || '';
             const company_name = page_formData.get('resend_email_company_name')?.toString() || '';
             const order_id = page_formData.get('resend_order_id')?.toString() || '';
             const DOMAIN = MAILGUN_DOMAIN || '';
@@ -339,13 +346,13 @@ export const actions = {
                 key: MAILGUN_API_KEY || ''
             });
 
-            const messageData = {
-                from: FROM_EMAIL,
-                to: email_address,
-                subject: `Schedule your technical interview - ${company_name}`,
-                html: emailBody.replace(/\n/g, '<br>'),
-                text: emailBody
-            };
+            // const messageData = {
+            //     from: FROM_EMAIL,
+            //     to: email_address,
+            //     subject: `Schedule your technical interview - ${company_name}`,
+            //     html: emailBody.replace(/\n/g, '<br>'),
+            //     text: emailBody
+            // };
 
             try {
                 // await mg.messages.create(DOMAIN, messageData);
@@ -485,6 +492,32 @@ export const actions = {
                 success: false,
                 error: 'Failed to process results'
             };
+        }
+    },
+    saveEvaluationSteps: async ({ request }) => {
+        const supa_client = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+        const page_formData = await request.formData();
+
+        const evaluation_steps = page_formData.get('evaluation_steps')?.toString() || '';
+        const eval_order_id = page_formData.get('eval_order_id')?.toString() || '';
+
+        const { data, error: supaError } = await supa_client
+            .from('orders')
+            .update({
+                eval_steps: evaluation_steps
+            })
+            .eq("id", eval_order_id)
+            .select();
+
+        if (supaError) {
+            return fail(500, {
+                success: false,
+                message: `Failed to write to DB: ${supaError.message}`,
+            })
+        }
+
+        return {
+            success: true
         }
     }
 };

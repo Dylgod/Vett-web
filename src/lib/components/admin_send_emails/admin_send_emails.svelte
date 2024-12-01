@@ -5,7 +5,7 @@
 	export let myemails: [string, boolean | 'fail'][];
 	export let selected: string[] = [];
 
-	export let resend_email_body: string;
+	export let resend_magic_link: string = 'cal.com/vett-dev/schedule-interview'
 	export let resend_email_company_name: string;
 	export let resend_supabase_emails_column: string;
 	export let resend_order_id: string;
@@ -146,7 +146,7 @@
 <div class="flex mb-10 mt-4 gap-4 relative">
 	<form method="POST" action="?/resendEmail" class="flex" use:enhance>
 		<input type="hidden" name="resend_order_id" value={resend_order_id} />
-		<input type="hidden" name="resend_email_body" value={resend_email_body} />
+		<input type="hidden" name="resend_magic_link" value={resend_magic_link} />
 		<input type="hidden" name="resend_email_company_name" value={resend_email_company_name} />
 		<input
 			type="hidden"

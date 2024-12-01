@@ -2,6 +2,7 @@
 	import AdminRow from '$lib/components/orders/admin_row.svelte';
 	import AdminSendEmails from '$lib/components/admin_send_emails/admin_send_emails.svelte';
 	import AdminSendResults from '$lib/components/admin_send_results/admin_send_results.svelte';
+	import AdminEmailSkills from '$lib/components/admin_send_emails/admin_email_skills.svelte';
 	import CalcomEmbed from '$lib/components/calcom/calcom_embed.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
@@ -49,8 +50,10 @@
 	let company_name: string = '';
 	let order_id: string;
 	let manager_uuid: string;
+	let eval_steps: string | null;
+	let imported_steps: Eval_Step[];
 
-	let emailTemplate: string;
+	let email_magic_link: string = 'cal.com/vett-dev/schedule-interview';
 
 	let colorIndex = 0;
 	const bg_colors: string[] = [
@@ -114,7 +117,7 @@
 
 	function saveTemplate() {
 		showNotification_alert('Email Template Saved!', true);
-		console.log(emailTemplate);
+		console.log(eval_steps);
 	}
 
 	function resetOrderModal() {
@@ -127,7 +130,8 @@
 		company_name = '';
 		order_id = '';
 		manager_uuid = '';
-		emailTemplate = '';
+		eval_steps = '';
+		imported_steps = [];
 		emailStore.set({ emails: [], loading: false });
 	}
 
@@ -140,23 +144,7 @@
 		order_id = task.Order_id;
 		supabase_emails_column = task.Emails;
 		manager_uuid = task.Manager_id;
-
-		emailTemplate = `Greetings,
-
-${company_name} has requested that you participate in a technical evaluation as part of the interview process.
-
-Our technical evaluation process is two steps:
-
-1. A small project to demonstrate your skills. The project is not timed, and you may complete it at whatever pace is most convenient for you. We evaluate projects based on their functionality and readability.
-
-2. After you have submitted your project we will have a video call to discuss the project and your experience. We never do trivia or leetcode style questions.
-
-Projects normally take between 2-4 hours to complete. The technical interview takes approximately one hour.
-
-The outline for the project is:
-<...steps go here...>
-
-You can schedule your technical interview with ${company_name} by clicking the calendar link below.`;
+		imported_steps = task.Eval_steps ? JSON.parse(task.Eval_steps) : null;
 
 		adminorder_modal_invisible = !adminorder_modal_invisible;
 	}
@@ -433,7 +421,9 @@ You can schedule your technical interview with ${company_name} by clicking the c
 					<div class="p-5 px-10">
 						{#if activeTab === 0}
 							<div class="space-y-6">
-								<p class="text-md font-medium text-gray-900 dark:text-white">Role: <span class='ml-3 text-gruvboxDark-fg1'>{role}</span></p>
+								<p class="text-md font-medium text-gray-900 dark:text-white">
+									Role: <span class="ml-3 text-gruvboxDark-fg1">{role}</span>
+								</p>
 								<div class="flex flex-wrap gap-1">
 									<p class="pr-2 text-md font-medium text-gray-900 dark:text-white">Skills:</p>
 									{#each skills as skill}
@@ -444,21 +434,33 @@ You can schedule your technical interview with ${company_name} by clicking the c
 										>
 									{/each}
 								</div>
-								<textarea
-									bind:value={emailTemplate}
-									class="border border-gray-300 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 h-64 resize-none font-mono whitespace-pre-wrap"
-									placeholder="Enter email template here..."
-									spellcheck="false"
-									wrap="soft"
-								></textarea>
-								<div class="flex justify-end">
-									<button
-										on:click={saveTemplate}
-										class="flex items-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
-									>
-										Save Template
-									</button>
-								</div>
+								<form
+									method="POST"
+									action="?/saveEvaluationSteps"
+									use:enhance={() => {
+										return async ({ result }) => {
+											if (result.type === 'failure') {
+												const errorMessage = result.data?.message || 'An error occurred';
+												showNotification_alert(errorMessage, false);
+											} else {
+												showNotification_alert('Steps Written to Database!', true);
+											}
+										};
+									}}
+								>
+									<AdminEmailSkills bind:exported_steps={eval_steps} {imported_steps} />
+									<div class="flex justify-end">
+										<button
+											on:click={saveTemplate}
+											class="flex items-center mt-4 px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 disabled:bg-gray-600"
+											type="submit"
+										>
+											Save Template
+										</button>
+									</div>
+									<input type="hidden" name="eval_order_id" value={order_id} />
+									<input type="hidden" name="evaluation_steps" value={eval_steps} />
+								</form>
 							</div>
 						{:else if activeTab === 1}
 							<form method="POST" action="?/sendCandidateEmails" use:enhance={handleEmailSubmit}>
@@ -467,9 +469,10 @@ You can schedule your technical interview with ${company_name} by clicking the c
 									name="emails_as_string"
 									value={JSON.stringify(targeted_emails_for_mailing)}
 								/>
-								<input type="hidden" name="email_body" value={emailTemplate} />
+								<input type="hidden" name="email_magic_link" value={email_magic_link} />
 								<input type="hidden" name="order_id" value={order_id} />
 								<input type="hidden" name="company_name" value={company_name} />
+								<input type="hidden" name="eval_steps" value={eval_steps} />
 								<input type="hidden" name="manager_uuid" value={manager_uuid} />
 								<input
 									type="hidden"
@@ -479,7 +482,7 @@ You can schedule your technical interview with ${company_name} by clicking the c
 								<AdminSendEmails
 									myemails={emails}
 									bind:selected={targeted_emails_for_mailing}
-									resend_email_body={emailTemplate}
+									resend_magic_link={email_magic_link}
 									resend_email_company_name={company_name}
 									resend_supabase_emails_column={JSON.stringify(supabase_emails_column)}
 									resend_order_id={order_id}
