@@ -486,6 +486,7 @@
 									resend_email_company_name={company_name}
 									resend_supabase_emails_column={JSON.stringify(supabase_emails_column)}
 									resend_order_id={order_id}
+									resend_eval_steps={eval_steps}
 								/>
 							</form>
 						{:else}

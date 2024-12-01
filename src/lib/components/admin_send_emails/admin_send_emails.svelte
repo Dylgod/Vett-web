@@ -9,6 +9,7 @@
 	export let resend_email_company_name: string;
 	export let resend_supabase_emails_column: string;
 	export let resend_order_id: string;
+	export let resend_eval_steps: string | null;
 	let resend_email_address: string;
 
 	$: {
@@ -147,6 +148,7 @@
 	<form method="POST" action="?/resendEmail" class="flex" use:enhance>
 		<input type="hidden" name="resend_order_id" value={resend_order_id} />
 		<input type="hidden" name="resend_magic_link" value={resend_magic_link} />
+		<input type="hidden" name="resend_eval_steps" value={resend_eval_steps} />
 		<input type="hidden" name="resend_email_company_name" value={resend_email_company_name} />
 		<input
 			type="hidden"
