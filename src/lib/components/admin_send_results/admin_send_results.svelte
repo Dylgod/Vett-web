@@ -36,6 +36,10 @@
 		noteText = '';
 		showNoteModal = !showNoteModal;
 	}
+
+	function getNoteButtonColor(note: string): string {
+		return note.length < 5 ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-700 hover:bg-blue-800';
+	}
 </script>
 
 <div class="relative">
@@ -57,7 +61,9 @@
 								noteText = evaluation.note || '';
 								showNoteModal = !showNoteModal;
 							}}
-							class="px-3 py-1 text-sm bg-blue-700 text-white rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+							class="px-3 py-1 text-sm {getNoteButtonColor(
+								evaluation.note || ''
+							)} text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
 						>
 							Note
 						</button>
