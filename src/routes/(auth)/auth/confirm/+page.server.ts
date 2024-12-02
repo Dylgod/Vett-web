@@ -36,7 +36,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
         const { data, error } = await locals.supabase.auth.verifyOtp({ token_hash, type })
 
         if (!error) {
-
+            // Company added a new user flow
             if (data.user?.user_metadata.display_name && data.user?.user_metadata.client_id && data.user?.user_metadata.rank) {
                 const newName: string = data.user?.user_metadata.display_name;
                 const newRank: string = data.user?.user_metadata.rank;

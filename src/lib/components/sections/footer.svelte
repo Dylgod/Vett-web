@@ -21,6 +21,12 @@
 				<a href="/#pricing" class="text-sm leading-6 text-blue-100 hover:text-white">Pricing</a>
 			</div>
 			<div class="pb-6">
+				<a href="/terms" class="text-sm leading-6 text-blue-100 hover:text-white">Terms</a>
+			</div>
+			<div class="pb-6">
+				<a href="/privacy" class="text-sm leading-6 text-blue-100 hover:text-white">Privacy</a>
+			</div>
+			<div class="pb-6">
 				<a href="/contact" class="text-sm leading-6 text-blue-100 hover:text-white">Contact</a>
 			</div>
 		</nav>
