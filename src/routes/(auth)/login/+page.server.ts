@@ -1,5 +1,6 @@
 import type { Provider } from "@supabase/supabase-js";
 import { error, fail, redirect } from "@sveltejs/kit";
+import { PUBLIC_HOSTNAME } from "$env/static/public";
 
 const SENDTO_COOKIE = "path_after_login"
 const ENABLED_OAUTH_PROVIDERS = ["google", "apple"]
@@ -44,23 +45,23 @@ export const actions = {
     },
 
     // OAuth based login.
-    oauthLogin: async ({ locals, url, request }) => {
-        const formData = await request.formData()
-        const provider = (formData.get("provider")?.toString() || "").trim()
-        if (!ENABLED_OAUTH_PROVIDERS.includes(provider)) {
-            console.error("invalid oauth provider: ", provider)
-            throw redirect(303, "/auth")
-        }
+    oauthLogin: async ({ request, locals, url }) => {
+        const body = Object.fromEntries(await request.formData());
+        const provider = url.searchParams.get('provider') as Provider;
 
-        const { data, error } = await locals.supabase.auth.signInWithOAuth({
-            provider: provider as Provider,
-            options: { redirectTo: `${url.origin}/auth/confirm` }
-        })
-        if (error) {
-            console.error("failed to send oauth link: ", error)
-            throw redirect(303, "/auth")
-        }
+        if (provider) {
+            const { data, error } = await locals.supabase.auth.signInWithOAuth({
+                provider: provider, options: {
+                    redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
+                }
 
-        throw redirect(303, data.url)
+            })
+
+            if (error) {
+                console.log(error)
+                return fail(400, { message: 'Something went wrong' })
+            }
+            throw redirect(303, data.url)
+        }
     },
 };
