@@ -98,7 +98,7 @@
 				</div>
 
 				<div class="mt-4 grid grid-cols-2 gap-4">
-					<form>
+					<form action='?/oauthLogin&provider=google'>
 						<button
 							formaction="?/oauthLogin&provider=google"
 							type="submit"
@@ -125,7 +125,7 @@
 							<span class="text-sm font-semibold leading-6">Google</span>
 						</button>
 					</form>
-					<form>
+					<form action='?/oauthLogin&provider=apple'>
 						<button
 							formaction="?/oauthLogin&provider=apple"
 							type="submit"
