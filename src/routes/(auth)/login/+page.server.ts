@@ -47,13 +47,14 @@ export const actions = {
     // OAuth based login.
     oauthLogin: async ({ request, locals, url }) => {
         const formData = await request.formData()
-        const provider_apple = formData.get('login-apple') as Provider;
-        const provider_google = formData.get('login-apple') as Provider;
+        const provider_apple = formData.get('login-apple');
+        const provider_google = formData.get('login-apple');
 
         if (provider_google) {
+            const provider = 'google' as Provider
             console.log('provider found google')
             const { data, error } = await locals.supabase.auth.signInWithOAuth({
-                provider: provider_google, options: {
+                provider: provider, options: {
                     redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
                 }
 
@@ -66,9 +67,10 @@ export const actions = {
             throw redirect(303, data.url)
         }
         else if (provider_apple) {
+            const provider = 'apple' as Provider
             console.log('provider found apple')
             const { data, error } = await locals.supabase.auth.signInWithOAuth({
-                provider: provider_google, options: {
+                provider: provider, options: {
                     redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
                 }
 
