@@ -98,10 +98,11 @@
 				</div>
 
 				<div class="mt-4 grid grid-cols-2 gap-4">
-					<form action='?/oauthLogin&provider=google'>
+					<form action='?/oauthLogin'>
+						<input type="text" name='login-google' id='login-google' class='hidden' value='google'>
 						<button
-							formaction="?/oauthLogin&provider=google"
 							type="submit"
+							on:click={() => console.log("google")}
 							class="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
 						>
 							<svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -125,10 +126,11 @@
 							<span class="text-sm font-semibold leading-6">Google</span>
 						</button>
 					</form>
-					<form action='?/oauthLogin&provider=apple'>
+					<form action='?/oauthLogin'>
+						<input type="text" name='login-apple' id='login-apple' class='hidden' value='apple'>
 						<button
-							formaction="?/oauthLogin&provider=apple"
 							type="submit"
+							on:click={() => console.log("apple")}
 							class="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
 						>
 							<svg
