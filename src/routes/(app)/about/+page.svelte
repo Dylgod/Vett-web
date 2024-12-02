@@ -60,7 +60,7 @@
 							>
 								<div class="relative ">
 									<img
-										src="screenshots/gennady.webp"
+										src="./screenshots/gennady.webp"
 										alt="Bill"
 										class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover object-left shadow-lg "
 									/>
@@ -72,7 +72,7 @@
 							<div class="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
 								<div class="relative">
 									<img
-										src="screenshots/carmack.jpg"
+										src="./screenshots/carmack.jpg"
 										alt=""
 										class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
 									/>
@@ -82,7 +82,7 @@
 								</div>
 								<div class="relative">
 									<img
-										src="screenshots/Linus.webp"
+										src="./screenshots/Linus.webp"
 										alt=""
 										class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
 									/>
@@ -94,7 +94,7 @@
 							<div class="w-44 flex-none space-y-8 pt-32 sm:pt-0">
 								<div class="relative">
 									<img
-										src="screenshots/Terry.jpg"
+										src="./screenshots/Terry.jpg"
 										alt=""
 										class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
 									/>
@@ -104,7 +104,7 @@
 								</div>
 								<div class="relative">
 									<img
-										src="screenshots/geohot2.webp"
+										src="./screenshots/geohot2.webp"
 										alt=""
 										class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
 									/>
@@ -158,7 +158,7 @@
 		<!-- Image section -->
 		<div class="my-16 xl:mx-auto xl:max-w-7xl xl:px-8">
 			<img
-				src="screenshots/hackathon.jpg"
+				src="./screenshots/hackathon.jpg"
 				alt=""
 				class="aspect-[5/2] w-full object-cover xl:rounded-3xl"
 			/>
