@@ -47,43 +47,24 @@ export const actions = {
     // OAuth based login.
     oauthLogin: async ({ request, locals }) => {
         const formData = await request.formData();
-        const provider_apple = formData.get('login-apple');
-        const provider_google = formData.get('login-google');
-
-        let provider;
-        if (provider_google) {
-            provider = 'google' as Provider;
-        } else if (provider_apple) {
-            provider = 'apple' as Provider;
-        } else {
-            return fail(400, { error: true, message: 'Invalid provider' });
+        const provider = formData.get('provider')?.toString();
+        console.log('oauthLogin called')
+        if (!provider || !['google', 'apple'].includes(provider)) {
+            return fail(400, { message: 'Invalid provider' });
+        }
+        
+        const { data, error } = await locals.supabase.auth.signInWithOAuth({
+            provider: provider as Provider,
+            options: {
+                redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
+            }
+        });
+        console.log('data', data)
+        if (error) {
+            console.error('OAuth error:', error);
+            return fail(400, { message: 'Authentication failed' });
         }
 
-        try {
-            const { data, error } = await locals.supabase.auth.signInWithOAuth({
-                provider: provider,
-                options: {
-                    redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`,
-                    queryParams: {
-                        access_type: 'offline',
-                        prompt: 'consent',
-                    }
-                }
-            });
-
-            if (error) {
-                console.error('OAuth error:', error);
-                return fail(400, { error: true, message: error.message });
-            }
-
-            if (!data.url) {
-                return fail(400, { error: true, message: 'No redirect URL received' });
-            }
-
-            return { url: data.url };
-        } catch (error) {
-            console.error('Unexpected error:', error);
-            return fail(500, { error: true, message: 'An unexpected error occurred' });
-        }
+        throw redirect(303, data.url);
     },
 };
