@@ -6,7 +6,6 @@
 
 	let showNotification = false;
 	let notificationText: string = '';
-	let isLoading = false;
 
 	function showNotification_alert(text: string) {
 		notificationText = text;
@@ -16,30 +15,23 @@
 		}, 3000);
 	}
 
-	async function handleOAuthLogin(provider: string) {
-		isLoading = true;
+	async function handleOAuthLogin(provider: 'google' | 'apple') {
 		try {
-			const response = await fetch('/login?/oauthLogin', {
+			const formData = new FormData();
+			formData.append(`login-${provider}`, provider);
+
+			const response = await fetch('?/oauthLogin', {
 				method: 'POST',
-				body: new FormData(),
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
+				body: formData
 			});
 
 			const result = await response.json();
-
-			if (result.error) {
-				showNotification_alert(result.message || 'Authentication failed');
-			}
-
 			if (result.url) {
 				window.location.href = result.url;
 			}
 		} catch (error) {
+			console.error('OAuth error:', error);
 			showNotification_alert('Authentication failed');
-		} finally {
-			isLoading = false;
 		}
 	}
 
@@ -128,7 +120,6 @@
 				<div class="mt-4 grid grid-cols-2 gap-4">
 					<button
 						type="button"
-						disabled={isLoading}
 						on:click={() => handleOAuthLogin('google')}
 						class="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
 					>
@@ -153,7 +144,8 @@
 						<span class="text-sm font-semibold leading-6">Google</span>
 					</button>
 					<button
-						type="submit"
+						type="button"
+						on:click={() => handleOAuthLogin('apple')}
 						class="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
 					>
 						<svg

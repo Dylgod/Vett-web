@@ -45,12 +45,29 @@ export const actions = {
     },
 
     // OAuth based login.
-    oauthLogin: async ({ locals, url }) => {
+    oauthLogin: async ({ request, locals }) => {
+        const formData = await request.formData();
+        const provider_apple = formData.get('login-apple');
+        const provider_google = formData.get('login-google');
+
+        let provider;
+        if (provider_google) {
+            provider = 'google' as Provider;
+        } else if (provider_apple) {
+            provider = 'apple' as Provider;
+        } else {
+            return fail(400, { error: true, message: 'Invalid provider' });
+        }
+
         try {
             const { data, error } = await locals.supabase.auth.signInWithOAuth({
-                provider: 'google',
+                provider: provider,
                 options: {
-                    redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
+                    redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`,
+                    queryParams: {
+                        access_type: 'offline',
+                        prompt: 'consent',
+                    }
                 }
             });
 
@@ -59,7 +76,10 @@ export const actions = {
                 return fail(400, { error: true, message: error.message });
             }
 
-            // Return the URL that the client should redirect to
+            if (!data.url) {
+                return fail(400, { error: true, message: 'No redirect URL received' });
+            }
+
             return { url: data.url };
         } catch (error) {
             console.error('Unexpected error:', error);
