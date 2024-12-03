@@ -48,7 +48,7 @@ export const actions = {
     oauthLogin: async ({ request, locals, url }) => {
         const formData = await request.formData()
         const provider_apple = formData.get('login-apple');
-        const provider_google = formData.get('login-apple');
+        const provider_google = formData.get('login-google');
 
         if (provider_google) {
             const provider = 'google' as Provider
