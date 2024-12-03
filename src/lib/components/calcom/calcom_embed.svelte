@@ -18,7 +18,7 @@
 		if (event.origin === BASE_URL) {
 			console.log('Received message:', event.data);
 
-			// Handle height adjustments
+			// Height adjustments
 			if (event.data.type === 'calendar-height') {
 				height = `${event.data.height}px`;
 			}
