@@ -44,7 +44,7 @@ export const actions = {
         throw redirect(303, `/auth/confirm?email=${email}`)
     },
 
-    // OAuth based login...
+    // OAuth based login....
     oauthLogin: async ({ request, locals }) => {
         const formData = await request.formData();
         const provider = formData.get('provider')?.toString();
