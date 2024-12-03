@@ -45,42 +45,25 @@ export const actions = {
     },
 
     // OAuth based login.
-    oauthLogin: async ({ request, locals, url }) => {
-        const formData = await request.formData()
-        const provider_apple = formData.get('login-apple');
-        const provider_google = formData.get('login-google');
-
-        if (provider_google) {
-            const provider = 'google' as Provider
-            console.log('provider found google')
+    oauthLogin: async ({ locals, url }) => {
+        try {
             const { data, error } = await locals.supabase.auth.signInWithOAuth({
-                provider: provider, options: {
+                provider: 'google',
+                options: {
                     redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
                 }
-
-            })
-
-            if (error) {
-                console.log(error)
-                return fail(400, { message: 'Something went wrong' })
-            }
-            throw redirect(303, data.url)
-        }
-        else if (provider_apple) {
-            const provider = 'apple' as Provider
-            console.log('provider found apple')
-            const { data, error } = await locals.supabase.auth.signInWithOAuth({
-                provider: provider, options: {
-                    redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
-                }
-
-            })
+            });
 
             if (error) {
-                console.log(error)
-                return fail(400, { message: 'Something went wrong' })
+                console.error('OAuth error:', error);
+                return fail(400, { error: true, message: error.message });
             }
-            throw redirect(303, data.url)
+
+            // Return the URL that the client should redirect to
+            return { url: data.url };
+        } catch (error) {
+            console.error('Unexpected error:', error);
+            return fail(500, { error: true, message: 'An unexpected error occurred' });
         }
     },
 };
