@@ -16,24 +16,31 @@
 	}
 
 	async function handleOAuthLogin(provider: 'google' | 'apple') {
-		console.log("handleOAuthLogin clicked")
+		
 		try {
+			console.log("chpt 1")
 			const formData = new FormData();
+			console.log("chpt 2")
 			formData.append(`login-${provider}`, provider);
-
+			console.log("chpt 3")
 			const response = await fetch('?/oauthLogin', {
 				method: 'POST',
 				body: formData
 			});
-
+			console.log("chpt 4")
 			const result = await response.json();
+			console.log("chpt 5")
 			if (result.url) {
+				console.log("chpt 6")
 				window.location.href = result.url;
 			}
+			console.log("chpt 7")
 		} catch (error) {
 			console.error('OAuth error:', error);
 			showNotification_alert('Authentication failed');
+			console.log("chpt 8")
 		}
+		console.log("chpt FINAL")
 	}
 
 	onMount(async () => {
