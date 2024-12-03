@@ -65,6 +65,7 @@ export const actions = {
             return fail(400, { message: 'Authentication failed' });
         }
 
+        // make sure site url is correct in supabase under URL configuration
         throw redirect(303, data.url);
     },
 };
