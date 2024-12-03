@@ -4,10 +4,13 @@ import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit'
 
-export async function GET(request: Request) {
-    const { searchParams, origin } = new URL(request.url)
-    console.log(request)
-    const code = searchParams.get('code') as string;
+export const GET = async (event) => {
+	const {
+		url,
+		locals: { supabase }
+	} = event;
+    console.log(event)
+    const code = url.searchParams.get('code') as string;
     console.log('code', code)
     // const next = searchParams.get('next') ?? '/';
     if (code) {
@@ -75,9 +78,11 @@ export async function GET(request: Request) {
 
         if (error) {
             console.log('ERROR', error)
+            throw redirect(303, `${origin}/login`);
         }
     } else {
         console.log('COULD NOT FIND GOOGLE AUTH CODE')
         throw redirect(303, `${origin}/login`);
     }
+    throw redirect(303, `${origin}/profile`);
 };
