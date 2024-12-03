@@ -1,15 +1,15 @@
+import type { ResendParams } from "@supabase/supabase-js";
+import type { Actions } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+import type { EmailOtpType } from '@supabase/supabase-js'
 import { SERVICE_ROLE } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit'
 
-export const GET = async (event) => {
-	const {
-		url,
-		locals: { supabase }
-	} = event;
-    console.log(event)
+export const load: PageServerLoad = async ({ url, locals, request }) => {
+
     const code = url.searchParams.get('code') as string;
     console.log('code', code)
     // const next = searchParams.get('next') ?? '/';
