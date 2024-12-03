@@ -6,31 +6,78 @@ import { redirect } from '@sveltejs/kit'
 
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url)
+    console.log(request)
     const code = searchParams.get('code') as string;
-    const next = searchParams.get('next') ?? '/';
+    console.log('code', code)
+    // const next = searchParams.get('next') ?? '/';
     if (code) {
         const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
-        const { data ,error } = await supaClient.auth.exchangeCodeForSession(code)
+        const { data, error } = await supaClient.auth.exchangeCodeForSession(code)
+        console.log('supadata', data, error)
         if (!error) {
+            console.log('NO ERROR ADDING TO SB NOW')
+
             const user_uuid = data.user?.id
-            const { data: insertData, error: userError } = await supaClient
-                .from('clients')
-                .insert
-                (
-                    {
-                        admins: [user_uuid as string],
-                        users: [user_uuid as string],
-                        owner: user_uuid,
+            if (user_uuid) {
+                console.log('user_uuid', user_uuid)
+                const { data: find_UUID_client, error: supaError } = await supaClient
+                    .from('clients')
+                    .select("*")
+                    .contains('users', [user_uuid])
+                    .single();
+
+                if (find_UUID_client) {
+                    console.log('find_UUID_client', find_UUID_client)
+                    throw redirect(303, '/profile')
+                } else {
+                    console.log('find_UUID_client NOT FOUND. Adding new client to SB')
+                    const { data: insertData, error: userError } = await supaClient
+                        .from('clients')
+                        .insert
+                        (
+                            {
+                                admins: [user_uuid as string],
+                                users: [user_uuid as string],
+                                owner: user_uuid,
+                            }
+                        )
+
+                    if (userError) {
+                        console.log(userError)
+                        throw redirect(303, `${origin}`);
+                    } else {
+                        console.log('redirecting to new profile')
+                        throw redirect(303, `${origin}/profile`);
                     }
-                )
+                }
+            } else {
+                console.log('Brand new user. Adding new client to SB')
+                const { data: insertData, error: userError } = await supaClient
+                    .from('clients')
+                    .insert
+                    (
+                        {
+                            admins: [user_uuid as string],
+                            users: [user_uuid as string],
+                            owner: user_uuid,
+                        }
+                    )
 
-            if (userError) {
-                console.log(userError)
-                throw redirect(303, `${origin}`);
+                if (userError) {
+                    console.log(userError)
+                    throw redirect(303, `${origin}`);
+                } else {
+                    console.log('redirecting to new profile 2')
+                    throw redirect(303, `${origin}/profile`);
+                }
             }
-
-            throw redirect(303, `${origin}/profile`);
         }
+
+        if (error) {
+            console.log('ERROR', error)
+        }
+    } else {
+        console.log('COULD NOT FIND GOOGLE AUTH CODE')
+        throw redirect(303, `${origin}/login`);
     }
-    throw redirect(303, `${origin}/login`);
 };
