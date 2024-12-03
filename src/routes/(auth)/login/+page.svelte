@@ -16,6 +16,7 @@
 	}
 
 	async function handleOAuthLogin(provider: 'google' | 'apple') {
+		console.log("handleOAuthLogin clicked")
 		try {
 			const formData = new FormData();
 			formData.append(`login-${provider}`, provider);
