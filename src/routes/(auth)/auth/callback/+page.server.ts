@@ -5,7 +5,7 @@ import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ locals ,url }) => {
     const code = url.searchParams.get('code');
     if (!code) {
         console.error('No Google auth code found');
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
     try {
         // Exchange code for session
-        const { data: authData, error: authError } = await supaClient.auth.exchangeCodeForSession(code);
+        const { data: authData, error: authError } = await locals.supabase.auth.exchangeCodeForSession(code);
         if (authError) {
             console.error('Auth error:', authError);
             throw redirect(303, '/login');
