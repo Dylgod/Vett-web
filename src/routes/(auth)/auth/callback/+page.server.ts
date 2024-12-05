@@ -1,85 +1,69 @@
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from './$types';
 import { SERVICE_ROLE } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
-import { redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ url, locals, request }) => {
-
-    const code = url.searchParams.get('code') as string;
-    console.log('code', code)
-    // const next = searchParams.get('next') ?? '/';
-    if (code) {
-        const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
-        const { data, error } = await supaClient.auth.exchangeCodeForSession(code)
-        console.log('supadata', data, error)
-        if (!error) {
-            console.log('NO ERROR ADDING TO SB NOW')
-
-            const user_uuid = data.user?.id
-            if (user_uuid) {
-                console.log('user_uuid', user_uuid)
-                const { data: find_UUID_client, error: supaError } = await supaClient
-                    .from('clients')
-                    .select("*")
-                    .contains('users', [user_uuid])
-                    .single();
-
-                if (find_UUID_client) {
-                    console.log('find_UUID_client', find_UUID_client)
-                    throw redirect(303, '/profile')
-                } else {
-                    console.log('find_UUID_client NOT FOUND. Adding new client to SB')
-                    const { data: insertData, error: userError } = await supaClient
-                        .from('clients')
-                        .insert
-                        (
-                            {
-                                admins: [user_uuid as string],
-                                users: [user_uuid as string],
-                                owner: user_uuid,
-                            }
-                        )
-
-                    if (userError) {
-                        console.log(userError)
-                        throw redirect(303, `${origin}`);
-                    } else {
-                        console.log('redirecting to new profile')
-                        throw redirect(303, `${origin}/profile`);
-                    }
-                }
-            } else {
-                console.log('Brand new user. Adding new client to SB')
-                const { data: insertData, error: userError } = await supaClient
-                    .from('clients')
-                    .insert
-                    (
-                        {
-                            admins: [user_uuid as string],
-                            users: [user_uuid as string],
-                            owner: user_uuid,
-                        }
-                    )
-
-                if (userError) {
-                    console.log(userError)
-                    throw redirect(303, `${origin}`);
-                } else {
-                    console.log('redirecting to new profile 2')
-                    throw redirect(303, `${origin}/profile`);
-                }
-            }
-        }
-
-        if (error) {
-            console.log('ERROR', error)
-            throw redirect(303, `${origin}/login`);
-        }
-    } else {
-        console.log('COULD NOT FIND GOOGLE AUTH CODE')
-        throw redirect(303, `${origin}/login`);
+export const load: PageServerLoad = async ({ url }) => {
+    const code = url.searchParams.get('code');
+    if (!code) {
+        console.error('No Google auth code found');
+        throw redirect(303, '/login');
     }
-    throw redirect(303, `${origin}/profile`);
+
+    const supaClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE);
+
+    try {
+        // Exchange code for session
+        const { data: authData, error: authError } = await supaClient.auth.exchangeCodeForSession(code);
+        if (authError) {
+            console.error('Auth error:', authError);
+            throw redirect(303, '/login');
+        }
+
+        const user_uuid = authData.user?.id;
+        if (!user_uuid) {
+            console.error('No user ID found in session data');
+            throw redirect(303, '/login');
+        }
+
+        // Case 1: Check if user already has a client
+        const { data: existingClient, error: findError } = await supaClient
+            .from('clients')
+            .select('*')
+            .contains('users', [user_uuid])
+            .single();
+
+        if (findError && findError.code !== 'PGRST116') { // Not a "no rows" error
+            console.error('Database error checking for existing client:', findError);
+            throw redirect(303, '/login');
+        }
+
+        // If client exists, redirect to profile (Case 1)
+        if (existingClient) {
+            console.log('Case 1: Existing client found, redirecting to profile');
+            throw redirect(303, '/profile');
+        }
+
+        // Case 2 & 3: Create new client (handles both existing and new users)
+        const { error: insertError } = await supaClient
+            .from('clients')
+            .insert({
+                admins: [user_uuid],
+                users: [user_uuid],
+                owner: user_uuid,
+            });
+
+        if (insertError) {
+            console.error('Error creating new client:', insertError);
+            throw redirect(303, '/login');
+        }
+
+        throw redirect(303, '/profile');
+
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        throw redirect(303, '/login');
+    }
 };
