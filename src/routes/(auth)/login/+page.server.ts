@@ -1,6 +1,6 @@
 import type { Provider } from "@supabase/supabase-js";
 import { error, fail, redirect } from "@sveltejs/kit";
-import { PUBLIC_HOSTNAME } from "$env/static/public";
+// import { PUBLIC_HOSTNAME } from "$env/static/public";
 
 const SENDTO_COOKIE = "path_after_login"
 const ENABLED_OAUTH_PROVIDERS = ["google", "apple"]
