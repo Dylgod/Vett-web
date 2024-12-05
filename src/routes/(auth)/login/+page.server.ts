@@ -56,7 +56,7 @@ export const actions = {
         const { data, error } = await locals.supabase.auth.signInWithOAuth({
             provider: provider as Provider,
             options: {
-                redirectTo: `http://vett.dev/auth/callback`
+                redirectTo: `http://vett.dev/auth/callback` // hostname env var not working
                 // redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
             }
         });
