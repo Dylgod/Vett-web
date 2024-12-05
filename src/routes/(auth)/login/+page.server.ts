@@ -52,11 +52,12 @@ export const actions = {
         if (!provider || !['google', 'apple'].includes(provider)) {
             return fail(400, { message: 'Invalid provider' });
         }
-        
+
         const { data, error } = await locals.supabase.auth.signInWithOAuth({
             provider: provider as Provider,
             options: {
-                redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
+                redirectTo: `http://vett.dev/auth/callback`
+                // redirectTo: `${PUBLIC_HOSTNAME}/auth/callback`
             }
         });
         console.log('data', data)
