@@ -22,4 +22,4 @@ vite.config.ts.timestamp-*
 
 # misc
 workbench.svelte
-static/screenshots/*
+# static/screenshots/* 

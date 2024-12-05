@@ -1,7 +1,4 @@
-import type { ResendParams } from "@supabase/supabase-js";
-import type { Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import type { EmailOtpType } from '@supabase/supabase-js'
 import { SERVICE_ROLE } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/types/supabase.js';
