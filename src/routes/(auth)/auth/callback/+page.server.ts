@@ -1,9 +1,11 @@
 import type { PageServerLoad } from './$types';
-import { SERVICE_ROLE } from '$env/static/private';
+import { MAILGUN_API_KEY, MAILGUN_DOMAIN, SERVICE_ROLE } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/types/supabase.js';
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from '@sveltejs/kit';
+import Mailgun from 'mailgun.js';
+import formData from 'form-data';
 
 export const load: PageServerLoad = async ({ locals ,url }) => {
     const code = url.searchParams.get('code');
@@ -63,6 +65,27 @@ export const load: PageServerLoad = async ({ locals ,url }) => {
         throw redirect(303, '/profile');
 
     } catch (error) {
+
+        const DOMAIN = MAILGUN_DOMAIN || '';
+        const FROM_EMAIL = 'Vett <noreply@vett.dev>';
+
+        try {
+        const mailgun = new Mailgun(formData);
+        const mg = mailgun.client({
+            username: 'api',
+            key: MAILGUN_API_KEY || ''
+        });
+
+        // Send email
+        const emailResult = await mg.messages.create(DOMAIN, {
+            from: FROM_EMAIL,
+            to: 'dylan@dylgod.com',
+            subject: `error report`,
+            text: error as string
+        });
+        } catch {
+            console.log('email send fail')
+        }
         console.error('Unexpected error:', error);
         throw redirect(303, '/login');
     }
